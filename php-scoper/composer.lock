@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d9a3b7417c347869632e629d47aeb68",
+    "content-hash": "64147d09b9817c4e5b7a68ed3901d512",
     "packages": [
         {
             "name": "humbug/php-scoper",
