@@ -1,0 +1,75 @@
+{
+  "name": "subscriptions-project/wordpress",
+  "description": "Subscribe with Google lets users easily buy and access a subscription to your premium content on WordPress.",
+  "license": "Apache-2.0",
+  "type": "wordpress-plugin",
+  "homepage": "https://sitekit.withgoogle.com",
+  "require-dev": {
+    "automattic/vipwpcs": "^0.3.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "0.4.4",
+    "johnpbloch/wordpress-core": "^5.2",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "phpunit/phpunit": "^4",
+    "roave/security-advisories": "dev-master",
+    "squizlabs/php_codesniffer": "^3.3",
+    "wp-coding-standards/wpcs": "^1"
+  },
+  "require": {
+    "php": ">=5.4",
+    "ext-json": "*",
+    "ext-openssl": "*",
+    "google/apiclient": "^2.0",
+    "guzzlehttp/guzzle": "~5.3.3"
+  },
+  "replace": {
+    "phpseclib/phpseclib": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Google\\Site_Kit\\": "includes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Google\\Site_Kit\\Tests\\": "tests/phpunit/includes"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "5.4"
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@prefix-dependencies"
+    ],
+    "post-update-cmd": [
+      "@prefix-dependencies"
+    ],
+    "prefix-dependencies": [
+      "@composer --working-dir=php-scoper install",
+      "php-scoper/vendor/bin/php-scoper add --output-dir=./third-party --force --quiet",
+      "@autoload-includes",
+      "@autoload-third-party",
+      "cp vendor/composer/autoload_files.php third-party/vendor/"
+    ],
+    "autoload-includes": [
+      "echo '{ \"autoload\": { \"classmap\": [\"\"] } }' > includes/composer.json",
+      "@composer --working-dir=includes dump-autoload --classmap-authoritative --no-interaction",
+      "cp includes/vendor/composer/autoload_classmap.php includes/",
+      "rm -rf includes/vendor && rm includes/composer.json",
+      "mkdir -p includes/vendor/composer && mv includes/autoload_classmap.php includes/vendor/composer/"
+    ],
+    "autoload-third-party": [
+      "echo '{ \"autoload\": { \"classmap\": [\"\"] } }' > third-party/composer.json",
+      "@composer --working-dir=third-party dump-autoload --classmap-authoritative --no-interaction",
+      "cp third-party/vendor/composer/autoload_classmap.php third-party/",
+      "rm -rf third-party/vendor && rm third-party/composer.json",
+      "mkdir -p third-party/vendor/composer && mv third-party/autoload_classmap.php third-party/vendor/composer/"
+    ],
+    "lint": "phpcs",
+    "lint-fix": "phpcbf",
+    "test":  "phpunit"
+  }
+}
