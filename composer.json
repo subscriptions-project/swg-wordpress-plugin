@@ -26,12 +26,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Google\\Site_Kit\\": "includes"
+      "SubscribeWithGoogle\\WordPress\\": "includes"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Google\\Site_Kit\\Tests\\": "tests/phpunit/includes"
+      "SubscribeWithGoogle\\WordPress\\Tests\\": "tests/phpunit/includes"
     }
   },
   "config": {

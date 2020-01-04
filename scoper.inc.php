@@ -2,7 +2,7 @@
 /**
  * PHP-Scoper configuration file.
  *
- * @package   Subscriptions_Project\WordPress
+ * @package   SubscribeWithGoogle\WordPress
  * @copyright 2019 Google LLC
  * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  * @link      https://sitekit.withgoogle.com
@@ -23,7 +23,7 @@ $google_services = implode(
 	)
 );
 return array(
-	'prefix'                     => 'Google\\Site_Kit_Dependencies',
+	'prefix'                     => 'SubscribeWithGoogle\WordPress_Dependencies',
 	'finders'                    => array(
 		// General dependencies, except Google API services.
 		Finder::create()
