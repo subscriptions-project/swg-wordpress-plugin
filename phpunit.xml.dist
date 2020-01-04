@@ -14,4 +14,13 @@
         <ini name="display_startup_errors" value="1" />
         <const name="GOOGLESITEKIT_TESTS" value="1" />
     </php>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">includes</directory>
+            <exclude>
+                <file>includes/loader.php</file>
+                <directory>includes/vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>

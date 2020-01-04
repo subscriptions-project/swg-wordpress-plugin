@@ -22,7 +22,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var Plugin|null
 	 */
-	private static $instance = null;
+	public static $instance = null;
 
 	/**
 	 * The plugin's main file.

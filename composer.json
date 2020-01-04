@@ -70,6 +70,7 @@
     ],
     "lint": "phpcs",
     "lint-fix": "phpcbf",
-    "test":  "phpunit"
+    "test":  "phpunit",
+    "coverage":  "phpunit --coverage-html=coverage"
   }
 }
