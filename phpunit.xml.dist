@@ -4,7 +4,7 @@
         processIsolation="false"
         colors="true">
     <testsuites>
-        <testsuite name="Site Kit Test Suite">
+        <testsuite name="Subscribe With Google Test Suite">
             <directory suffix=".php">./tests/phpunit/integration</directory>
         </testsuite>
     </testsuites>
@@ -12,7 +12,7 @@
         <ini name="error_reporting" value="32767" />
         <ini name="display_errors" value="1" />
         <ini name="display_startup_errors" value="1" />
-        <const name="GOOGLESITEKIT_TESTS" value="1" />
+        <const name="SUBSCRIBEWITHGOOGLE_TESTS" value="1" />
     </php>
     <filter>
         <whitelist>
