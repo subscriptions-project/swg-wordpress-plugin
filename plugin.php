@@ -9,6 +9,7 @@
  * @wordpress-plugin
  * Plugin Name: Subscribe with Google
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }

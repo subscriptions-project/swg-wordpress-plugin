@@ -7,6 +7,7 @@
  * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  * @link      https://sitekit.withgoogle.com
  */
+
 use Isolated\Symfony\Component\Finder\Finder;
 // Google API services to include classes for.
 $google_services = implode(

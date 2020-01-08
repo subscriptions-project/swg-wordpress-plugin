@@ -52,7 +52,7 @@ final class Plugin {
 	 * @return bool True if the plugin main instance could be loaded, false otherwise.
 	 */
 	public static function load( $main_file ) {
-		if ( static::$instance !== null ) {
+		if ( null !== static::$instance ) {
 			return false;
 		}
 
