@@ -8,6 +8,13 @@
  *
  * @wordpress-plugin
  * Plugin Name: Subscribe with Google
+ * Plugin URI: https://developers.google.com/news/subscribe/
+ * Description: Subscribe with Google is a platform designed to help publishers drive conversions and engage existing subscribers across Google and the web.
+ * Version: 1.0.0
+ * Author: Subscribe with Google authors
+ * Author URI: https://developers.google.com/news/subscribe/
+ * License: MIT
+ * Text Domain: subscribe-with-google
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
