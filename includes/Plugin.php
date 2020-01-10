@@ -49,8 +49,6 @@ final class Plugin {
 	/**
 	 * Loads the plugin main instance and initializes it.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @return bool True if the plugin main instance could be loaded, false otherwise.
 	 */
 	public static function load() {
