@@ -14,18 +14,17 @@ class SampleTest extends \WP_UnitTestCase {
         Plugin::$instance = null;
 
         // The first execution should return true, since a new instance was created.
-        $success = Plugin::load( SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE );
+        $success = Plugin::load();
         $this->assertEquals( $success, true );
         
         // The second execution should return false, since a new instance was not created.
-        $success = Plugin::load( SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE );
+        $success = Plugin::load();
         $this->assertEquals( $success, false );
     }
 
-    public function test_main_file_value() {
-        $this->assertEquals(
-            Plugin::$instance->main_file,
-            SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE
-        );
+    /** Admin menu should be added. */
+    public function test_admin_menu() {
+        do_action( 'admin_menu' );
+        $this->assertNotEmpty( menu_page_url( 'subscribe_with_google', false ) );
     }
 }

@@ -59,7 +59,7 @@ function autoload_vendor_files() {
 autoload_vendor_files();
 
 // Initialize the plugin.
-Plugin::load( SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE );
+Plugin::load();
 
 /**
  * WP CLI Commands
