@@ -1,9 +1,0 @@
-{
-  "name": "subscriptions-project/wordpress-php-scoper",
-  "description": "PHP Scoper is used to namespace dependencies to prevent conflicts with other plugins and themes.",
-  "require": {
-      "humbug/php-scoper": "^0.13.0"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
-}
