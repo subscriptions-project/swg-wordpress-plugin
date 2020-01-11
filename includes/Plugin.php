@@ -50,17 +50,10 @@ final class Plugin {
 		);
 	}
 
-	/**
-	 * Loads the plugin main instance and initializes it.
-	 *
-	 * @return bool True if the plugin main instance could be loaded, false otherwise.
-	 */
+	/** Loads the plugin main instance and initializes it. */
 	public static function load() {
-		if ( null !== static::$instance ) {
-			return false;
+		if ( null === static::$instance ) {
+			static::$instance = new static();
 		}
-
-		static::$instance = new static();
-		return true;
 	}
 }
