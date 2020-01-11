@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-const glob = require( 'glob' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const path = require( 'path' );
 const TerserPlugin = require( 'terser-webpack-plugin' );
