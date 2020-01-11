@@ -1,0 +1,44 @@
+{
+  "extends": [
+    "plugin:@wordpress/eslint-plugin/recommended",
+    "plugin:jest/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "settings": {
+    "react": {
+      "version": "16.2.0"
+    }
+  },
+  "globals": {
+    "React": "readonly",
+    "swg": "readonly",
+    "swgAdminbar": "readonly",
+    "swgDashboard": "readonly",
+    "swgSettings": "readonly",
+    "lodash": "readonly",
+    "swgCurrentModule": "readonly",
+    "gtag": "readonly",
+    "process": "readonly"
+  },
+  "rules": {
+    "valid-jsdoc": "warn"
+  },
+  "overrides": [
+    {
+      "files": [
+        "tests/e2e/**/*.js"
+      ],
+      "env": {
+        "browser": true
+      },
+      "globals": {
+        "browser": true,
+        "page": true,
+        "wp": true
+      }
+    }
+  ]
+}
