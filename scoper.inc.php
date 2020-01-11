@@ -5,7 +5,7 @@
  * @package   SubscribeWithGoogle\WordPress
  * @copyright 2019 Google LLC
  * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
- * @link      https://sitekit.withgoogle.com
+ * @link      https://developers.google.com/news/subscribe
  */
 
 use Isolated\Symfony\Component\Finder\Finder;

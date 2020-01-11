@@ -3,7 +3,7 @@
   "description": "Subscribe with Google lets users easily buy and access a subscription to your premium content on WordPress.",
   "license": "Apache-2.0",
   "type": "wordpress-plugin",
-  "homepage": "https://sitekit.withgoogle.com",
+  "homepage": "https://developers.google.com/news/subscribe",
   "require-dev": {
     "automattic/vipwpcs": "^0.3.0",
     "dealerdirect/phpcodesniffer-composer-installer": "0.4.4",
