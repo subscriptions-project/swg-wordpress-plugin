@@ -12,7 +12,11 @@ namespace SubscribeWithGoogle\WordPress;
 /** Main class for the plugin. */
 final class Plugin {
 
-	/** Main instance of the plugin. */
+	/**
+	 * Main instance of the plugin.
+	 *
+	 * @var Plugin
+	 */
 	public static $instance = null;
 
 	/** Creates the plugin. */
@@ -30,10 +34,10 @@ final class Plugin {
 		$page_title = 'Subscribe with Google';
 		$menu_title = 'Subscribe with Google';
 		$capability = 'manage_options';
-		$slug = 'subscribe_with_google';
-		$callback = array( $this, 'plugin_settings_page_content' );
-		$icon = 'dashicons-megaphone';
-		$position = 100;
+		$slug       = 'subscribe_with_google';
+		$callback   = array( $this, 'plugin_settings_page_content' );
+		$icon       = 'dashicons-megaphone';
+		$position   = 100;
 
 		add_menu_page(
 			$page_title,
