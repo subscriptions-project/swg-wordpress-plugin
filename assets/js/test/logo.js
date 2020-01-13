@@ -1,11 +1,10 @@
-/**
- * Internal dependencies
- */
 import Logo from '../logo';
+import React from 'react';
+import renderer from 'react-test-renderer';
 
-describe( 'Logo', () => {
-	it( 'renders correctly', () => {
-		const result = Logo();
-		expect( result ).toStrictEqual( '123.87' );
-	} );
+it( 'renders correctly', () => {
+  const logo = renderer
+    .create(<Logo />)
+    .toJSON();
+  expect( logo ).toMatchSnapshot();
 } );

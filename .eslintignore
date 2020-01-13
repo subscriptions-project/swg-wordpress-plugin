@@ -5,3 +5,4 @@
 /tests/backstop/html_report/*
 /php-scoper/*
 /vendor/*
+/coverage/*

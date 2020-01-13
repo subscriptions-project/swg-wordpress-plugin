@@ -64,7 +64,7 @@
   "lint-staged": {
     "linters": {
       "assets/js/**/*.js": [
-        "eslint"
+        "eslint . --fix"
       ],
       "assets/sass/**/*.scss": [
         "stylelint --syntax scss"
@@ -148,6 +148,7 @@
     "eslint-loader": "^2.1.2",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^22.15.2",
+    "eslint-plugin-react": "^7.17.0",
     "eslint-scope": "^5.0.0",
     "focus-trap-react": "^5.0.1",
     "formdata-polyfill": "^3.0.17",
