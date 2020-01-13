@@ -32,3 +32,8 @@ $GLOBALS['wp_tests_options'] = array(
 
 // Start up the WP testing environment.
 require $_test_root . '/includes/bootstrap.php';
+
+// Print a banner.
+echo "📰 📰 📰 📰 \n";
+echo "\033[00;34m🗞  SwG  🗞 \033[0m\n";
+echo "📰 📰 📰 📰 \n";
