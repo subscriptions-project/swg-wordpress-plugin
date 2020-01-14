@@ -22,6 +22,8 @@ final class Plugin {
 	/** Creates the plugin. */
 	public function __construct() {
 		$this->add_actions();
+		$this->add_filters();
+		$this->add_shortcodes();
 	}
 
 	/** Adds WordPress actions. */
@@ -39,8 +41,27 @@ final class Plugin {
 
 		// Post view pages.
 		add_action( 'wp_head', array( $this, 'handle_wp_head' ) );
+	}
+
+	/** Adds WordPress filters. */
+	private function add_filters() {
 		add_filter( 'the_content', array( $this, 'filter_the_content' ) );
+	}
+
+	/** Adds WordPress shortcodes. */
+	private function add_shortcodes() {
 		add_shortcode( 'swg-subscribe', array( $this, 'shortcode_subscribe' ) );
+	}
+
+	/**
+	 * Shortcode for rendering a Subscribe button.
+	 *
+	 * @param array[string]string $atts Attributes affecting shortcode.
+	 */
+	private function shortcode_subscribe( $atts = [] ) {
+		$play_offers = $atts['play-offers'] ? $atts['play-offers'] : '';
+
+		return '<button class="swg-button" data-play-offers="' . $play_offers . '"></button>';
 	}
 
 	/** Adds admin menu item. */
