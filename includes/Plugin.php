@@ -143,6 +143,256 @@ final class Plugin {
 		);
 	}
 
+	/** Adds to the <head> element on Post view pages. */
+	public function handle_wp_head() {
+		// Styles for SwgPress.
+		wp_enqueue_style(
+			'swgpress',
+			plugins_url( 'swgpress.css', __FILE__ ),
+			null,
+			1
+		);
+
+		// SwG's open-source JavaScript library (https://github.com/subscriptions-project/swg-js).
+		wp_enqueue_script(
+			'swg-js',
+			'https://news.google.com/swg/js/v1/swg.js',
+			null,
+			1,
+			true
+		);
+
+		// JavaScript for SwgPress.
+		wp_enqueue_script(
+			'swgpress',
+			plugins_url( 'swgpress.js', __FILE__ ),
+			null,
+			1,
+			true
+		);
+
+		$publication_id = get_option( $this::SWG_NAMESPACE . 'publication_id' );
+		$products_str   = trim( get_option( $this::SWG_NAMESPACE . 'products' ) );
+		if ( ! $products_str || ! $publication_id ) {
+			return;
+		}
+
+		$products = array_map(
+			function( $product ) {
+				// TODO: Create a utility method that does this.
+				return trim( $product );
+			},
+			explode( "\n", $products_str )
+		);
+
+		$product = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
+		$is_free = 'false';
+
+		if ( ! $product || ! in_array( $product, $products ) ) {
+			// TODO: Create a utility method that does this.
+			$product = $products[0];
+			$is_free = 'true';
+		}
+
+		$product_id = $publication_id . ':' . $product;
+
+		// TODO: Add encrypted document key to head, once it's saved.
+		?>
+		<meta name="subscriptions-product-id" content="<?php echo esc_attr( $product_id ); ?>" />
+		<meta name="subscriptions-accessible-for-free" content="<?php echo esc_attr( $is_free ); ?>" />
+		<?php
+	}
+
+	/**
+	 * Saves additional metadata when a Post is saved.
+	 *
+	 * @param string $post_id ID of the post being saved.
+	 */
+	public function setup_post_save( $post_id ) {
+		$key = $this::SWG_NAMESPACE . 'product';
+    // phpcs:disable -- Might be a bug in one of the outdated WP linters?
+		$product = $_POST[ $key ];
+		$nonce   = $_POST['settings_nonce'];
+    // phpcs:enable
+		if ( isset( $product, $nonce ) && wp_verify_nonce( sanitize_key( $nonce ), 'settings_nonce_action' ) && '' !== $product ) {
+			$value = sanitize_text_field( wp_unslash( $product ) );
+			update_post_meta(
+				$post_id,
+				$key,
+				$value
+			);
+		}
+	}
+
+	/** Renders the admin settings page. */
+	public function plugin_settings_page_content() {
+		?>
+	<div class="wrap">
+			<h2>Subscribe with Google</h2>
+			<form method="post" action="options.php">
+				<?php
+					settings_fields( 'subscribe_with_google' );
+					do_settings_sections( 'subscribe_with_google' );
+					submit_button();
+				?>
+			</form>
+	</div>
+		<?php
+	}
+
+	/** Adds sections to admin settings page. */
+	public function setup_sections() {
+		// TODO: Should the admin settings page get its own class?
+		add_settings_section( $this::SWG_NAMESPACE . 'configuration', 'Configuration', false, 'subscribe_with_google' );
+		add_settings_section( $this::SWG_NAMESPACE . 'report', 'Statistics', false, 'subscribe_with_google' );
+	}
+
+	/** Adds fields to admin settings page. */
+	public function setup_fields() {
+		$fields = array(
+			array(
+				'uid'          => $this::SWG_NAMESPACE . 'publication_id',
+				'label'        => 'Publication ID',
+				'section'      => $this::SWG_NAMESPACE . 'configuration',
+				'type'         => 'text',
+				'options'      => false,
+				'placeholder'  => 'your.publication.id',
+				'helper'       => '',
+				'supplemental' => 'Unique indentifier for your publication.',
+				'default'      => '',
+			),
+
+			array(
+				'uid'          => $this::SWG_NAMESPACE . 'products',
+				'label'        => 'Product Names',
+				'section'      => $this::SWG_NAMESPACE . 'configuration',
+				'type'         => 'textarea',
+				'options'      => false,
+				'placeholder'  => "basic\npremium",
+				'helper'       => '',
+				'supplemental' => 'Products, one per line.',
+				'default'      => '',
+			),
+
+			array(
+				'uid'          => $this::SWG_NAMESPACE . 'chart',
+				'label'        => 'Sample chart',
+				'section'      => $this::SWG_NAMESPACE . 'report',
+				'type'         => 'chart',
+				'options'      => false,
+				'placeholder'  => '',
+				'helper'       => '',
+				'supplemental' => 'TODO: Create sample chart.',
+				'default'      => '',
+			),
+		);
+
+		foreach ( $fields as $field ) {
+			add_settings_field(
+				$field['uid'],
+				$field['label'],
+				array( $this, 'field_callback' ),
+				'subscribe_with_google',
+				$field['section'],
+				$field
+			);
+
+			register_setting( 'subscribe_with_google', $field['uid'] );
+		}
+	}
+
+	/**
+	 * Adds a settings field.
+	 *
+	 * @param array[string]string $arguments Describes how field should render.
+	 */
+	public function field_callback( $arguments ) {
+		// Get the current value, if there is one.
+		$value = get_option( $arguments['uid'] );
+		if ( ! $value ) {
+			$value = $arguments['default'];
+		}
+
+		// Check which type of field we want.
+		switch ( $arguments['type'] ) {
+			case 'text':
+				printf(
+					'<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
+					esc_attr( $arguments['uid'] ),
+					esc_attr( $arguments['type'] ),
+					esc_attr( $arguments['placeholder'] ),
+					esc_attr( $value )
+				);
+				break;
+			case 'textarea':
+				printf(
+					'<textarea style="min-height: 96px;" name="%1$s" id="%1$s" placeholder="%2$s">%3$s</textarea>',
+					esc_attr( $arguments['uid'] ),
+					esc_attr( $arguments['placeholder'] ),
+					esc_attr( $value )
+				);
+				break;
+			case 'chart':
+				printf(
+					'📊 📈'
+				);
+				break;
+		}
+
+		// If there is help text.
+		if ( $arguments['helper'] ) {
+			printf( '<span class="helper"> %s</span>', esc_attr( $arguments['helper'] ) );
+		}
+
+		// If there is supplemental text.
+		if ( $arguments['supplemental'] ) {
+			printf( '<p class="description">%s</p>', esc_attr( $arguments['supplemental'] ) );
+		}
+	}
+
+	/** Abc. */
+	public function setup_post_edit_fields() {
+		add_meta_box(
+			$this::SWG_NAMESPACE . 'post-edit-metabox',
+			'📰 Subscribe with Google',
+			function() {
+				$free_field_key    = $this::SWG_NAMESPACE . 'free';
+				$product_field_key = $this::SWG_NAMESPACE . 'product';
+				$products_str      = trim( get_option( $this::SWG_NAMESPACE . 'products' ) );
+				$is_free           = get_option( $this::SWG_NAMESPACE . 'free', 'true' );
+				if ( $products_str ) {
+					$selected_product = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
+					$products         = explode( "\n", $products_str );
+					?>
+					Product&nbsp;
+					<select name="<?php echo esc_attr( $product_field_key ); ?>" id="<?php echo esc_attr( $product_field_key ); ?>">
+						<?php
+						foreach ( $products as $product ) {
+							$product = trim( $product );
+							?>
+								<option
+									value="<?php echo esc_attr( $product ); ?>"
+								<?php echo ( $product == $selected_product ? 'selected' : '' ); ?>
+								>
+								<?php echo esc_html( $product ); ?>
+								</option>
+								<?php
+						}
+						?>
+					</select>
+					<?php
+				} else {
+					?>
+					Lmao define some products bruh. <a href="<?php echo esc_url( admin_url( 'admin.php?page=subscribe_with_google' ) ); ?>">Link</a>
+					<?php
+				}
+			},
+			'post',
+			'advanced',
+			'high'
+		);
+	}
+
 	/** Loads the plugin main instance and initializes it. */
 	public static function load() {
 		if ( null === static::$instance ) {

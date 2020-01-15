@@ -1,0 +1,11 @@
+.swg-paywall-prompt span {
+  opacity: 0.5;
+}
+
+article:not(.swg-entitled) .swg-paywall {
+  display: none;
+}
+
+article.swg-entitled .swg-paywall-prompt {
+  display: none;
+}
