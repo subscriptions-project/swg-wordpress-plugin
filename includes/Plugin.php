@@ -62,7 +62,7 @@ final class Plugin {
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
 	public function shortcode_subscribe( $atts = [] ) {
-		$play_offers = $atts['play-offers'] ? $atts['play-offers'] : '';
+		$play_offers = isset( $atts['play-offers'] ) ? $atts['play-offers'] : '';
 
 		return '<button class="swg-button" data-play-offers="' . $play_offers . '"></button>';
 	}
