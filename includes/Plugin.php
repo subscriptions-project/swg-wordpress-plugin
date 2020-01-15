@@ -75,7 +75,7 @@ final class Plugin {
 	 */
 	public function filter_the_content( $content ) {
 		// Check if we're inside the main loop in a single post page.
-		if ( ! is_single() || ! in_the_loop() || ! is_main_query() ) {
+		if ( ! is_single() || ! is_main_query() ) {
 			return $content;
 		}
 
@@ -197,6 +197,9 @@ final class Plugin {
 		$product_key = $this::SWG_NAMESPACE . 'product';
 		$free_key    = $this::SWG_NAMESPACE . 'free';
 		// phpcs:disable -- Might be a bug in one of the outdated WP linters?
+		if ( ! isset ( $_POST[ $this::SWG_NAMESPACE . '_nonce' ] ) ) {
+			return;
+		}
 		$product = $_POST[ $product_key ];
 		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
 		$swg_nonce   = $_POST[ $this::SWG_NAMESPACE . '_nonce' ];
