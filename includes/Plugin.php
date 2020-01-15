@@ -81,20 +81,9 @@ final class Plugin {
 
 		// Verify this post is supposed to be locked, even.
 		// If it's free, just bail.
-		$products_str = trim( get_option( $this::SWG_NAMESPACE . 'products' ) );
-		if ( ! $products_str ) {
-			return $content;
-		}
-		$products = array_map(
-			function( $product ) {
-				// TODO: Create a utility method that does this.
-				return trim( $product );
-			},
-			explode( "\n", $products_str )
-		);
-		$meta_key = $this::SWG_NAMESPACE . 'product';
-		$product  = get_post_meta( get_the_ID(), $meta_key, true );
-		if ( ! $product || ! in_array( $product, $products ) ) {
+		$free_key = $this::SWG_NAMESPACE . 'free';
+		$free     = get_post_meta( get_the_ID(), $free_key, true );
+		if ( 'true' == $free ) {
 			return $content;
 		}
 
@@ -185,16 +174,11 @@ final class Plugin {
 			explode( "\n", $products_str )
 		);
 
-		$product = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
-		$is_free = 'false';
-
-		if ( ! $product || ! in_array( $product, $products ) ) {
-			// TODO: Create a utility method that does this.
-			$product = $products[0];
-			$is_free = 'true';
-		}
-
+		$product    = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
 		$product_id = $publication_id . ':' . $product;
+
+		$is_free = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'free', true );
+		$is_free = $is_free ? $is_free : 'false';
 
 		// TODO: Add encrypted document key to head, once it's saved.
 		?>
@@ -209,16 +193,36 @@ final class Plugin {
 	 * @param string $post_id ID of the post being saved.
 	 */
 	public function setup_post_save( $post_id ) {
-		$key = $this::SWG_NAMESPACE . 'product';
-    // phpcs:disable -- Might be a bug in one of the outdated WP linters?
-		$product = $_POST[ $key ];
-		$nonce   = $_POST['settings_nonce'];
+		// TODO: Can these key strings be saved somewhere more central? As class consts?
+		$product_key = $this::SWG_NAMESPACE . 'product';
+		$free_key    = $this::SWG_NAMESPACE . 'free';
+		// phpcs:disable -- Might be a bug in one of the outdated WP linters?
+		$product = $_POST[ $product_key ];
+		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
+		$swg_nonce   = $_POST[ $this::SWG_NAMESPACE . '_nonce' ];
     // phpcs:enable
-		if ( isset( $product, $nonce ) && wp_verify_nonce( sanitize_key( $nonce ), 'settings_nonce_action' ) && '' !== $product ) {
+
+		// Verify settings nonce.
+		if ( ! wp_verify_nonce( sanitize_key( $swg_nonce ), $this::SWG_NAMESPACE . '_saving_settings' ) ) {
+			return;
+		}
+
+		// Product field.
+		if ( isset( $product ) && '' !== $product ) {
 			$value = sanitize_text_field( wp_unslash( $product ) );
 			update_post_meta(
 				$post_id,
-				$key,
+				$product_key,
+				$value
+			);
+		}
+
+		// Free field.
+		if ( isset( $free ) && '' !== $free ) {
+			$value = sanitize_text_field( wp_unslash( $free ) );
+			update_post_meta(
+				$post_id,
+				$free_key,
 				$value
 			);
 		}
@@ -350,28 +354,30 @@ final class Plugin {
 		}
 	}
 
-	/** Abc. */
+	/** Adds fields to Post edit page. */
 	public function setup_post_edit_fields() {
 		add_meta_box(
 			$this::SWG_NAMESPACE . 'post-edit-metabox',
 			'📰 Subscribe with Google',
 			function() {
-				$free_field_key    = $this::SWG_NAMESPACE . 'free';
-				$product_field_key = $this::SWG_NAMESPACE . 'product';
-				$products_str      = trim( get_option( $this::SWG_NAMESPACE . 'products' ) );
-				$is_free           = get_option( $this::SWG_NAMESPACE . 'free', 'true' );
+
+				$free_key     = $this::SWG_NAMESPACE . 'free';
+				$product_key  = $this::SWG_NAMESPACE . 'product';
+				$products_key = $this::SWG_NAMESPACE . 'products';
+				$free         = get_post_meta( get_the_ID(), $free_key, true ) == 'true';
+				$products_str = trim( get_option( $products_key ) );
+
 				if ( $products_str ) {
-					$selected_product = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
+					$selected_product = get_post_meta( get_the_ID(), $product_key, true );
 					$products         = explode( "\n", $products_str );
 					?>
 					Product&nbsp;
-					<select name="<?php echo esc_attr( $product_field_key ); ?>" id="<?php echo esc_attr( $product_field_key ); ?>">
+					<select name="<?php echo esc_attr( $product_key ); ?>" id="<?php echo esc_attr( $product_key ); ?>">
 						<?php
 						foreach ( $products as $product ) {
 							$product = trim( $product );
 							?>
-								<option
-									value="<?php echo esc_attr( $product ); ?>"
+								<option value="<?php echo esc_attr( $product ); ?>"
 								<?php echo ( $product == $selected_product ? 'selected' : '' ); ?>
 								>
 								<?php echo esc_html( $product ); ?>
@@ -380,12 +386,26 @@ final class Plugin {
 						}
 						?>
 					</select>
+					<br />
+					<br />
+					Is Free&nbsp;
 					<?php
+					if ( $free ) {
+						?>
+						<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" checked />
+						<?php
+					} else {
+						?>
+						<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" />
+						<?php
+					}
 				} else {
 					?>
 					Lmao define some products bruh. <a href="<?php echo esc_url( admin_url( 'admin.php?page=subscribe_with_google' ) ); ?>">Link</a>
 					<?php
 				}
+				// TODO: How can we generate the nonce to make it impossible to guess? What if we generated a random number when the plugin is activated, and saved it to the DB?
+				wp_nonce_field( $this::SWG_NAMESPACE . '_saving_settings', $this::SWG_NAMESPACE . '_nonce' );
 			},
 			'post',
 			'advanced',
