@@ -105,7 +105,7 @@ class FilterTest extends \WP_UnitTestCase {
 		);
 		$this->assertContains(
 			'swg-paywall-prompt',
-			$result,
+			$result
 		);
 	}
 }
