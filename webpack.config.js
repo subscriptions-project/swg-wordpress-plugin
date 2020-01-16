@@ -294,9 +294,7 @@ module.exports = ( env, argv ) => {
 							'postcss-loader',
 							{
 								loader: 'sass-loader',
-								options: {
-									includePaths: [ 'node_modules' ],
-								},
+								options: { },
 							},
 						],
 					},
