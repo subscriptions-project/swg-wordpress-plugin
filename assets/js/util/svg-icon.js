@@ -21,15 +21,15 @@
  */
 import PropTypes from 'prop-types';
 
-const SvgIcon = ( { id, className, height, width } ) => {
-	const svgPath = `${ swg.admin.assetsRoot }svg/svg.svg`;
+const SvgIcon = ({ id, className, height, width }) => {
+	const svgPath = `${swg.admin.assetsRoot}svg/svg.svg`;
 	return (
 		<svg
-			className={ `${ 'svg' } ${ className }` }
-			height={ height }
-			width={ width }
+			className={`${'svg'} ${className}`}
+			height={height}
+			width={width}
 		>
-			<use xlinkHref={ `${ svgPath }#${ id }` } />
+			<use xlinkHref={`${svgPath}#${id}`} />
 		</svg>
 	);
 };
