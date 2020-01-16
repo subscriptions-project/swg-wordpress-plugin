@@ -81,7 +81,9 @@ script:
     fi
   - |
     if [[ "$PHP" == "1" ]]; then
-      composer test || exit 1
+      composer test --coverage-text=coverage.info || exit 1
+      # Upload Coverage to CodeCov
+      ./node_modules/.bin/codecov -f coverage.info
     fi
   - |
     if [[ "$E2E" == "1" ]]; then
