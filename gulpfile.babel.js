@@ -21,23 +21,9 @@
  */
 import gulp from 'gulp';
 import requireDir from 'require-dir';
-import runSequence from 'run-sequence';
 import livereload from 'gulp-livereload';
-import phpunit from 'gulp-phpunit';
 
 requireDir('./gulp-tasks');
-
-/**
- * Gulp task to run all SVG processes in a sequential order.
- */
-gulp.task('build', () => {
-	runSequence(
-		'webpack',
-		'svg',
-		'imagemin',
-		'copy-vendor'
-	);
-});
 
 /**
  * Gulp task to watch for file changes and run the associated processes.
@@ -51,46 +37,42 @@ gulp.task('watch', () => {
 });
 
 /**
- * Gulp task to livereload file changes in browser.
- */
-gulp.task('local', () => {
-	runSequence(
-		'build',
-		'browser-sync'
-	);
-});
-
-/**
  * Gulp task to minify and combine svg's.
  */
-gulp.task('svg', () => {
-	runSequence('svgstore');
-	runSequence('svgmin');
-});
+gulp.task('svg', gulp.series('svgstore', 'svgmin'));
+
+/**
+ * Gulp task to run all SVG processes in a sequential order.
+ */
+gulp.task('build', gulp.series(
+	'webpack',
+	'svg',
+	'imagemin',
+	'copy-vendor'
+));
+
+/**
+ * Gulp task to livereload file changes in browser.
+ */
+gulp.task('local', gulp.series(
+	'build',
+	'browser-sync'
+));
 
 /**
  * Gulp task to run the default release processes in a sequential order.
  */
-gulp.task('release', () => {
-	runSequence(
-		'svg',
-		'imagemin',
-		'copy-vendor'
-	);
-});
+gulp.task('release', gulp.series(
+	'svg',
+	'imagemin',
+	'copy-vendor'
+));
 
 /**
  * Gulp task to run the default build processes in a sequential order.
  */
-gulp.task('default', () => {
-	runSequence(
-		'webpack',
-		'phpcs',
-		'copy-vendor'
-	);
-});
-
-gulp.task('phpunit', () => {
-	gulp.src('')
-		.pipe(phpunit('./vendor/bin/phpunit'));
-});
+gulp.task('default', gulp.series(
+	'webpack',
+	'phpcs',
+	'copy-vendor'
+));
