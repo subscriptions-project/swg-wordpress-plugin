@@ -1,7 +1,10 @@
 // Wait for SwG library to become available.
 (self.SWG = self.SWG || []).push(subscriptions => {
 
-  /** Removes paywalls for given productIds. */
+  /**
+   * Removes paywalls for given productIds.
+   * @param {!Set<string>} productIds Set of productIDs to unlock.
+   */
   function removePaywallsForProductIds(productIds) {
     const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
     if (!metaEl) {
@@ -16,15 +19,15 @@
   }
 
   // Handle payment responses.
-  subscriptions.setOnPaymentResponse(async response => {
-    console.log('Payment response');
+  subscriptions.setOnPaymentResponse(response => {
     // 1. Handle subscription response.
+    console.log('Payment response');
 
     // 2. Once subscription is processed (account created):
-    await response.complete();
-
-    // 3. The subscription is fully processed.
-    console.log('response.complete');
+    response.complete().then(() => {
+      // 3. The subscription is fully processed.
+      console.log('response.complete');
+    });
   });
   
   // Handle subscribe button clicks.
