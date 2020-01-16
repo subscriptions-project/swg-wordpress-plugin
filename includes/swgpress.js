@@ -4,6 +4,7 @@
   /**
    * Removes paywalls for given productIds.
    * @param {!Set<string>} productIds Set of productIDs to unlock.
+   * @return {void}
    */
   function removePaywallsForProductIds(productIds) {
     const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
