@@ -25,72 +25,72 @@ import runSequence from 'run-sequence';
 import livereload from 'gulp-livereload';
 import phpunit from 'gulp-phpunit';
 
-requireDir( './gulp-tasks' );
+requireDir('./gulp-tasks');
 
 /**
  * Gulp task to run all SVG processes in a sequential order.
  */
-gulp.task( 'build', () => {
+gulp.task('build', () => {
 	runSequence(
 		'webpack',
 		'svg',
 		'imagemin',
 		'copy-vendor'
 	);
-} );
+});
 
 /**
  * Gulp task to watch for file changes and run the associated processes.
  */
-gulp.task( 'watch', () => {
-	livereload.listen( { basePath: 'dist' } );
-	gulp.watch( './assets/sass/**/*.scss', [ 'build' ] );
-	gulp.watch( './assets/svg/**/*.svg', [ 'build' ] );
-	gulp.watch( './assets/js/*.js', [ 'build' ] );
-	gulp.watch( './assets/js/modules/**/*.js', [ 'build' ] );
-} );
+gulp.task('watch', () => {
+	livereload.listen({ basePath: 'dist' });
+	gulp.watch('./assets/sass/**/*.scss', ['build']);
+	gulp.watch('./assets/svg/**/*.svg', ['build']);
+	gulp.watch('./assets/js/*.js', ['build']);
+	gulp.watch('./assets/js/modules/**/*.js', ['build']);
+});
 
 /**
  * Gulp task to livereload file changes in browser.
  */
-gulp.task( 'local', () => {
+gulp.task('local', () => {
 	runSequence(
 		'build',
 		'browser-sync'
 	);
-} );
+});
 
 /**
  * Gulp task to minify and combine svg's.
  */
-gulp.task( 'svg', () => {
-	runSequence( 'svgstore' );
-	runSequence( 'svgmin' );
-} );
+gulp.task('svg', () => {
+	runSequence('svgstore');
+	runSequence('svgmin');
+});
 
 /**
  * Gulp task to run the default release processes in a sequential order.
  */
-gulp.task( 'release', () => {
+gulp.task('release', () => {
 	runSequence(
 		'svg',
 		'imagemin',
 		'copy-vendor'
 	);
-} );
+});
 
 /**
  * Gulp task to run the default build processes in a sequential order.
  */
-gulp.task( 'default', () => {
+gulp.task('default', () => {
 	runSequence(
 		'webpack',
 		'phpcs',
 		'copy-vendor'
 	);
-} );
+});
 
-gulp.task( 'phpunit', () => {
-	gulp.src( '' )
-		.pipe( phpunit( './vendor/bin/phpunit' ) );
-} );
+gulp.task('phpunit', () => {
+	gulp.src('')
+		.pipe(phpunit('./vendor/bin/phpunit'));
+});
