@@ -34,7 +34,6 @@ class BasicTest extends \WP_UnitTestCase {
 		$this->assertEmpty( $wp_settings_sections );
 		
 		Plugin::$instance->setup_sections();
-		$this->assertEquals( true, is_array( $wp_settings_sections ) );
 		$this->assertEquals( 2, count(
 			$wp_settings_sections['subscribe_with_google']
 		) );
