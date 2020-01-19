@@ -1,8 +1,8 @@
 /**
  * External dependencies
  */
-import gulp from 'gulp';
-import browserSync from 'browser-sync';
+const gulp = require('gulp');
+const browserSync = require('browser-sync');
 
 browserSync.create();
 

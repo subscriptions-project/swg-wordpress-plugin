@@ -1,15 +1,15 @@
 /**
  * External dependencies
  */
-import gulp from 'gulp';
-import webpack from 'webpack';
-import PluginError from 'plugin-error';
-import log from 'fancy-log';
+const gulp = require('gulp');
+const webpack = require('webpack');
+const PluginError = require('plugin-error');
+const log = require('fancy-log');
 
 /**
  * Internal dependencies
  */
-import config from '../webpack.config.js';
+const config = require('../webpack.config.js');
 
 gulp.task('webpack', (callback) => {
 	// run webpack

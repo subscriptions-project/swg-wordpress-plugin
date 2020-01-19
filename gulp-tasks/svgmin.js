@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import gulp from 'gulp';
-import svgmin from 'gulp-svgmin';
-import pump from 'pump';
+const gulp = require('gulp');
+const svgmin = require('gulp-svgmin');
+const pump = require('pump');
 
 const config = {
 	input: './assets/svg/**/*.svg',

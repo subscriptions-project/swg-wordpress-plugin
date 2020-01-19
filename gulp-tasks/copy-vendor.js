@@ -1,8 +1,8 @@
 /**
  * External dependencies
  */
-import gulp from 'gulp';
-import del from 'del';
+const gulp = require('gulp');
+const del = require('del');
 
 gulp.task('copy-vendor', () => {
 	del.sync(['dist/assets/vendor/*']);

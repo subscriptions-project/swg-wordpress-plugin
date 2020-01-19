@@ -19,9 +19,9 @@
 /**
  * External dependencies
  */
-import gulp from 'gulp';
-import requireDir from 'require-dir';
-import livereload from 'gulp-livereload';
+const gulp = require('gulp');
+const requireDir = require('require-dir');
+const livereload = require('gulp-livereload');
 
 requireDir('./gulp-tasks');
 
@@ -30,10 +30,10 @@ requireDir('./gulp-tasks');
  */
 gulp.task('watch', () => {
 	livereload.listen({ basePath: 'dist' });
-	gulp.watch('./assets/sass/**/*.scss', ['build']);
-	gulp.watch('./assets/svg/**/*.svg', ['build']);
-	gulp.watch('./assets/js/*.js', ['build']);
-	gulp.watch('./assets/js/modules/**/*.js', ['build']);
+	gulp.watch('./assets/sass/**/*.scss', gulp.series(['build']));
+	gulp.watch('./assets/svg/**/*.svg', gulp.series(['build']));
+	gulp.watch('./assets/js/*.js', gulp.series(['build']));
+	gulp.watch('./assets/js/modules/**/*.js', gulp.series(['build']));
 });
 
 /**
