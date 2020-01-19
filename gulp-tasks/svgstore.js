@@ -11,18 +11,18 @@ const config = {
 	output: './dist/assets/svg',
 };
 
-gulp.task( 'svgstore', ( cb ) => {
+gulp.task('svgstore', (cb) => {
 	pump(
 		[
-			gulp.src( config.input ),
-			svgmin( {
-				plugins: [ {
+			gulp.src(config.input),
+			svgmin({
+				plugins: [{
 					removeViewBox: false,
-				} ],
-			} ),
-			svgstore( { inlineSvg: true } ),
-			gulp.dest( config.output ),
+				}],
+			}),
+			svgstore({ inlineSvg: true }),
+			gulp.dest(config.output),
 		],
 		cb
 	);
-} );
+});

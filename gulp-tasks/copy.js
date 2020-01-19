@@ -4,8 +4,8 @@
 const gulp = require('gulp');
 const del = require('del');
 
-gulp.task( 'copy', () => {
-	del.sync( [ './release/**/*' ] );
+gulp.task('copy', () => {
+	del.sync(['./release/**/*']);
 
 	gulp.src(
 		[
@@ -28,5 +28,5 @@ gulp.task( 'copy', () => {
 		],
 		{ base: '.' }
 	)
-		.pipe( gulp.dest( 'release' ) );
-} );
+		.pipe(gulp.dest('release'));
+});

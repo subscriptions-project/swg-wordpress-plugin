@@ -10,17 +10,17 @@ const config = {
 	output: './dist/assets/svg',
 };
 
-gulp.task( 'svgmin', ( cb ) => {
+gulp.task('svgmin', (cb) => {
 	pump(
 		[
-			gulp.src( config.input ),
-			svgmin( {
-				plugins: [ {
+			gulp.src(config.input),
+			svgmin({
+				plugins: [{
 					removeViewBox: false,
-				} ],
-			} ),
-			gulp.dest( config.output ),
+				}],
+			}),
+			gulp.dest(config.output),
 		],
 		cb
 	);
-} );
+});

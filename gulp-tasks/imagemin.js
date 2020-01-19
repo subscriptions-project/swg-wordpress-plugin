@@ -10,13 +10,13 @@ const config = {
 	output: './dist/assets/images',
 };
 
-gulp.task( 'imagemin', ( cb ) => {
+gulp.task('imagemin', (cb) => {
 	pump(
 		[
-			gulp.src( config.input ),
+			gulp.src(config.input),
 			imagemin(),
-			gulp.dest( config.output ),
+			gulp.dest(config.output),
 		],
 		cb
 	);
-} );
+});
