@@ -277,7 +277,7 @@ module.exports = ( env, argv ) => {
 		// Build the main plugin admin css.
 		{
 			entry: {
-				hello: './assets/sass/hello.scss',
+				subscribers: './assets/sass/subscribers.scss',
 			},
 			module: {
 				rules: [
