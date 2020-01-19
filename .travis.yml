@@ -78,6 +78,9 @@ script:
       npm run test:js || exit 1 # JS unit tests
       npm run test || exit 1 # Bundle size test
       # travis_retry npm run travis:visualtest || exit 1 # Visual regression tests
+
+      # Upload Coverage to CodeCov
+      ./node_modules/.bin/codecov -f build/logs/lcov.info
     fi
   - |
     if [[ "$PHP" == "1" ]]; then

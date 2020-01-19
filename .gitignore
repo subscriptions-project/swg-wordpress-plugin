@@ -13,6 +13,7 @@ npm-debug.log
 /languages
 google-site-kit.zip
 /coverage
+/build
 
 # Editors
 *.esproj
