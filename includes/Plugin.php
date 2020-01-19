@@ -137,7 +137,7 @@ final class Plugin {
 		// Styles for SwgPress.
 		wp_enqueue_style(
 			'swgpress',
-			plugins_url( 'swgpress.css', __FILE__ ),
+			plugins_url( '../prototype/swgpress.css', __FILE__ ),
 			null,
 			1
 		);
@@ -154,7 +154,7 @@ final class Plugin {
 		// JavaScript for SwgPress.
 		wp_enqueue_script(
 			'swgpress',
-			plugins_url( 'swgpress.js', __FILE__ ),
+			plugins_url( '../prototype/swgpress.js', __FILE__ ),
 			null,
 			1,
 			true
