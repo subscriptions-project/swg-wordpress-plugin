@@ -137,8 +137,7 @@ final class Plugin {
 		// Styles for SwgPress.
 		wp_enqueue_style(
 			'swgpress',
-			plugins_url( '../prototype/swgpress.css', __FILE__ ), // CSS file.
-			// plugins_url( '../dist/assets/css/subscribers.css', __FILE__ ), // Compiled from Sass.
+			plugins_url( '../dist/assets/css/subscribers.css', __FILE__ ),
 			null,
 			1
 		);
