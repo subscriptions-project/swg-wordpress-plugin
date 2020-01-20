@@ -136,7 +136,7 @@ final class Plugin {
 	public function handle_wp_head() {
 		// Styles for SwgPress.
 		wp_enqueue_style(
-			'swgpress',
+			'subscribe-with-google',
 			plugins_url( '../dist/assets/css/subscribers.css', __FILE__ ),
 			null,
 			1
@@ -153,8 +153,8 @@ final class Plugin {
 
 		// JavaScript for SwgPress.
 		wp_enqueue_script(
-			'swgpress',
-			plugins_url( '../prototype/swgpress.js', __FILE__ ),
+			'subscribe-with-google',
+			plugins_url( '../dist/assets/js/subscribers.js', __FILE__ ),
 			null,
 			1,
 			true

@@ -30,7 +30,7 @@
       console.log('response.complete');
     });
   });
-  
+
   // Handle subscribe button clicks.
   const subscribeButtons = document.querySelectorAll('.swg-button');
   for (const subscribeButton of subscribeButtons) {
@@ -44,7 +44,7 @@
           .map(p => p.trim());
       }
 
-      subscriptions.showOffers({skus, isClosable: true});
+      subscriptions.showOffers({ skus, isClosable: true });
     });
   }
 

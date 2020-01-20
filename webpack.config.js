@@ -103,7 +103,7 @@ module.exports = ( env, argv ) => {
 		// Build the settings js..
 		{
 			entry: {
-				'swg-hello': './assets/js/hello.js',
+				'subscribers': './assets/js/subscribers.js',
 			},
 			output: {
 				filename: '[name].js',
@@ -186,49 +186,6 @@ module.exports = ( env, argv ) => {
 				},
 			},
 			externals,
-			resolve,
-		},
-
-		// Build the test files.
-		{
-			entry: { 'swg-tests': './assets/js/swg-tests.js' },
-			output: {
-				filename: '[name].js',
-				path: __dirname + '/dist/assets/js',
-				chunkFilename: '[name].js',
-				publicPath: '',
-			},
-			module: {
-				rules: [
-					{
-						test: /\.js$/,
-
-						use: [
-							{
-								loader: 'babel-loader',
-								query: {
-									presets: [ [ '@babel/env', {
-										useBuiltIns: 'entry',
-										corejs: 2,
-									} ], '@babel/preset-react' ],
-								},
-							},
-							{
-								loader: 'eslint-loader',
-								options: {
-									formatter: require( 'eslint' ).CLIEngine.getFormatter( 'stylish' ),
-								},
-							},
-						],
-					},
-				],
-			},
-			plugins: ( env && env.analyze ) ? [] : [
-				new WebpackBar( {
-					name: 'Test files',
-					color: '#34a853',
-				} ),
-			],
 			resolve,
 		},
 
