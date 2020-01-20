@@ -80,13 +80,13 @@ script:
       # travis_retry npm run travis:visualtest || exit 1 # Visual regression tests
 
       # Upload Coverage to CodeCov
-      ./node_modules/.bin/codecov -f build/logs/lcov.info
+      ./node_modules/.bin/codecov -f coverage/js/lcov.info
     fi
   - |
     if [[ "$PHP" == "1" ]]; then
       composer test-on-travis
       # Upload Coverage to CodeCov
-      ./node_modules/.bin/codecov -f coverage/coverage.xml
+      ./node_modules/.bin/codecov -f coverage/php/coverage.xml
     fi
   - |
     if [[ "$E2E" == "1" ]]; then
