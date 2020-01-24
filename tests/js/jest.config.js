@@ -30,7 +30,8 @@ module.exports = {
 		'^GoogleUtil/(.*)$': '<rootDir>assets/js/util/$1',
 		'^GoogleModules/(.*)$': '<rootDir>assets/js/modules/$1',
 	},
+	collectCoverageFrom: [ 'assets/js/**/*.{js,jsx}' ],
 	coveragePathIgnorePatterns: [ '/node_modules/', '<rootDir>/build/' ],
-	coverageReporters: [ 'lcov' ],
-	coverageDirectory: '<rootDir>/build/logs',
+	coverageReporters: [ 'lcovonly' ],
+	coverageDirectory: '<rootDir>/coverage/js',
 };
