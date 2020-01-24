@@ -161,21 +161,8 @@ final class Plugin {
 		);
 
 		$publication_id = get_option( $this::SWG_NAMESPACE . 'publication_id' );
-		$products_str   = trim( get_option( $this::SWG_NAMESPACE . 'products' ) );
-		if ( ! $products_str || ! $publication_id ) {
-			return;
-		}
-
-		$products = array_map(
-			function( $product ) {
-				// TODO: Create a utility method that does this.
-				return trim( $product );
-			},
-			explode( "\n", $products_str )
-		);
-
-		$product    = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
-		$product_id = $publication_id . ':' . $product;
+		$product        = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
+		$product_id     = $publication_id . ':' . $product;
 
 		$is_free = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'free', true );
 		$is_free = $is_free ? $is_free : 'false';
