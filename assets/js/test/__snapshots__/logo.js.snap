@@ -3,10 +3,10 @@
 exports[`renders correctly 1`] = `
 <div
   aria-hidden="true"
-  className="googlesitekit-logo"
+  className="subscribewithgoogle-logo"
 >
   <svg
-    className="svg googlesitekit-logo__logo-g"
+    className="svg subscribewithgoogle-logo__logo-g"
     height="34"
     width="32"
   >
@@ -16,7 +16,7 @@ exports[`renders correctly 1`] = `
   </svg>
   <svg
     className="svg 
-				 googlesitekit-logo__logo-sitekit
+				 subscribewithgoogle-logo__logo-sitekit
 				"
     height="26"
     width="99"
@@ -28,7 +28,7 @@ exports[`renders correctly 1`] = `
   <span
     className="screen-reader-text"
   >
-    Site Kit by Google Logo
+    Subscribe with Google logo
   </span>
 </div>
 `;

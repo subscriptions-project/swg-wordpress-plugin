@@ -27,23 +27,23 @@ import { __ } from '@wordpress/i18n';
 
 const Logo = () => {
 	return (
-		<div className="googlesitekit-logo" aria-hidden="true">
+		<div className="subscribewithgoogle-logo" aria-hidden="true">
 			<SvgIcon
 				id="logo-g"
-				className="googlesitekit-logo__logo-g"
+				className="subscribewithgoogle-logo__logo-g"
 				height="34"
 				width="32"
 			/>
 			<SvgIcon
 				id="logo-sitekit"
 				className={ `
-				 googlesitekit-logo__logo-sitekit
+				 subscribewithgoogle-logo__logo-sitekit
 				` }
 				height="26"
 				width="99"
 			/>
 			<span className="screen-reader-text">
-				{ __( 'Site Kit by Google Logo', 'google-site-kit' ) }
+				{ __( 'Subscribe with Google logo', 'subscribe-with-google' ) }
 			</span>
 		</div>
 	);

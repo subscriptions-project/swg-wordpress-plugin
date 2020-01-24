@@ -10,7 +10,7 @@ gulp.task('copy', () => {
 	gulp.src(
 		[
 			'readme.txt',
-			'google-site-kit.php',
+			'plugin.php',
 			'uninstall.php',
 			'dist/*.js',
 			'dist/assets/**/*',

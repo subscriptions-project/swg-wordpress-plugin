@@ -11,7 +11,7 @@ phpunit.xml
 npm-debug.log
 /dist
 /languages
-google-site-kit.zip
+subscribe-with-google.zip
 /coverage
 /build
 
