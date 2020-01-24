@@ -190,7 +190,7 @@ final class Plugin {
 		$product = $_POST[ $product_key ];
 		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
 		$swg_nonce   = $_POST[ $this::SWG_NAMESPACE . '_nonce' ];
-    // phpcs:enable
+		// phpcs:enable
 
 		// Verify settings nonce.
 		if ( ! wp_verify_nonce( sanitize_key( $swg_nonce ), $this::SWG_NAMESPACE . '_saving_settings' ) ) {
