@@ -1,23 +1,29 @@
+/**
+ * Removes paywalls for given productIds.
+ * @param {!Set<string>} productIds Set of productIDs to unlock.
+ * @return {void}
+ */
+export function removePaywallsForProductIds(productIds) {
+	const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
+	if (!metaEl) {
+		return;
+	}
+
+	const productId = metaEl.getAttribute('content');
+	if (!productIds.has(productId)) {
+		return;
+	}
+
+	const articleEl = document.querySelector('article');
+	if (!articleEl) {
+		return;
+	}
+
+	articleEl.classList.add('swg-entitled');
+}
+
 // Wait for SwG library to become available.
 (self.SWG = self.SWG || []).push(subscriptions => {
-
-  /**
-   * Removes paywalls for given productIds.
-   * @param {!Set<string>} productIds Set of productIDs to unlock.
-   * @return {void}
-   */
-  function removePaywallsForProductIds(productIds) {
-    const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
-    if (!metaEl) {
-      return;
-    }
-    const productId = metaEl.getAttribute('content');
-    if (!productIds.has(productId)) {
-      return;
-    }
-    const articleEl = document.querySelector('article');
-    articleEl.classList.add('swg-entitled');
-  }
 
   // Handle payment responses.
   subscriptions.setOnPaymentResponse(response => {
