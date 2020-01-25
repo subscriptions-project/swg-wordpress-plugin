@@ -23,21 +23,24 @@ describe('paywalls', () => {
 
 	it('handles missing meta element', () => {
 		metaEl.remove();
-		removePaywallsForProductIds(PRODUCT_IDS);
+		const success = removePaywallsForProductIds(PRODUCT_IDS);
+		expect(success).toBeFalsy();
 	});
 
 	it('handles mismatched product in meta element', () => {
 		metaEl.setAttribute('content', 'exclusive');
-		removePaywallsForProductIds(PRODUCT_IDS);
+		const success = removePaywallsForProductIds(PRODUCT_IDS);
+		expect(success).toBeFalsy();
 	});
 
 	it('handles missing article element', () => {
 		articleEl.remove();
-		removePaywallsForProductIds(PRODUCT_IDS);
+		const success = removePaywallsForProductIds(PRODUCT_IDS);
+		expect(success).toBeFalsy();
 	});
 
 	it('marks article as entitled', () => {
-		removePaywallsForProductIds(PRODUCT_IDS);
-		expect(articleEl.classList.contains('swg-entitled')).toBeTruthy();
+		const success = removePaywallsForProductIds(PRODUCT_IDS);
+		expect(success).toBeTruthy();
 	});
 });

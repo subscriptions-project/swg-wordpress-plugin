@@ -32,20 +32,5 @@
   },
   "rules": {
     "valid-jsdoc": "warn"
-  },
-  "overrides": [
-    {
-      "files": [
-        "tests/e2e/**/*.js"
-      ],
-      "env": {
-        "browser": true
-      },
-      "globals": {
-        "browser": true,
-        "page": true,
-        "wp": true
-      }
-    }
-  ]
+  }
 }

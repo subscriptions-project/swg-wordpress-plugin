@@ -25,6 +25,8 @@ notifications:
     on_failure: change
 
 cache:
+  bundler: true
+  yarn: true
   directories:
     - $HOME/.cache/composer
     - $HOME/.phpbrew
@@ -39,12 +41,12 @@ branches:
 # Before install, failures in this section will result in build status 'errored'
 before_install:
   - |
-    if [[ "$PHP" == "1" ]] || [[ "$JS" == "1" ]] || [[ "$E2E" == "1" ]] || [[ "$SNIFF" == "1" ]]; then
+    if [[ "$PHP" == "1" ]] || [[ "$JS" == "1" ]] || [[ "$LINT" == "1" ]]; then
       nvm install
-      npm ci
+      yarn install --frozen-lockfile
     fi
   - |
-    if [[ "$PHP" == "1" ]] || [[ "$E2E" == "1" ]] || [[ "$SNIFF" == "1" ]]; then
+    if [[ "$PHP" == "1" ]] || [[ "$LINT" == "1" ]]; then
       docker run --rm -v "$PWD:/app" -v "$HOME/.cache/composer:/tmp/cache" composer install
     fi
   - |
@@ -67,17 +69,14 @@ before_install:
 
 script:
   - |
-    if [[ "$SNIFF" == "1" ]]; then
-      composer lint || exit 1
-      npm run lint:js || exit 1
-      npm run lint:css || exit 1
+    if [[ "$LINT" == "1" ]]; then
+      npm run lint || exit 1
     fi
   - |
     if [[ "$JS" == "1" ]]; then
       npm run build || exit 1 # Build for tests.
       npm run test:js || exit 1 # JS unit tests
-      npm run test || exit 1 # Bundle size test
-      # travis_retry npm run travis:visualtest || exit 1 # Visual regression tests
+      npm run test:size || exit 1 # Bundle size test
 
       # Upload Coverage to CodeCov
       ./node_modules/.bin/codecov -f coverage/js/lcov.info
@@ -88,13 +87,6 @@ script:
       # Upload Coverage to CodeCov
       ./node_modules/.bin/codecov -f coverage/php/coverage.xml
     fi
-  - |
-    if [[ "$E2E" == "1" ]]; then
-      npm run build || exit 1 # Build for tests.
-      npm run env:start || exit 1
-      npm run test:e2e:ci || exit 1 # E2E tests.
-      npm run env:stop || exit 1
-    fi
 
 jobs:
   allow_failures:
@@ -103,7 +95,7 @@ jobs:
     - stage: test
       name: Lint
       php: 7.3
-      env: WP_VERSION=4.7 PHPCS_PHP_VERSION='5.4' SNIFF=1 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      env: WP_VERSION=4.7 PHPCS_PHP_VERSION='5.4' LINT=1 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
     - name: PHP Tests (PHP 5.6, WordPress latest)
       php: 5.6
       env: WP_VERSION=latest PHP=1 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -116,19 +108,6 @@ jobs:
     - name: JS Tests
       php: 7.4
       env: WP_VERSION=latest JS=1
-    # - name: PHP Tests (PHP nightly, WordPress trunk)
-    #   stage: test
-    #   php: nightly
-    #   env: WP_VERSION=master PHP=1 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-    # - stage: test
-    #   name: E2E Tests (WordPress latest)
-    #   env: E2E=1
-    # - stage: test
-    #   name: E2E Tests (WordPress 4.7)
-    #   env: E2E=1 WP_VERSION=4.7.13
-    # - stage: test
-    #   name: E2E Tests (WordPress 4.9, Gutenberg 4.9)
-    #   env: E2E=1 WP_VERSION=4.9.10 GUTENBERG_VERSION=4.9.0
 
 services:
   - docker

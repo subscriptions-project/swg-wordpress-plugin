@@ -1,25 +1,26 @@
 /**
  * Removes paywalls for given productIds.
  * @param {!Set<string>} productIds Set of productIDs to unlock.
- * @return {void}
+ * @return {boolean} True if successful.
  */
 export function removePaywallsForProductIds(productIds) {
 	const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
 	if (!metaEl) {
-		return;
+		return false;
 	}
 
 	const productId = metaEl.getAttribute('content');
 	if (!productIds.has(productId)) {
-		return;
+		return false;
 	}
 
 	const articleEl = document.querySelector('article');
 	if (!articleEl) {
-		return;
+		return false;
 	}
 
-	articleEl.classList.add('swg-entitled');
+  articleEl.classList.add('swg-entitled');
+  return true;
 }
 
 // Wait for SwG library to become available.

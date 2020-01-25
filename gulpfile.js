@@ -37,34 +37,17 @@ gulp.task('watch', () => {
 });
 
 /**
- * Gulp task to minify and combine svg's.
- */
-gulp.task('svg', gulp.series('svgstore', 'svgmin'));
-
-/**
- * Gulp task to run all SVG processes in a sequential order.
+ * Gulp task to build project.
  */
 gulp.task('build', gulp.series(
 	'webpack',
-	'svg',
-	'imagemin',
 	'copy-vendor'
-));
-
-/**
- * Gulp task to livereload file changes in browser.
- */
-gulp.task('local', gulp.series(
-	'build',
-	'browser-sync'
 ));
 
 /**
  * Gulp task to run the default release processes in a sequential order.
  */
 gulp.task('release', gulp.series(
-	'svg',
-	'imagemin',
 	'copy-vendor'
 ));
 
@@ -73,6 +56,5 @@ gulp.task('release', gulp.series(
  */
 gulp.task('default', gulp.series(
 	'webpack',
-	'phpcs',
 	'copy-vendor'
 ));
