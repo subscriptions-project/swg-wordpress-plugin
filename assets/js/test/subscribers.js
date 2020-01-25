@@ -1,5 +1,7 @@
 import { removePaywallsForProductIds } from '../subscribers';
 
+//
+
 describe('paywalls', () => {
 	const PRODUCT_IDS = new Set(['basic', 'premium']);
 
