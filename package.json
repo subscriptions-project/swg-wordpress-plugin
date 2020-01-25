@@ -45,20 +45,9 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "assets/js/**/*.js": [
-        "eslint . --fix"
-      ],
-      "assets/sass/**/*.scss": [
-        "stylelint --syntax scss"
-      ],
-      "*.php": [
-        "composer lint-fix"
-      ]
-    },
-    "ignore": [
-      "dist/**/*"
-    ]
+    "assets/js/**/*.js": "eslint . --fix",
+    "assets/sass/**/*.scss": "stylelint --syntax scss",
+    "*.php": "composer lint-fix"
   },
   "keywords": [
     "subscribe",
@@ -87,6 +76,7 @@
     "gulp-zip": "^5.0.1",
     "husky": "^4.2.1",
     "jest": "^25.1.0",
+    "lint-staged": "^10.0.2",
     "node-sass": "^4.13.1",
     "plugin-error": "^1.0.1",
     "react": "^16.12.0",
