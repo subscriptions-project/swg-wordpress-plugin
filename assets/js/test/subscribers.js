@@ -36,6 +36,7 @@ describe('subscribers', () => {
 
 		buttonEl = document.createElement('div');
 		buttonEl.classList.add('swg-button');
+		buttonEl.dataset.playOffers = 'basic, premium';
 		document.body.appendChild(buttonEl);
 	});
 
@@ -77,7 +78,7 @@ describe('subscribers', () => {
 
 		expect(subscriptions.showOffers.mock.calls).toEqual([[{
 			isClosable: true,
-			skus: [],
+			skus: ['basic', 'premium'],
 		}]]);
 	});
 });
