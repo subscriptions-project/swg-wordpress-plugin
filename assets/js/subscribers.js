@@ -1,40 +1,32 @@
 /**
  * Removes paywalls for given productIds.
  * @param {!Set<string>} productIds Set of productIDs to unlock.
- * @return {boolean} True if successful.
  */
-export function removePaywallsForProductIds(productIds) {
-	const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
+function removePaywallsForProductIds(productIds) {
+  const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
 	if (!metaEl) {
-		return false;
+    return;
 	}
-
+  
 	const productId = metaEl.getAttribute('content');
 	if (!productIds.has(productId)) {
-		return false;
+    return;
 	}
-
+  
 	const articleEl = document.querySelector('article');
 	if (!articleEl) {
-		return false;
+    return;
 	}
-
+  
   articleEl.classList.add('swg-entitled');
-  return true;
 }
 
 // Wait for SwG library to become available.
 (self.SWG = self.SWG || []).push(subscriptions => {
-
-  // Handle payment responses.
   subscriptions.setOnPaymentResponse(response => {
-    // 1. Handle subscription response.
-    console.log('Payment response');
-
-    // 2. Once subscription is processed (account created):
+    // TODO: Create/update an account in WP.
     response.complete().then(() => {
-      // 3. The subscription is fully processed.
-      console.log('response.complete');
+      // TODO: Handle successful account creation/update.
     });
   });
 
@@ -66,6 +58,4 @@ export function removePaywallsForProductIds(productIds) {
     }
     removePaywallsForProductIds(productIds);
   });
-
-  console.log('📰 SwgPress has started.');
 });

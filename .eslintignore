@@ -1,8 +1,6 @@
-!/.storybook
-/.storybook/data/*
-/assets/vendor/*
-/dist/*
-/tests/backstop/html_report/*
-/php-scoper/*
-/vendor/*
-/coverage/*
+/.vscode
+/coverage
+/dist
+/node_modules
+/third-party
+/vendor
