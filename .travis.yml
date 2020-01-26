@@ -83,7 +83,7 @@ script:
     fi
   - |
     if [[ "$PHP" == "1" ]]; then
-      composer test-on-travis
+      composer test-on-travis || exit 1
       # Upload Coverage to CodeCov
       ./node_modules/.bin/codecov -f coverage/php/coverage.xml
     fi
