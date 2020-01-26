@@ -13,7 +13,7 @@
  * Version: 1.0.0
  * Author: Subscribe with Google authors
  * Author URI: https://developers.google.com/news/subscribe/
- * License: MIT
+ * License: Apache 2.0
  * Text Domain: subscribe-with-google
  */
 
