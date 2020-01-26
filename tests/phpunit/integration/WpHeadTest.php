@@ -33,7 +33,7 @@ class WpHeadTest extends \WP_UnitTestCase {
 	}
 
 	public function test__handle_wp_head__adds_scripts_and_styles() {
-		do_action( 'wp_head' );
+		Plugin::$instance->handle_wp_head();
 
 		$this->expectOutputRegex( '/subscriptions-product-id/' );
 
@@ -56,7 +56,7 @@ class WpHeadTest extends \WP_UnitTestCase {
 			'/\<meta name="subscriptions-product-id" content="example.com:basic" \/\>/'
 		);
 
-		do_action( 'wp_head' );
+		Plugin::$instance->handle_wp_head();
 	}
 
 	public function test__adds_product_id_meta_tag__premium() {
@@ -70,7 +70,7 @@ class WpHeadTest extends \WP_UnitTestCase {
 			'/\<meta name="subscriptions-product-id" content="example.com:premium" \/\>/'
 		);
 
-		do_action( 'wp_head' );
+		Plugin::$instance->handle_wp_head();
 	}
 
 	public function test__adds_free_meta_tag__true() {
@@ -84,7 +84,7 @@ class WpHeadTest extends \WP_UnitTestCase {
 			'/\<meta name="subscriptions-accessible-for-free" content="true" \/\>/'
 		);
 
-		do_action( 'wp_head' );
+		Plugin::$instance->handle_wp_head();
 	}
 
 	public function test__adds_free_meta_tag__false() {
@@ -98,7 +98,7 @@ class WpHeadTest extends \WP_UnitTestCase {
 			'/\<meta name="subscriptions-accessible-for-free" content="false" \/\>/'
 		);
 
-		do_action( 'wp_head' );
+		Plugin::$instance->handle_wp_head();
 	}
 
 	public function test__adds_free_meta_tag__defaults_to_false() {
@@ -112,6 +112,6 @@ class WpHeadTest extends \WP_UnitTestCase {
 			'/\<meta name="subscriptions-accessible-for-free" content="false" \/\>/'
 		);
 
-		do_action( 'wp_head' );
+		Plugin::$instance->handle_wp_head();
 	}
 }
