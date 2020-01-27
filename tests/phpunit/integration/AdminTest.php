@@ -39,4 +39,12 @@ class AdminTest extends \WP_UnitTestCase {
 			$wp_settings_sections['subscribe_with_google']
 		) );
 	}
+
+	public function test__admin_page__settings_form() {
+		$this->expectOutputRegex(
+			"/\<input type='hidden' name='option_page' value='subscribe_with_google' \/\>/"
+		);
+
+		Plugin::$instance->plugin_settings_page_content();
+	}
 }
