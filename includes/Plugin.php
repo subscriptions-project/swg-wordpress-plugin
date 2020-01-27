@@ -184,21 +184,25 @@ final class Plugin {
 		$product_key = $this::SWG_NAMESPACE . 'product';
 		$free_key    = $this::SWG_NAMESPACE . 'free';
 		// phpcs:disable -- Might be a bug in one of the outdated WP linters?
-		if ( ! isset ( $_POST[ $this::SWG_NAMESPACE . '_nonce' ] ) ) {
+		if (
+			! isset ( $_POST[ $this::SWG_NAMESPACE . 'nonce' ] ) ||
+			! isset ( $_POST[ $this::SWG_NAMESPACE . 'product' ] ) ||
+			! isset ( $_POST[ $this::SWG_NAMESPACE . 'free' ] )
+		) {
 			return;
 		}
 		$product = $_POST[ $product_key ];
 		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
-		$swg_nonce   = $_POST[ $this::SWG_NAMESPACE . '_nonce' ];
+		$swg_nonce   = $_POST[ $this::SWG_NAMESPACE . 'nonce' ];
 		// phpcs:enable
 
 		// Verify settings nonce.
-		if ( ! wp_verify_nonce( sanitize_key( $swg_nonce ), $this::SWG_NAMESPACE . '_saving_settings' ) ) {
+		if ( ! wp_verify_nonce( sanitize_key( $swg_nonce ), $this::SWG_NAMESPACE . 'saving_settings' ) ) {
 			return;
 		}
 
 		// Product field.
-		if ( isset( $product ) && '' !== $product ) {
+		if ( '' !== $product ) {
 			$value = sanitize_text_field( wp_unslash( $product ) );
 			update_post_meta(
 				$post_id,
@@ -208,7 +212,7 @@ final class Plugin {
 		}
 
 		// Free field.
-		if ( isset( $free ) && '' !== $free ) {
+		if ( '' !== $free ) {
 			$value = sanitize_text_field( wp_unslash( $free ) );
 			update_post_meta(
 				$post_id,
@@ -395,7 +399,7 @@ final class Plugin {
 					<?php
 				}
 				// TODO: How can we generate the nonce to make it impossible to guess? What if we generated a random number when the plugin is activated, and saved it to the DB?
-				wp_nonce_field( $this::SWG_NAMESPACE . '_saving_settings', $this::SWG_NAMESPACE . '_nonce' );
+				wp_nonce_field( $this::SWG_NAMESPACE . 'saving_settings', $this::SWG_NAMESPACE . 'nonce' );
 			},
 			'post',
 			'advanced',
