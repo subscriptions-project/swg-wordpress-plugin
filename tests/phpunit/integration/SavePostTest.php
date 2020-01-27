@@ -31,11 +31,11 @@ class SavePostTest extends \WP_UnitTestCase {
 		// Reset post meta.
 		delete_post_meta(
 			$this->post_id,
-			'SubscribeWithGoogle_free',
+			'SubscribeWithGoogle_free'
 		);
 		delete_post_meta(
 			$this->post_id,
-			'SubscribeWithGoogle_product',
+			'SubscribeWithGoogle_product'
 		);
 
 		// Instantiate plugin.
