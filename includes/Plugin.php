@@ -353,58 +353,59 @@ final class Plugin {
 		add_meta_box(
 			$this::SWG_NAMESPACE . 'post-edit-metabox',
 			'📰 Subscribe with Google',
-			function() {
-
-				$free_key     = $this::SWG_NAMESPACE . 'free';
-				$product_key  = $this::SWG_NAMESPACE . 'product';
-				$products_key = $this::SWG_NAMESPACE . 'products';
-				$free         = get_post_meta( get_the_ID(), $free_key, true ) == 'true';
-				$products_str = trim( get_option( $products_key ) );
-
-				if ( $products_str ) {
-					$selected_product = get_post_meta( get_the_ID(), $product_key, true );
-					$products         = explode( "\n", $products_str );
-					?>
-					Product&nbsp;
-					<select name="<?php echo esc_attr( $product_key ); ?>" id="<?php echo esc_attr( $product_key ); ?>">
-						<?php
-						foreach ( $products as $product ) {
-							$product = trim( $product );
-							?>
-								<option value="<?php echo esc_attr( $product ); ?>"
-								<?php echo ( $product == $selected_product ? 'selected' : '' ); ?>
-								>
-								<?php echo esc_html( $product ); ?>
-								</option>
-								<?php
-						}
-						?>
-					</select>
-					<br />
-					<br />
-					Is Free&nbsp;
-					<?php
-					if ( $free ) {
-						?>
-						<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" checked />
-						<?php
-					} else {
-						?>
-						<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" />
-						<?php
-					}
-				} else {
-					?>
-					Lmao define some products bruh. <a href="<?php echo esc_url( admin_url( 'admin.php?page=subscribe_with_google' ) ); ?>">Link</a>
-					<?php
-				}
-				// TODO: How can we generate the nonce to make it impossible to guess? What if we generated a random number when the plugin is activated, and saved it to the DB?
-				wp_nonce_field( $this::SWG_NAMESPACE . 'saving_settings', $this::SWG_NAMESPACE . 'nonce' );
-			},
+			array( $this, 'render_post_edit_fields' ),
 			'post',
 			'advanced',
 			'high'
 		);
+	}
+
+	/** Renders post edit fields. */
+	public function render_post_edit_fields() {
+		$free_key     = $this::SWG_NAMESPACE . 'free';
+		$product_key  = $this::SWG_NAMESPACE . 'product';
+		$products_key = $this::SWG_NAMESPACE . 'products';
+		$free         = get_post_meta( get_the_ID(), $free_key, true ) == 'true';
+		$products_str = trim( get_option( $products_key ) );
+
+		if ( $products_str ) {
+			$selected_product = get_post_meta( get_the_ID(), $product_key, true );
+			$products         = explode( "\n", $products_str );
+			?>
+				Product&nbsp;
+				<select name="<?php echo esc_attr( $product_key ); ?>" id="<?php echo esc_attr( $product_key ); ?>">
+				<?php
+				foreach ( $products as $product ) {
+					$product = trim( $product );
+					?>
+							<option value="<?php echo esc_attr( $product ); ?>"
+						<?php echo ( $product == $selected_product ? 'selected' : '' ); ?>
+							>
+						<?php echo esc_html( $product ); ?>
+							</option>
+						<?php
+				}
+				?>
+				</select>
+				<br />
+				<br />
+				Is Free&nbsp;
+				<?php
+				if ( $free ) {
+					?>
+					<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" checked />
+					<?php
+				} else {
+					?>
+					<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" />
+					<?php
+				}
+		} else {
+			?>
+				Please define products on the SwG setup page 😄. <a href="<?php echo esc_url( admin_url( 'admin.php?page=subscribe_with_google' ) ); ?>">Link</a>
+				<?php
+		}
+		wp_nonce_field( $this::SWG_NAMESPACE . 'saving_settings', $this::SWG_NAMESPACE . 'nonce' );
 	}
 
 	/** Loads the plugin main instance and initializes it. */
