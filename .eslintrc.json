@@ -31,6 +31,10 @@
     "process": "readonly"
   },
   "rules": {
-    "valid-jsdoc": "warn"
+    "valid-jsdoc": [2, {
+      "requireReturn": false,
+      "requireParamDescription": false,
+      "requireReturnDescription": false
+    }]
   }
 }
