@@ -12,9 +12,6 @@ namespace SubscribeWithGoogle\WordPress;
 /** Main class for the plugin. */
 final class Plugin {
 
-	/** Namespace for SwG variables. */
-	const SWG_NAMESPACE = 'SubscribeWithGoogle_';
-
 	/**
 	 * Main instance of the plugin.
 	 *
@@ -62,9 +59,12 @@ final class Plugin {
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
 	public function shortcode_subscribe( $atts = [] ) {
-		$play_offers = isset( $atts['play-offers'] ) ? $atts['play-offers'] : '';
-
-		return '<button class="swg-button" data-play-offers="' . $play_offers . '"></button>';
+		$html = '<button class="swg-button" data-play-offers="';
+		if ( isset( $atts['play-offers'] ) ) {
+			$html .= $atts['play-offers'];
+		}
+		$html .= '"></button>';
+		return $html;
 	}
 
 	/**
@@ -81,7 +81,7 @@ final class Plugin {
 
 		// Verify this post is supposed to be locked, even.
 		// If it's free, just bail.
-		$free_key = $this::SWG_NAMESPACE . 'free';
+		$free_key = $this::key( 'free' );
 		$free     = get_post_meta( get_the_ID(), $free_key, true );
 		if ( 'true' == $free ) {
 			return $content;
@@ -160,11 +160,11 @@ final class Plugin {
 			true
 		);
 
-		$publication_id = get_option( $this::SWG_NAMESPACE . 'publication_id' );
-		$product        = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'product', true );
+		$publication_id = get_option( $this::key( 'publication_id' ) );
+		$product        = get_post_meta( get_the_ID(), $this::key( 'product' ), true );
 		$product_id     = $publication_id . ':' . $product;
 
-		$is_free = get_post_meta( get_the_ID(), $this::SWG_NAMESPACE . 'free', true );
+		$is_free = get_post_meta( get_the_ID(), $this::key( 'free' ), true );
 		$is_free = $is_free ? $is_free : 'false';
 
 		// TODO: Add encrypted document key to head, once it's saved.
@@ -180,24 +180,23 @@ final class Plugin {
 	 * @param string $post_id ID of the post being saved.
 	 */
 	public function setup_post_save( $post_id ) {
-		// TODO: Can these key strings be saved somewhere more central? As class consts?
-		$product_key = $this::SWG_NAMESPACE . 'product';
-		$free_key    = $this::SWG_NAMESPACE . 'free';
+		$product_key = $this::key( 'product' );
+		$free_key    = $this::key( 'free' );
 		// phpcs:disable -- Might be a bug in one of the outdated WP linters?
 		if (
-			! isset ( $_POST[ $this::SWG_NAMESPACE . 'nonce' ] ) ||
-			! isset ( $_POST[ $this::SWG_NAMESPACE . 'product' ] ) ||
-			! isset ( $_POST[ $this::SWG_NAMESPACE . 'free' ] )
+			! isset ( $_POST[ $this::key( 'nonce' ) ] ) ||
+			! isset ( $_POST[ $this::key( 'product' ) ] ) ||
+			! isset ( $_POST[ $this::key( 'free' ) ] )
 		) {
 			return;
 		}
 		$product = $_POST[ $product_key ];
 		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
-		$swg_nonce   = $_POST[ $this::SWG_NAMESPACE . 'nonce' ];
+		$swg_nonce   = $_POST[ $this::key( 'nonce' ) ];
 		// phpcs:enable
 
 		// Verify settings nonce.
-		if ( ! wp_verify_nonce( sanitize_key( $swg_nonce ), $this::SWG_NAMESPACE . 'saving_settings' ) ) {
+		if ( ! wp_verify_nonce( sanitize_key( $swg_nonce ), $this::key( 'saving_settings' ) ) ) {
 			return;
 		}
 
@@ -240,18 +239,17 @@ final class Plugin {
 
 	/** Adds sections to admin settings page. */
 	public function setup_sections() {
-		// TODO: Should the admin settings page get its own class?
-		add_settings_section( $this::SWG_NAMESPACE . 'configuration', 'Configuration', false, 'subscribe_with_google' );
-		add_settings_section( $this::SWG_NAMESPACE . 'report', 'Statistics', false, 'subscribe_with_google' );
+		add_settings_section( $this::key( 'configuration' ), 'Configuration', false, 'subscribe_with_google' );
+		add_settings_section( $this::key( 'report' ), 'Statistics', false, 'subscribe_with_google' );
 	}
 
 	/** Adds fields to admin settings page. */
 	public function setup_fields() {
 		$fields = array(
 			array(
-				'uid'          => $this::SWG_NAMESPACE . 'publication_id',
+				'uid'          => $this::key( 'publication_id' ),
 				'label'        => 'Publication ID',
-				'section'      => $this::SWG_NAMESPACE . 'configuration',
+				'section'      => $this::key( 'configuration' ),
 				'type'         => 'text',
 				'options'      => false,
 				'placeholder'  => 'your.publication.id',
@@ -259,9 +257,9 @@ final class Plugin {
 			),
 
 			array(
-				'uid'          => $this::SWG_NAMESPACE . 'products',
+				'uid'          => $this::key( 'products' ),
 				'label'        => 'Product Names',
-				'section'      => $this::SWG_NAMESPACE . 'configuration',
+				'section'      => $this::key( 'configuration' ),
 				'type'         => 'textarea',
 				'options'      => false,
 				'placeholder'  => "basic\npremium",
@@ -271,9 +269,9 @@ final class Plugin {
 			),
 
 			array(
-				'uid'          => $this::SWG_NAMESPACE . 'chart',
+				'uid'          => $this::key( 'chart' ),
 				'label'        => 'Sample chart',
-				'section'      => $this::SWG_NAMESPACE . 'report',
+				'section'      => $this::key( 'report' ),
 				'type'         => 'chart',
 				'options'      => false,
 				'placeholder'  => '',
@@ -339,7 +337,7 @@ final class Plugin {
 	/** Adds fields to Post edit page. */
 	public function setup_post_edit_fields() {
 		add_meta_box(
-			$this::SWG_NAMESPACE . 'post-edit-metabox',
+			$this::key( 'post-edit-metabox' ),
 			'📰 Subscribe with Google',
 			array( $this, 'render_post_edit_fields' ),
 			'post',
@@ -350,9 +348,9 @@ final class Plugin {
 
 	/** Renders post edit fields. */
 	public function render_post_edit_fields() {
-		$free_key     = $this::SWG_NAMESPACE . 'free';
-		$product_key  = $this::SWG_NAMESPACE . 'product';
-		$products_key = $this::SWG_NAMESPACE . 'products';
+		$free_key     = $this::key( 'free' );
+		$product_key  = $this::key( 'product' );
+		$products_key = $this::key( 'products' );
 		$free         = get_post_meta( get_the_ID(), $free_key, true ) == 'true';
 		$products_str = trim( get_option( $products_key ) );
 
@@ -400,7 +398,7 @@ final class Plugin {
 		}
 		echo '/>';
 
-		wp_nonce_field( $this::SWG_NAMESPACE . 'saving_settings', $this::SWG_NAMESPACE . 'nonce' );
+		wp_nonce_field( $this::key( 'saving_settings' ), $this::key( 'nonce' ) );
 	}
 
 	/** Loads the plugin main instance and initializes it. */
@@ -408,5 +406,15 @@ final class Plugin {
 		if ( null === static::$instance ) {
 			static::$instance = new static();
 		}
+	}
+
+	/**
+	 * Returns a namespaced key.
+	 *
+	 * @param string $key Key to namespace.
+	 * @return string Namespaced key.
+	 */
+	private static function key( $key ) {
+		return 'SubscribeWithGoogle_' . $key;
 	}
 }
