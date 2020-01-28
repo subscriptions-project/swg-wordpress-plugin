@@ -191,9 +191,9 @@ final class Plugin {
 		) {
 			return;
 		}
-		$product = $_POST[ $product_key ];
-		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
-		$swg_nonce   = $_POST[ $nonce_key ];
+		$product   = $_POST[ $product_key ];
+		$free      = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
+		$swg_nonce = $_POST[ $nonce_key ];
 		// phpcs:enable
 
 		// Verify settings nonce.
@@ -225,16 +225,16 @@ final class Plugin {
 	/** Renders the admin settings page. */
 	public function plugin_settings_page_content() {
 		?>
-	<div class="wrap">
-			<h2>Subscribe with Google</h2>
-			<form method="post" action="options.php">
-				<?php
-					settings_fields( 'subscribe_with_google' );
-					do_settings_sections( 'subscribe_with_google' );
-					submit_button();
-				?>
-			</form>
-	</div>
+		<div class="wrap">
+		<h2>Subscribe with Google</h2>
+		<form method="post" action="options.php">
+		<?php
+		settings_fields( 'subscribe_with_google' );
+		do_settings_sections( 'subscribe_with_google' );
+		submit_button();
+		?>
+		</form>
+		</div>
 		<?php
 	}
 
