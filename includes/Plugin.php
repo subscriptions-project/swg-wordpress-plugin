@@ -182,17 +182,18 @@ final class Plugin {
 	public function setup_post_save( $post_id ) {
 		$product_key = $this::key( 'product' );
 		$free_key    = $this::key( 'free' );
+		$nonce_key   = $this::key( 'nonce' );
 		// phpcs:disable -- Might be a bug in one of the outdated WP linters?
 		if (
-			! isset ( $_POST[ $this::key( 'nonce' ) ] ) ||
-			! isset ( $_POST[ $this::key( 'product' ) ] ) ||
-			! isset ( $_POST[ $this::key( 'free' ) ] )
+			! isset ( $_POST[ $nonce_key ] ) ||
+			! isset ( $_POST[ $product_key ] ) ||
+			! isset ( $_POST[ $free_key ] )
 		) {
 			return;
 		}
 		$product = $_POST[ $product_key ];
 		$free = $_POST[ $free_key ] ? $_POST[ $free_key ] : 'false';
-		$swg_nonce   = $_POST[ $this::key( 'nonce' ) ];
+		$swg_nonce   = $_POST[ $nonce_key ];
 		// phpcs:enable
 
 		// Verify settings nonce.
