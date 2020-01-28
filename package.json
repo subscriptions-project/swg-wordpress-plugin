@@ -47,7 +47,7 @@
   "lint-staged": {
     "assets/js/**/*.js": "eslint . --fix",
     "assets/sass/**/*.scss": "stylelint --syntax scss",
-    "*.php": "composer lint-fix"
+    "*.php": "composer lint"
   },
   "keywords": [
     "subscribe",
