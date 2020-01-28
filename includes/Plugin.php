@@ -37,7 +37,7 @@ final class Plugin {
 
 		// Post create/edit pages.
 		add_action( 'add_meta_boxes', array( $this, 'setup_post_edit_fields' ) );
-		add_action( 'save_post', array( $this, 'setup_post_save' ) );
+		add_action( 'save_post', array( $this, 'handle_save_post' ) );
 
 		// Post view pages.
 		add_action( 'wp_head', array( $this, 'handle_wp_head' ) );
@@ -179,7 +179,7 @@ final class Plugin {
 	 *
 	 * @param string $post_id ID of the post being saved.
 	 */
-	public function setup_post_save( $post_id ) {
+	public function handle_save_post( $post_id ) {
 		$product_key = $this::key( 'product' );
 		$free_key    = $this::key( 'free' );
 		$nonce_key   = $this::key( 'nonce' );

@@ -66,7 +66,7 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'false'
 		);
-		Plugin::$instance->setup_post_save( $this->post_id );
+		Plugin::$instance->handle_save_post( $this->post_id );
 
 		// Verify updates didn't happen.
 		$this->assertPostMeta( 'free', '' );
@@ -87,7 +87,7 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'false'
 		);
-		Plugin::$instance->setup_post_save( $this->post_id );
+		Plugin::$instance->handle_save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'false' );
