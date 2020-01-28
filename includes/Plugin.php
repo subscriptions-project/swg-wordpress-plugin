@@ -386,11 +386,12 @@ final class Plugin {
 		echo ' id="' . esc_attr( $product_key ) . '"';
 		echo '>';
 		foreach ( $products as $product ) {
-			$product  = trim( $product );
-			$selected = $product == $selected_product ? 'selected ' : '';
+			$product = trim( $product );
 			echo '<option';
 			echo ' value="' . esc_attr( $product ) . '"';
-			echo esc_html( $selected );
+			if ( $product == $selected_product ) {
+				echo ' selected';
+			}
 			echo '>';
 			echo esc_html( $product );
 			echo '</option>';
