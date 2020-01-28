@@ -368,43 +368,49 @@ final class Plugin {
 		$free         = get_post_meta( get_the_ID(), $free_key, true ) == 'true';
 		$products_str = trim( get_option( $products_key ) );
 
-		if ( $products_str ) {
-			$selected_product = get_post_meta( get_the_ID(), $product_key, true );
-			$products         = explode( "\n", $products_str );
-			?>
-				Product&nbsp;
-				<select name="<?php echo esc_attr( $product_key ); ?>" id="<?php echo esc_attr( $product_key ); ?>">
-				<?php
-				foreach ( $products as $product ) {
-					$product = trim( $product );
-					?>
-							<option value="<?php echo esc_attr( $product ); ?>"
-						<?php echo ( $product == $selected_product ? 'selected' : '' ); ?>
-							>
-						<?php echo esc_html( $product ); ?>
-							</option>
-						<?php
-				}
-				?>
-				</select>
-				<br />
-				<br />
-				Is Free&nbsp;
-				<?php
-				if ( $free ) {
-					?>
-					<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" checked />
-					<?php
-				} else {
-					?>
-					<input id="<?php echo esc_attr( $free_key ); ?>" name="<?php echo esc_attr( $free_key ); ?>" type="checkbox" value="true" />
-					<?php
-				}
-		} else {
-			?>
-				Please define products on the SwG setup page 😄. <a href="<?php echo esc_url( admin_url( 'admin.php?page=subscribe_with_google' ) ); ?>">Link</a>
-				<?php
+		if ( ! $products_str ) {
+			echo 'Please define products on the SwG setup page 😄. ';
+			echo '<a href="';
+			echo esc_url( admin_url( 'admin.php?page=subscribe_with_google' ) );
+			echo '">Link</a>';
+			return;
 		}
+
+		$selected_product = get_post_meta( get_the_ID(), $product_key, true );
+		$products         = explode( "\n", $products_str );
+
+		// Products dropdown.
+		echo 'Product&nbsp; ';
+		echo '<select';
+		echo ' name="' . esc_attr( $product_key ) . '"';
+		echo ' id="' . esc_attr( $product_key ) . '"';
+		echo '>';
+		foreach ( $products as $product ) {
+			$product  = trim( $product );
+			$selected = $product == $selected_product ? 'selected ' : '';
+			echo '<option';
+			echo ' value="' . esc_attr( $product ) . '"';
+			echo esc_html( $selected );
+			echo '>';
+			echo esc_html( $product );
+			echo '</option>';
+		}
+		echo '</select>';
+		echo '<br />';
+		echo '<br />';
+
+		// Free checkbox.
+		echo 'Is Free&nbsp; ';
+		echo '<input';
+		echo ' id="' . esc_attr( $free_key ) . '"';
+		echo ' name="' . esc_attr( $free_key ) . '"';
+		echo ' type="checkbox"';
+		echo ' value="true"';
+		if ( $free ) {
+			echo ' checked';
+		}
+		echo '/>';
+
 		wp_nonce_field( $this::SWG_NAMESPACE . 'saving_settings', $this::SWG_NAMESPACE . 'nonce' );
 	}
 
