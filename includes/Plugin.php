@@ -183,7 +183,9 @@ final class Plugin {
 		$product_key = $this::key( 'product' );
 		$free_key    = $this::key( 'free' );
 		$nonce_key   = $this::key( 'nonce' );
-		// phpcs:disable -- Might be a bug in one of the outdated WP linters?
+		// phpcs:disable
+		// There might be a bug in one of the WP linters.
+		// We can't upgrade them while supporting older versions of PHP it seems.
 		if (
 			! isset ( $_POST[ $nonce_key ] ) ||
 			! isset ( $_POST[ $product_key ] ) ||
@@ -202,24 +204,20 @@ final class Plugin {
 		}
 
 		// Product field.
-		if ( '' !== $product ) {
-			$value = sanitize_text_field( wp_unslash( $product ) );
-			update_post_meta(
-				$post_id,
-				$product_key,
-				$value
-			);
-		}
+		$value = sanitize_text_field( wp_unslash( $product ) );
+		update_post_meta(
+			$post_id,
+			$product_key,
+			$value
+		);
 
 		// Free field.
-		if ( '' !== $free ) {
-			$value = sanitize_text_field( wp_unslash( $free ) );
-			update_post_meta(
-				$post_id,
-				$free_key,
-				$value
-			);
-		}
+		$value = sanitize_text_field( wp_unslash( $free ) );
+		update_post_meta(
+			$post_id,
+			$free_key,
+			$value
+		);
 	}
 
 	/** Renders the admin settings page. */
