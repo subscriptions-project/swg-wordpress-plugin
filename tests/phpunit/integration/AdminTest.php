@@ -40,7 +40,7 @@ class AdminTest extends \WP_UnitTestCase {
 		) );
 	}
 
-	public function test__admin_page__settings_form() {
+	public function test__admin_page__renders_settings_form() {
 		$this->expectOutputRegex(
 			"/\<input type='hidden' name='option_page' value='subscribe_with_google' \/\>/"
 		);
@@ -48,7 +48,47 @@ class AdminTest extends \WP_UnitTestCase {
 		Plugin::$instance->plugin_settings_page_content();
 	}
 
-	public function test__admin_page__settings_fields() {
+	public function test__admin_page__renders_settings_fields__text() {
+		$this->expectOutputString(
+			'<input name="SubscribeWithGoogle_publication_id" id="SubscribeWithGoogle_publication_id" type="text" placeholder="Add products here" value="example.com" /><p class="description">Extra text</p>'
+		);
+
+		// Define publication ID.
+		update_option( 'SubscribeWithGoogle_publication_id', 'example.com' );
+
+		Plugin::$instance->field_callback( array(
+			'uid' => 'SubscribeWithGoogle_publication_id',
+			'type' => 'text',
+			'placeholder' => 'Add products here',
+			'supplemental' => 'Extra text',
+		) );
+	}
+
+	public function test__admin_page__renders_settings_fields__textarea() {
+		$this->expectOutputString(
+			'<textarea style="min-height: 96px;" name="SubscribeWithGoogle_publication_id" id="SubscribeWithGoogle_publication_id" placeholder="Add products here">example.com</textarea>'
+		);
+
+		// Define publication ID.
+		update_option( 'SubscribeWithGoogle_publication_id', 'example.com' );
+
+		Plugin::$instance->field_callback( array(
+			'uid' => 'SubscribeWithGoogle_publication_id',
+			'type' => 'textarea',
+			'placeholder' => 'Add products here',
+		) );
+	}
+
+	public function test__admin_page__renders_settings_fields__chart() {
+		$this->expectOutputString('📊 📈');
+
+		Plugin::$instance->field_callback( array(
+			'type' => 'chart',
+			'uid' => 'TODO: Make actual charts 😂',
+		) );
+	}
+
+	public function test__admin_page__registers_settings_fields() {
 		global $wp_registered_settings;
 
 		Plugin::$instance->setup_fields();

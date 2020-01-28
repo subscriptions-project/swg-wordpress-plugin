@@ -255,9 +255,7 @@ final class Plugin {
 				'type'         => 'text',
 				'options'      => false,
 				'placeholder'  => 'your.publication.id',
-				'helper'       => '',
 				'supplemental' => 'Unique indentifier for your publication.',
-				'default'      => '',
 			),
 
 			array(
@@ -279,9 +277,7 @@ final class Plugin {
 				'type'         => 'chart',
 				'options'      => false,
 				'placeholder'  => '',
-				'helper'       => '',
 				'supplemental' => 'TODO: Create sample chart.',
-				'default'      => '',
 			),
 		);
 
@@ -305,11 +301,8 @@ final class Plugin {
 	 * @param array[string]string $arguments Describes how field should render.
 	 */
 	public function field_callback( $arguments ) {
-		// Get the current value, if there is one.
+		// Get the current value.
 		$value = get_option( $arguments['uid'] );
-		if ( ! $value ) {
-			$value = $arguments['default'];
-		}
 
 		// Check which type of field we want.
 		switch ( $arguments['type'] ) {
@@ -337,13 +330,8 @@ final class Plugin {
 				break;
 		}
 
-		// If there is help text.
-		if ( $arguments['helper'] ) {
-			printf( '<span class="helper"> %s</span>', esc_attr( $arguments['helper'] ) );
-		}
-
 		// If there is supplemental text.
-		if ( $arguments['supplemental'] ) {
+		if ( isset( $arguments['supplemental'] ) ) {
 			printf( '<p class="description">%s</p>', esc_attr( $arguments['supplemental'] ) );
 		}
 	}
