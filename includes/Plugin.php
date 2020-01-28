@@ -345,7 +345,10 @@ final class Plugin {
 		);
 	}
 
-	/** Renders post edit fields. */
+	/**
+	 * Renders post edit fields.
+	 * TODO: Create a new class for the Post Edit page stuff.
+	 */
 	public function render_post_edit_fields() {
 		$free_key     = $this::key( 'free' );
 		$product_key  = $this::key( 'product' );
@@ -361,26 +364,15 @@ final class Plugin {
 			return;
 		}
 
-		$selected_product = get_post_meta( get_the_ID(), $product_key, true );
-		$products         = explode( "\n", $products_str );
-
 		// Products dropdown.
 		echo 'Product&nbsp; ';
 		echo '<select';
 		echo ' name="' . esc_attr( $product_key ) . '"';
 		echo ' id="' . esc_attr( $product_key ) . '"';
 		echo '>';
-		foreach ( $products as $product ) {
-			$product = trim( $product );
-			echo '<option';
-			echo ' value="' . esc_attr( $product ) . '"';
-			if ( $product == $selected_product ) {
-				echo ' selected';
-			}
-			echo '>';
-			echo esc_html( $product );
-			echo '</option>';
-		}
+		$selected_product = get_post_meta( get_the_ID(), $product_key, true );
+		$products         = explode( "\n", $products_str );
+		$this::render_post_edit_product_options( $products, $selected_product );
 		echo '</select>';
 		echo '<br />';
 		echo '<br />';
@@ -398,6 +390,26 @@ final class Plugin {
 		echo '/>';
 
 		wp_nonce_field( $this::key( 'saving_settings' ), $this::key( 'nonce' ) );
+	}
+
+	/**
+	 * Renders options for the post edit page's products dropdown.
+	 * 
+	 * @param array[string] $products that are rendered as options.
+	 * @param string        $selected_product that is the initial selected option.
+	 */
+	private static function render_post_edit_product_options( $products, $selected_product ) {
+		foreach ( $products as $product ) {
+			$product = trim( $product );
+			echo '<option';
+			echo ' value="' . esc_attr( $product ) . '"';
+			if ( $product == $selected_product ) {
+				echo ' selected';
+			}
+			echo '>';
+			echo esc_html( $product );
+			echo '</option>';
+		}
 	}
 
 	/** Loads the plugin main instance and initializes it. */
