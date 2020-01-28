@@ -47,4 +47,15 @@ class AdminTest extends \WP_UnitTestCase {
 
 		Plugin::$instance->plugin_settings_page_content();
 	}
+
+	public function test__admin_page__settings_fields() {
+		global $wp_registered_settings;
+
+		Plugin::$instance->setup_fields();
+
+		$keys = array_keys( $wp_registered_settings );
+		$this->assertContains( 'SubscribeWithGoogle_publication_id', $keys );
+		$this->assertContains( 'SubscribeWithGoogle_products', $keys );
+		$this->assertContains( 'SubscribeWithGoogle_chart', $keys );
+	}
 }
