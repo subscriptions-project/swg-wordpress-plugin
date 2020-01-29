@@ -7,6 +7,7 @@ use SubscribeWithGoogle\WordPress\Plugin;
 class AdminTest extends \WP_UnitTestCase {
 
 	public function setUp() {
+		error_log( '🏃 AdminTest' );
 		parent::setUp();
 
 		// Instantiate plugin.

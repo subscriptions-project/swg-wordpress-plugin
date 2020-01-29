@@ -6,6 +6,7 @@ use SubscribeWithGoogle\WordPress\Plugin;
 
 class ShortcodeTest extends \WP_UnitTestCase {
 	public function setUp() {
+		error_log( '🏃 ShortcodeTest' );
 		parent::setUp();
 
 		// Instantiate plugin.

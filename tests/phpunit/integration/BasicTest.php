@@ -6,6 +6,7 @@ use SubscribeWithGoogle\WordPress\Plugin;
 
 class BasicTest extends \WP_UnitTestCase {
 	public function setUp() {
+		error_log( '🏃 BasicTest' );
 		parent::setUp();
 
 		// Instantiate plugin.

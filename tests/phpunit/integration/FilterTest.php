@@ -12,6 +12,7 @@ class FilterTest extends \WP_UnitTestCase {
 	';
 
 	public function setUp() {
+		error_log( '🏃 FilterTest' );
 		parent::setUp();
 
 		// Instantiate plugin.

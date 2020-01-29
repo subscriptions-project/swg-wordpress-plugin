@@ -9,6 +9,7 @@ class WpHeadTest extends \WP_UnitTestCase {
 	private $post_id = null;
 
 	public function setUp() {
+		error_log( '🏃 WpHeadTest' );
 		parent::setUp();
 
 		if ( $this->post_id == null ) {
