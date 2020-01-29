@@ -55,7 +55,7 @@ class PostEditTest extends \WP_UnitTestCase {
 
 		// Select product for post.
 		$post_id = $this->factory->post->create();
-		$this->go_to( "/wp-admin/post.php?post=$post_id&action=edit" );
+		$this->go_to( "/?p=$post_id" );
 		update_post_meta( $post_id, 'SubscribeWithGoogle_product', 'premium' );
 
 		$this->post_edit->render_post_edit_fields();
@@ -82,7 +82,7 @@ class PostEditTest extends \WP_UnitTestCase {
 
 		// Set product as free.
 		$post_id = $this->factory->post->create();
-		$this->go_to( "/wp-admin/post.php?post=$post_id&action=edit" );
+		$this->go_to( "/?p=$post_id" );
 		update_post_meta( $post_id, 'SubscribeWithGoogle_free', 'true' );
 
 		$this->post_edit->render_post_edit_fields();
