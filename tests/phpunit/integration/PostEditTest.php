@@ -2,17 +2,17 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
-use SubscribeWithGoogle\WordPress\Plugin;
+use SubscribeWithGoogle\WordPress\PostEdit;
 
 class PostEditTest extends \WP_UnitTestCase {
 
 	private $post_id = null;
+	private $post_edit = null;
 
 	public function setUp() {
 		parent::setUp();
 
-		// Instantiate plugin.
-		Plugin::load();
+		$this->post_edit = new PostEdit();
 
 		if ( $this->post_id == null ) {
 			// Create a post.
@@ -34,7 +34,7 @@ class PostEditTest extends \WP_UnitTestCase {
 	public function test__adds_metabox() {
 		global $wp_meta_boxes;
 
-		Plugin::$instance->setup_post_edit_fields();
+		$this->post_edit->setup_post_edit_fields();
 
 		$this->assertContains(
 			'SubscribeWithGoogle_post-edit-metabox',
@@ -47,7 +47,7 @@ class PostEditTest extends \WP_UnitTestCase {
 			"/Please define products on the SwG setup page 😄/"
 		);
 
-		Plugin::$instance->render_post_edit_fields();
+		$this->post_edit->render_post_edit_fields();
 	}
 
 	public function test__renders_metabox__products_dropdown() {
@@ -58,7 +58,7 @@ class PostEditTest extends \WP_UnitTestCase {
 		// Define products.
 		update_option( 'SubscribeWithGoogle_products', "basic\npremium" );
 
-		Plugin::$instance->render_post_edit_fields();
+		$this->post_edit->render_post_edit_fields();
 	}
 
 	public function test__renders_metabox__products_dropdown__with_selection() {
@@ -72,7 +72,7 @@ class PostEditTest extends \WP_UnitTestCase {
 		// Select product for post.
 		update_post_meta( $this->post_id, 'SubscribeWithGoogle_product', 'premium' );
 
-		Plugin::$instance->render_post_edit_fields();
+		$this->post_edit->render_post_edit_fields();
 	}
 
 	public function test__renders_metabox__free_checkbox__unchecked() {
@@ -83,7 +83,7 @@ class PostEditTest extends \WP_UnitTestCase {
 		// Define products.
 		update_option( 'SubscribeWithGoogle_products', "basic\npremium" );
 
-		Plugin::$instance->render_post_edit_fields();
+		$this->post_edit->render_post_edit_fields();
 	}
 
 	public function test__renders_metabox__free_checkbox__checked() {
@@ -97,6 +97,6 @@ class PostEditTest extends \WP_UnitTestCase {
 		// Set product as free.
 		update_post_meta( $this->post_id, 'SubscribeWithGoogle_free', 'true' );
 
-		Plugin::$instance->render_post_edit_fields();
+		$this->post_edit->render_post_edit_fields();
 	}
 }

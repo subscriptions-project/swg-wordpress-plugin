@@ -2,11 +2,12 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
-use SubscribeWithGoogle\WordPress\Plugin;
+use SubscribeWithGoogle\WordPress\PostEdit;
 
 class SavePostTest extends \WP_UnitTestCase {
 
 	private $post_id = null;
+	private $post_edit = null;
 
 	public function setUp() {
 		parent::setUp();
@@ -38,8 +39,7 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_product'
 		);
 
-		// Instantiate plugin.
-		Plugin::load();
+		$this->post_edit = new PostEdit();
 	}
 
 	public function tearDown() {
@@ -66,14 +66,14 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'false'
 		);
-		Plugin::$instance->handle_save_post( $this->post_id );
+		$this->post_edit->handle_save_post( $this->post_id );
 
 		// Verify updates didn't happen.
 		$this->assertPostMeta( 'free', '' );
 		$this->assertPostMeta( 'product', '' );
 	}
 
-	public function test__updates_post_meta() {
+	public function test__updates_post_meta__when_free_is_unset() {
 		global $_POST;
 
 		// Verify initial state.
@@ -85,12 +85,32 @@ class SavePostTest extends \WP_UnitTestCase {
 		$_POST = array(
 			'SubscribeWithGoogle_nonce' => $nonce,
 			'SubscribeWithGoogle_product' => 'premium',
-			'SubscribeWithGoogle_free' => 'false'
 		);
-		Plugin::$instance->handle_save_post( $this->post_id );
+		$this->post_edit->handle_save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'false' );
+		$this->assertPostMeta( 'product', 'premium' );
+	}
+
+	public function test__updates_post_meta__when_free_is_true() {
+		global $_POST;
+
+		// Verify initial state.
+		$this->assertPostMeta( 'free', '' );
+		$this->assertPostMeta( 'product', '' );
+		
+		// Trigger updates.
+		$nonce = wp_create_nonce('SubscribeWithGoogle_saving_settings');
+		$_POST = array(
+			'SubscribeWithGoogle_nonce' => $nonce,
+			'SubscribeWithGoogle_product' => 'premium',
+			'SubscribeWithGoogle_free' => 'true',
+		);
+		$this->post_edit->handle_save_post( $this->post_id );
+
+		// Verify updates.
+		$this->assertPostMeta( 'free', 'true' );
 		$this->assertPostMeta( 'product', 'premium' );
 	}
 }
