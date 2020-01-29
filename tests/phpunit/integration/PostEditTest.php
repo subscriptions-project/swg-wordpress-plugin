@@ -6,7 +6,6 @@ use SubscribeWithGoogle\WordPress\PostEdit;
 
 class PostEditTest extends \WP_UnitTestCase {
 
-	private $post_id = null;
 	private $post_edit = null;
 
 	public function setUp() {
@@ -14,22 +13,6 @@ class PostEditTest extends \WP_UnitTestCase {
 		parent::setUp();
 
 		$this->post_edit = new PostEdit();
-
-		if ( $this->post_id == null ) {
-			// Create a post.
-			$this->post_id = $this->factory->post->create();
-			wp_update_post( array(
-				'ID' => $this->post_id,
-			) );
-
-			// Visit the post.
-			$this->go_to("/?p={$this->post_id}");
-		}
-
-		// Reset state.
-		delete_option( 'SubscribeWithGoogle_publication_id' );
-		delete_post_meta( $this->post_id, 'SubscribeWithGoogle_product' );
-		delete_post_meta( $this->post_id, 'SubscribeWithGoogle_free' );
 	}
 
 	public function test__adds_metabox() {
@@ -71,7 +54,9 @@ class PostEditTest extends \WP_UnitTestCase {
 		update_option( 'SubscribeWithGoogle_products', "basic\npremium" );
 
 		// Select product for post.
-		update_post_meta( $this->post_id, 'SubscribeWithGoogle_product', 'premium' );
+		$post_id = $this->factory->post->create();
+		$this->go_to( "/wp-admin/post.php?post=$post_id&action=edit" );
+		update_post_meta( $post_id, 'SubscribeWithGoogle_product', 'premium' );
 
 		$this->post_edit->render_post_edit_fields();
 	}
@@ -96,7 +81,9 @@ class PostEditTest extends \WP_UnitTestCase {
 		update_option( 'SubscribeWithGoogle_products', "basic\npremium" );
 
 		// Set product as free.
-		update_post_meta( $this->post_id, 'SubscribeWithGoogle_free', 'true' );
+		$post_id = $this->factory->post->create();
+		$this->go_to( "/wp-admin/post.php?post=$post_id&action=edit" );
+		update_post_meta( $post_id, 'SubscribeWithGoogle_free', 'true' );
 
 		$this->post_edit->render_post_edit_fields();
 	}
