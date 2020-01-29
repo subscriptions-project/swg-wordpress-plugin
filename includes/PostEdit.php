@@ -15,14 +15,14 @@ final class PostEdit {
 	/** Creates the plugin. */
 	public function __construct() {
 		// Render meta box on Post Edit page.
-		add_action( 'add_meta_boxes', array( $this, 'setup_post_edit_fields' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
 		// Handle Posts being saved.
-		add_action( 'save_post', array( $this, 'handle_save_post' ) );
+		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
 
-	/** Adds fields to Post edit page. */
-	public function setup_post_edit_fields() {
+	/** Adds meta boxes to the Post edit page. */
+	public function add_meta_boxes() {
 		add_meta_box(
 			Plugin::key( 'post-edit-metabox' ),
 			'📰 Subscribe with Google',
@@ -50,14 +50,24 @@ final class PostEdit {
 		}
 
 		// Products dropdown.
+		$products         = explode( "\n", $products_str );
+		$selected_product = get_post_meta( get_the_ID(), $product_key, true );
 		echo 'Product&nbsp; ';
 		echo '<select';
 		echo ' name="' . esc_attr( $product_key ) . '"';
 		echo ' id="' . esc_attr( $product_key ) . '"';
 		echo '>';
-		$selected_product = get_post_meta( get_the_ID(), $product_key, true );
-		$products         = explode( "\n", $products_str );
-		$this::render_post_edit_product_options( $products, $selected_product );
+		foreach ( $products as $product ) {
+			$product = trim( $product );
+			echo '<option';
+			echo ' value="' . esc_attr( $product ) . '"';
+			if ( $selected_product == $product ) {
+				echo ' selected';
+			}
+			echo '>';
+			echo esc_html( $product );
+			echo '</option>';
+		}
 		echo '</select>';
 		echo '<br />';
 		echo '<br />';
@@ -78,31 +88,11 @@ final class PostEdit {
 	}
 
 	/**
-	 * Renders options for the post edit page's products dropdown.
-	 * 
-	 * @param array[string] $products that are rendered as options.
-	 * @param string        $selected_product that is the initial selected option.
-	 */
-	private static function render_post_edit_product_options( $products, $selected_product ) {
-		foreach ( $products as $product ) {
-			$product = trim( $product );
-			echo '<option';
-			echo ' value="' . esc_attr( $product ) . '"';
-			if ( $product == $selected_product ) {
-				echo ' selected';
-			}
-			echo '>';
-			echo esc_html( $product );
-			echo '</option>';
-		}
-	}
-
-	/**
 	 * Saves additional metadata when a Post is saved.
 	 *
 	 * @param string $post_id ID of the post being saved.
 	 */
-	public function handle_save_post( $post_id ) {
+	public function save_post( $post_id ) {
 		$product_key = Plugin::key( 'product' );
 		$free_key    = Plugin::key( 'free' );
 		$nonce_key   = Plugin::key( 'nonce' );

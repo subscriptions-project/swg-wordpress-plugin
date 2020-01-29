@@ -34,7 +34,7 @@ class PostEditTest extends \WP_UnitTestCase {
 	public function test__adds_metabox() {
 		global $wp_meta_boxes;
 
-		$this->post_edit->setup_post_edit_fields();
+		$this->post_edit->add_meta_boxes();
 
 		$this->assertContains(
 			'SubscribeWithGoogle_post-edit-metabox',

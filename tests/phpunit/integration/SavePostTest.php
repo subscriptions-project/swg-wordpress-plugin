@@ -66,7 +66,7 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'false'
 		);
-		$this->post_edit->handle_save_post( $this->post_id );
+		$this->post_edit->save_post( $this->post_id );
 
 		// Verify updates didn't happen.
 		$this->assertPostMeta( 'free', '' );
@@ -86,7 +86,7 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_nonce' => $nonce,
 			'SubscribeWithGoogle_product' => 'premium',
 		);
-		$this->post_edit->handle_save_post( $this->post_id );
+		$this->post_edit->save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'false' );
@@ -107,7 +107,7 @@ class SavePostTest extends \WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'true',
 		);
-		$this->post_edit->handle_save_post( $this->post_id );
+		$this->post_edit->save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'true' );
