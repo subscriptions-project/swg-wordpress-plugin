@@ -12,7 +12,7 @@ namespace SubscribeWithGoogle\WordPress;
 /** Supports editing of posts. */
 final class PostEdit {
 
-	/** Creates the plugin. */
+	/** Adds action handlers. */
 	public function __construct() {
 		// Render meta box on Post Edit page.
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
