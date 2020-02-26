@@ -27,7 +27,7 @@ const externals = {
 module.exports = (env, argv) => {
 	return [
 
-		// Build the settings js..
+		// Build JavaScript
 		{
 			entry: {
 				'subscribers': './assets/js/subscribers.js',
@@ -68,7 +68,7 @@ module.exports = (env, argv) => {
 			},
 			plugins: (env && env.analyze) ? [] : [
 				new WebpackBar({
-					name: 'Module Entry Points',
+					name: 'JavaScript',
 					color: '#fbbc05',
 				}),
 			],
@@ -115,7 +115,7 @@ module.exports = (env, argv) => {
 			externals,
 		},
 
-		// Build the main plugin admin css.
+		// Build CSS
 		{
 			entry: {
 				subscribers: './assets/sass/subscribers.scss',
@@ -137,7 +137,7 @@ module.exports = (env, argv) => {
 					filename: '/assets/css/[name].css',
 				}),
 				new WebpackBar({
-					name: 'Plugin CSS',
+					name: 'CSS',
 					color: '#4285f4',
 				}),
 			],
