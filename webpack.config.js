@@ -19,23 +19,6 @@
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
-/**
- * Given a string, returns a new string with dash separators converted to
- * camel-case equivalent. This is not as aggressive as `_.camelCase` in
- * converting to uppercase, where Lodash will convert letters following
- * numbers.
- *
- * @param {string} string Input dash-delimited string.
- *
- * @return {string} Camel-cased string.
- */
-function camelCaseDash(string) {
-	return string.replace(
-		/-([a-z])/g,
-		(match, letter) => letter.toUpperCase()
-	);
-}
-
 const externals = {
 	react: 'React',
 };
@@ -135,6 +118,12 @@ module.exports = (env, argv) => {
 		{
 			entry: {
 				subscribers: './assets/sass/subscribers.scss',
+			},
+			output: {
+				filename: '[name].css',
+				path: __dirname + '/dist/assets/css',
+				chunkFilename: '[name].css',
+				publicPath: '',
 			},
 			module: {
 				rules: [
