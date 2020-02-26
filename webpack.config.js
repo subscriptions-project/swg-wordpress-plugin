@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
@@ -119,17 +120,12 @@ module.exports = (env, argv) => {
 			entry: {
 				subscribers: './assets/sass/subscribers.scss',
 			},
-			output: {
-				filename: '[name].css',
-				path: __dirname + '/dist/assets/css',
-				chunkFilename: '[name].css',
-				publicPath: '',
-			},
 			module: {
 				rules: [
 					{
 						test: /\.scss$/,
 						use: [
+							MiniCssExtractPlugin.loader,
 							'css-loader',
 							'sass-loader'
 						],
@@ -137,6 +133,9 @@ module.exports = (env, argv) => {
 				],
 			},
 			plugins: (env && env.analyze) ? [] : [
+				new MiniCssExtractPlugin({
+					filename: '/assets/css/[name].css',
+				}),
 				new WebpackBar({
 					name: 'Plugin CSS',
 					color: '#4285f4',
