@@ -5,7 +5,8 @@ const SUBSCRIBERS = self.SWG[0];
 describe('subscribers', () => {
 	let metaEl;
 	let articleEl;
-	let buttonEl;
+	let contributeButtonEl;
+	let subscribeButtonEl;
 	let subscriptions;
 
 	beforeEach(() => {
@@ -14,7 +15,7 @@ describe('subscribers', () => {
 				const response = {
 					complete: () => Promise.resolve(),
 				};
-				callback(response);
+				callback(Promise.resolve(response));
 			},
 			getEntitlements: () => Promise.resolve({
 				entitlements: [
@@ -23,6 +24,7 @@ describe('subscribers', () => {
 					},
 				],
 			}),
+			showContributions: jest.fn(),
 			showOffers: jest.fn(),
 		};
 
@@ -34,10 +36,15 @@ describe('subscribers', () => {
 		articleEl = document.createElement('article');
 		document.body.appendChild(articleEl);
 
-		buttonEl = document.createElement('div');
-		buttonEl.classList.add('swg-button');
-		buttonEl.dataset.playOffers = 'basic, premium';
-		document.body.appendChild(buttonEl);
+		contributeButtonEl = document.createElement('div');
+		contributeButtonEl.classList.add('swg-contribute-button');
+		contributeButtonEl.dataset.playOffers = 'basic, premium';
+		document.body.appendChild(contributeButtonEl);
+
+		subscribeButtonEl = document.createElement('div');
+		subscribeButtonEl.classList.add('swg-button');
+		subscribeButtonEl.dataset.playOffers = 'basic, premium';
+		document.body.appendChild(subscribeButtonEl);
 	});
 
 	afterEach(() => {
@@ -71,12 +78,23 @@ describe('subscribers', () => {
 		expect(articleEl.classList.contains('swg-entitled')).toBeTruthy();
 	});
 
-	it('handles button clicks', async () => {
+	it('handles subscribe button clicks', async () => {
 		await SUBSCRIBERS(subscriptions);
 
-		buttonEl.click();
+		subscribeButtonEl.click();
 
 		expect(subscriptions.showOffers.mock.calls).toEqual([[{
+			isClosable: true,
+			skus: ['basic', 'premium'],
+		}]]);
+	});
+
+	it('handles contribute button clicks', async () => {
+		await SUBSCRIBERS(subscriptions);
+
+		contributeButtonEl.click();
+
+		expect(subscriptions.showContributions.mock.calls).toEqual([[{
 			isClosable: true,
 			skus: ['basic', 'premium'],
 		}]]);

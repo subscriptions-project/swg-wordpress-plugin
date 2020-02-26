@@ -4,29 +4,49 @@
  */
 function removePaywallsForProductIds(productIds) {
   const metaEl = document.querySelector('meta[name=subscriptions-product-id]');
-	if (!metaEl) {
+  if (!metaEl) {
     return;
-	}
-  
-	const productId = metaEl.getAttribute('content');
-	if (!productIds.has(productId)) {
+  }
+
+  const productId = metaEl.getAttribute('content');
+  if (!productIds.has(productId)) {
     return;
-	}
-  
-	const articleEl = document.querySelector('article');
-	if (!articleEl) {
+  }
+
+  const articleEl = document.querySelector('article');
+  if (!articleEl) {
     return;
-	}
-  
+  }
+
   articleEl.classList.add('swg-entitled');
+}
+
+/**
+ * Gets a list of Play Offers from a given Element.
+ * @param {!Element} el
+ * @return {string[]}
+ */
+function getPlayOffersFromElement(el) {
+  let skus = [];
+
+  if (el.dataset.playOffers) {
+    skus = el.dataset.playOffers
+      .trim()
+      .split(',')
+      .map(p => p.trim());
+  }
+
+  return skus;
 }
 
 // Wait for SwG library to become available.
 (self.SWG = self.SWG || []).push(subscriptions => {
-  subscriptions.setOnPaymentResponse(response => {
-    // TODO: Create/update an account in WP.
-    response.complete().then(() => {
-      // TODO: Handle successful account creation/update.
+  subscriptions.setOnPaymentResponse(paymentResponse => {
+    paymentResponse.then(response => {
+      // TODO: Handle payment response.
+      response.complete().then(() => {
+        // TODO: Update page accordingly.
+      });
     });
   });
 
@@ -34,16 +54,17 @@ function removePaywallsForProductIds(productIds) {
   const subscribeButtons = document.querySelectorAll('.swg-button');
   for (const subscribeButton of subscribeButtons) {
     subscribeButton.addEventListener('click', () => {
-      let skus = [];
-
-      if (subscribeButton.dataset.playOffers) {
-        skus = subscribeButton.dataset.playOffers
-          .trim()
-          .split(',')
-          .map(p => p.trim());
-      }
-
+      const skus = getPlayOffersFromElement(subscribeButton);
       subscriptions.showOffers({ skus, isClosable: true });
+    });
+  }
+
+  // Handle contribute button clicks.
+  const contributeButtons = document.querySelectorAll('.swg-contribute-button');
+  for (const contributeButton of contributeButtons) {
+    contributeButton.addEventListener('click', () => {
+      const skus = getPlayOffersFromElement(contributeButton);
+      subscriptions.showContributions({ skus, isClosable: true });
     });
   }
 
