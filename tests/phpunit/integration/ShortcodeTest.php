@@ -13,7 +13,7 @@ class ShortcodeTest extends \WP_UnitTestCase {
 		Plugin::load();
 	}
 
-	public function test__with_play_offers() {
+	public function test__subscribe__with_play_offers() {
 		$result = Plugin::$instance->shortcode_subscribe(
 			array(
 				'play-offers' => 'sku1, sku2'
@@ -26,12 +26,34 @@ class ShortcodeTest extends \WP_UnitTestCase {
 		);
 	}
 
-	public function test__without_play_offers() {
+	public function test__subscribe__without_play_offers() {
 		$result = Plugin::$instance->shortcode_subscribe();
 
 		$this->assertEquals(
 			$result,
 			'<button class="swg-button" data-play-offers=""></button>'
+		);
+	}
+
+	public function test__contribute__with_play_offers() {
+		$result = Plugin::$instance->shortcode_contribute(
+			array(
+				'play-offers' => 'sku1, sku2'
+			)
+		);
+
+		$this->assertEquals(
+			$result,
+			'<button class="swg-contribute-button" data-play-offers="sku1, sku2">Contribute with Google</button>'
+		);
+	}
+
+	public function test__contribute__without_play_offers() {
+		$result = Plugin::$instance->shortcode_contribute();
+
+		$this->assertEquals(
+			$result,
+			'<button class="swg-contribute-button" data-play-offers="">Contribute with Google</button>'
 		);
 	}
 }
