@@ -7,6 +7,7 @@ describe('subscribers', () => {
   let articleEl;
   let contributeButtonEl;
   let subscribeButtonEl;
+  let subscribeButtonElWithoutPlayOffersDefined;
   let subscriptions;
 
   beforeEach(() => {
@@ -45,6 +46,10 @@ describe('subscribers', () => {
     subscribeButtonEl.classList.add('swg-button');
     subscribeButtonEl.dataset.playOffers = 'basic, premium';
     document.body.appendChild(subscribeButtonEl);
+
+    subscribeButtonElWithoutPlayOffersDefined = document.createElement('div');
+    subscribeButtonElWithoutPlayOffersDefined.classList.add('swg-button');
+    document.body.appendChild(subscribeButtonElWithoutPlayOffersDefined);
   });
 
   afterEach(() => {
@@ -86,6 +91,17 @@ describe('subscribers', () => {
     expect(subscriptions.showOffers.mock.calls).toEqual([[{
       isClosable: true,
       skus: ['basic', 'premium'],
+    }]]);
+  });
+
+  it('handles subscribe button clicks when play offers are not defined', async () => {
+    await SUBSCRIBERS(subscriptions);
+
+    subscribeButtonElWithoutPlayOffersDefined.click();
+
+    expect(subscriptions.showOffers.mock.calls).toEqual([[{
+      isClosable: true,
+      skus: [],
     }]]);
   });
 
