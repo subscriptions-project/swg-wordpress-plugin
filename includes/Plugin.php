@@ -49,6 +49,7 @@ final class Plugin {
 	/** Adds WordPress shortcodes. */
 	private function add_shortcodes() {
 		add_shortcode( 'swg-subscribe', array( $this, 'shortcode_subscribe' ) );
+		add_shortcode( 'swg-contribute', array( $this, 'shortcode_contribute' ) );
 	}
 
 	/**
@@ -62,6 +63,20 @@ final class Plugin {
 			$html .= $atts['play-offers'];
 		}
 		$html .= '"></button>';
+		return $html;
+	}
+
+	/**
+	 * Shortcode for rendering a Contribute button.
+	 *
+	 * @param array[string]string $atts Attributes affecting shortcode.
+	 */
+	public function shortcode_contribute( $atts = [] ) {
+		$html = '<button class="swg-contribute-button" data-play-offers="';
+		if ( isset( $atts['play-offers'] ) ) {
+			$html .= $atts['play-offers'];
+		}
+		$html .= '">Contribute with Google</button>';
 		return $html;
 	}
 

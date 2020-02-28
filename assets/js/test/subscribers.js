@@ -24,7 +24,7 @@ describe('subscribers', () => {
 					},
 				],
 			}),
-			showContributions: jest.fn(),
+			showContributionOptions: jest.fn(),
 			showOffers: jest.fn(),
 		};
 
@@ -94,7 +94,7 @@ describe('subscribers', () => {
 
 		contributeButtonEl.click();
 
-		expect(subscriptions.showContributions.mock.calls).toEqual([[{
+		expect(subscriptions.showContributionOptions.mock.calls).toEqual([[{
 			isClosable: true,
 			skus: ['basic', 'premium'],
 		}]]);

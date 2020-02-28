@@ -62,7 +62,7 @@ function getPlayOffersFromElement(el) {
 	for (const contributeButton of contributeButtons) {
 		contributeButton.addEventListener('click', () => {
 			const skus = getPlayOffersFromElement(contributeButton);
-			subscriptions.showContributions({ skus, isClosable: true });
+			subscriptions.showContributionOptions({ skus, isClosable: true });
 		});
 	}
 
