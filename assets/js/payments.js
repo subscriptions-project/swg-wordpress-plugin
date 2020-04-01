@@ -3,11 +3,11 @@
  * @param {*} subscriptions SwG API 
  */
 export function handlePaymentResponse(subscriptions) {
-	subscriptions.setOnPaymentResponse(paymentResponse => {
+  subscriptions.setOnPaymentResponse(paymentResponse => {
     paymentResponse.then(response => {
       // TODO: Handle payment response.
       response.complete().then(() => {
-				// TODO: Update page accordingly.
+        // TODO: Update page accordingly.
       });
     });
   });

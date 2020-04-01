@@ -17,13 +17,13 @@ export function handleContributeButtonClicks(subscriptions) {
  * @param {*} subscriptions SwG API
  */
 export function handleSubscribeButtonClicks(subscriptions) {
-	const subscribeButtons = document.querySelectorAll('.swg-button');
-	for (const subscribeButton of subscribeButtons) {
-		subscribeButton.addEventListener('click', () => {
-			const skus = getPlayOffersFromElement(subscribeButton);
-			subscriptions.showOffers({ skus, isClosable: true });
-		});
-	}
+  const subscribeButtons = document.querySelectorAll('.swg-button');
+  for (const subscribeButton of subscribeButtons) {
+    subscribeButton.addEventListener('click', () => {
+      const skus = getPlayOffersFromElement(subscribeButton);
+      subscriptions.showOffers({ skus, isClosable: true });
+    });
+  }
 }
 
 /**
