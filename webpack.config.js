@@ -30,7 +30,7 @@ module.exports = (env, argv) => {
 		// Build JavaScript
 		{
 			entry: {
-				'subscribers': './assets/js/subscribers.js',
+				'main': './assets/js/main.js',
 			},
 			output: {
 				filename: '[name].js',
@@ -118,7 +118,7 @@ module.exports = (env, argv) => {
 		// Build CSS
 		{
 			entry: {
-				subscribers: './assets/sass/subscribers.scss',
+				main: './assets/sass/main.scss',
 			},
 			module: {
 				rules: [

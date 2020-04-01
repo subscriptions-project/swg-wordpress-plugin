@@ -1,8 +1,8 @@
-import '../subscribers';
+import '../main';
 
 const SUBSCRIBERS = self.SWG[0];
 
-describe('subscribers', () => {
+describe('main', () => {
   let metaEl;
   let articleEl;
   let contributeButtonEl;

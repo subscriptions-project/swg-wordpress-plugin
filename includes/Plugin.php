@@ -150,7 +150,7 @@ final class Plugin {
 		// Styles for SwgPress.
 		wp_enqueue_style(
 			'subscribe-with-google',
-			plugins_url( '../dist/assets/css/subscribers.css', __FILE__ ),
+			plugins_url( '../dist/assets/css/main.css', __FILE__ ),
 			null,
 			1
 		);
@@ -167,7 +167,7 @@ final class Plugin {
 		// JavaScript for SwgPress.
 		wp_enqueue_script(
 			'subscribe-with-google',
-			plugins_url( '../dist/assets/js/subscribers.js', __FILE__ ),
+			plugins_url( '../dist/assets/js/main.js', __FILE__ ),
 			null,
 			1,
 			true
