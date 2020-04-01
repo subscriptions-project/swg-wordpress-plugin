@@ -7,11 +7,9 @@ const del = require('del');
 gulp.task('copy', () => {
 	del.sync(['./release/**/*']);
 
-	gulp.src(
+	return gulp.src(
 		[
-			'readme.txt',
 			'plugin.php',
-			'uninstall.php',
 			'dist/*.js',
 			'dist/assets/**/*',
 			'bin/**/*',

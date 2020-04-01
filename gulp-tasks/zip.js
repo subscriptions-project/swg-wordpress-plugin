@@ -13,7 +13,7 @@ gulp.task('pre-zip', () => {
 });
 
 gulp.task('zip', () => {
-	gulp.src(
+	return gulp.src(
 		['release/subscribe-with-google/**'],
 		{ base: 'release/' }
 	)
@@ -34,7 +34,7 @@ gulp.task('pre-zip-wp50', () => {
 });
 
 gulp.task('zip-wp50', () => {
-	gulp.src(
+	return gulp.src(
 		['release/subscribe-with-google-wp50/**'],
 		{ base: 'release/' }
 	)

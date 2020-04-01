@@ -11,7 +11,7 @@
     "watch": "npm run remove-dist && gulp copy-vendor && webpack --watch --mode=development --debug --devtool cheap-module-eval-source-map --output-pathinfo",
     "release-zip": "npm run build && gulp release && gulp copy && gulp pre-zip && gulp zip && rm -rf release",
     "release-zip-wp50": "npm run build && gulp release && gulp copy && gulp pre-zip-wp50 && gulp zip-wp50 && rm -rf release",
-    "release": "rm -rf release && git worktree prune && git worktree add -B stable release origin/stable && npm run build && gulp release && gulp copy",
+    "release": "rm -rf release && git worktree prune && git worktree add -B stable release origin/master && npm run build && gulp release && gulp copy",
     "remove-dist": "rm -rf dist/*",
     "test:size": "npm run build:production && bundlesize",
     "test:analyze": "webpack -p --mode=production --env.analyze=true --json --progress --profile > /tmp/stats.json && cp ./dist/assets/js/*.js /tmp && webpack-bundle-analyzer /tmp/stats.json",
