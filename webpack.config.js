@@ -49,12 +49,6 @@ module.exports = (env, argv) => {
 						use: [
 							{
 								loader: 'babel-loader',
-								query: {
-									presets: [['@babel/env', {
-										useBuiltIns: 'entry',
-										corejs: 2,
-									}], '@babel/preset-react'],
-								},
 							},
 							{
 								loader: 'eslint-loader',
