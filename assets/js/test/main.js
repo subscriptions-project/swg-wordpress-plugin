@@ -43,12 +43,12 @@ describe('main', () => {
     document.body.appendChild(contributeButtonEl);
 
     subscribeButtonEl = document.createElement('div');
-    subscribeButtonEl.classList.add('swg-button');
+    subscribeButtonEl.classList.add('swg-subscribe-button');
     subscribeButtonEl.dataset.playOffers = 'basic, premium';
     document.body.appendChild(subscribeButtonEl);
 
     subscribeButtonElWithoutPlayOffersDefined = document.createElement('div');
-    subscribeButtonElWithoutPlayOffersDefined.classList.add('swg-button');
+    subscribeButtonElWithoutPlayOffersDefined.classList.add('swg-subscribe-button');
     document.body.appendChild(subscribeButtonElWithoutPlayOffersDefined);
   });
 

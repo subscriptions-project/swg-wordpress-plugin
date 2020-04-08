@@ -22,7 +22,7 @@ class ShortcodeTest extends \WP_UnitTestCase {
 
 		$this->assertEquals(
 			$result,
-			'<button class="swg-button" data-play-offers="sku1, sku2"></button>'
+			'<button class="swg-button swg-subscribe-button" data-play-offers="sku1, sku2"></button>'
 		);
 	}
 
@@ -31,7 +31,7 @@ class ShortcodeTest extends \WP_UnitTestCase {
 
 		$this->assertEquals(
 			$result,
-			'<button class="swg-button" data-play-offers=""></button>'
+			'<button class="swg-button swg-subscribe-button" data-play-offers=""></button>'
 		);
 	}
 

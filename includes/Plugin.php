@@ -58,7 +58,7 @@ final class Plugin {
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
 	public function shortcode_subscribe( $atts = [] ) {
-		$html = '<button class="swg-button" data-play-offers="';
+		$html = '<button class="swg-button swg-subscribe-button" data-play-offers="';
 		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];
 		}
@@ -110,7 +110,7 @@ final class Plugin {
 	🔒 <span>Subscribe to unlock the rest of this article.</span>
 	<br />
 	<br />
-	<button class="swg-button"></button>
+	<button class="swg-button swg-subscribe-button"></button>
 </p>
 
 <div class="swg-paywall">
