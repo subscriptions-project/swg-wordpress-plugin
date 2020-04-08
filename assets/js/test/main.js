@@ -6,7 +6,9 @@ describe('main', () => {
   let metaEl;
   let articleEl;
   let contributeButtonEl;
+  let contributeLinkEl;
   let subscribeButtonEl;
+  let subscribeLinkEl;
   let subscribeButtonElWithoutPlayOffersDefined;
   let subscriptions;
 
@@ -42,10 +44,20 @@ describe('main', () => {
     contributeButtonEl.dataset.playOffers = 'basic, premium';
     document.body.appendChild(contributeButtonEl);
 
+    contributeLinkEl = document.createElement('a');
+    contributeLinkEl.href = '#swg-contribute';
+    contributeLinkEl.dataset.playOffers = 'basic, premium';
+    document.body.appendChild(contributeLinkEl);
+
     subscribeButtonEl = document.createElement('div');
     subscribeButtonEl.classList.add('swg-subscribe-button');
     subscribeButtonEl.dataset.playOffers = 'basic, premium';
     document.body.appendChild(subscribeButtonEl);
+
+    subscribeLinkEl = document.createElement('a');
+    subscribeLinkEl.href = '#swg-subscribe';
+    subscribeLinkEl.dataset.playOffers = 'basic, premium';
+    document.body.appendChild(subscribeLinkEl);
 
     subscribeButtonElWithoutPlayOffersDefined = document.createElement('div');
     subscribeButtonElWithoutPlayOffersDefined.classList.add('swg-subscribe-button');
@@ -94,6 +106,17 @@ describe('main', () => {
     }]]);
   });
 
+  it('handles subscribe link clicks', async () => {
+    await SUBSCRIBERS(subscriptions);
+
+    subscribeLinkEl.click();
+
+    expect(subscriptions.showOffers.mock.calls).toEqual([[{
+      isClosable: true,
+      skus: ['basic', 'premium'],
+    }]]);
+  });
+
   it('handles subscribe button clicks when play offers are not defined', async () => {
     await SUBSCRIBERS(subscriptions);
 
@@ -109,6 +132,17 @@ describe('main', () => {
     await SUBSCRIBERS(subscriptions);
 
     contributeButtonEl.click();
+
+    expect(subscriptions.showContributionOptions.mock.calls).toEqual([[{
+      isClosable: true,
+      skus: ['basic', 'premium'],
+    }]]);
+  });
+
+  it('handles contribute link clicks', async () => {
+    await SUBSCRIBERS(subscriptions);
+
+    contributeLinkEl.click();
 
     expect(subscriptions.showContributionOptions.mock.calls).toEqual([[{
       isClosable: true,

@@ -7,7 +7,6 @@ export function handleContributeClicks(subscriptions) {
     Array.from(document.querySelectorAll('.swg-contribute-button')),
     Array.from(document.querySelectorAll('a[href="#swg-contribute"]'))
   ));
-  console.log(contributeButtons);
   for (const contributeButton of contributeButtons) {
     contributeButton.addEventListener('click', () => {
       const skus = getPlayOffersFromElement(contributeButton);
