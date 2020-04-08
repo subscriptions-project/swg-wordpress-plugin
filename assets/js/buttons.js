@@ -2,7 +2,7 @@
  * Handle clicks on Contribute buttons.
  * @param {*} subscriptions SwG API
  */
-export function handleContributeButtonClicks(subscriptions) {
+export function handleContributeClicks(subscriptions) {
   const contributeButtons = document.querySelectorAll('.swg-contribute-button');
   for (const contributeButton of contributeButtons) {
     contributeButton.addEventListener('click', () => {
@@ -16,7 +16,7 @@ export function handleContributeButtonClicks(subscriptions) {
  * Handle clicks on Subscribe buttons.
  * @param {*} subscriptions SwG API
  */
-export function handleSubscribeButtonClicks(subscriptions) {
+export function handleSubscribeClicks(subscriptions) {
   const subscribeButtons = document.querySelectorAll('.swg-subscribe-button');
   for (const subscribeButton of subscribeButtons) {
     subscribeButton.addEventListener('click', () => {

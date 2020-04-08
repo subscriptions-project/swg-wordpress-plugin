@@ -1,4 +1,4 @@
-import { handleSubscribeButtonClicks, handleContributeButtonClicks } from "./buttons";
+import { handleSubscribeClicks, handleContributeClicks } from "./buttons";
 import { handlePaymentResponse } from "./payments";
 import { getOwnedProducts } from "./products";
 import { unlockContent } from "./unlock";
@@ -10,8 +10,8 @@ import { unlockContent } from "./unlock";
   handlePaymentResponse(subscriptions);
 
   // Handle button clicks.
-  handleSubscribeButtonClicks(subscriptions);
-  handleContributeButtonClicks(subscriptions);
+  handleSubscribeClicks(subscriptions);
+  handleContributeClicks(subscriptions);
 
   // Unlock content for owned products.
   await getOwnedProducts(subscriptions).then(unlockContent);
