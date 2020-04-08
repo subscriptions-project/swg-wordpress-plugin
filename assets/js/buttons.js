@@ -3,10 +3,10 @@
  * @param {*} subscriptions SwG API
  */
 export function handleContributeClicks(subscriptions) {
-  const contributeButtons = [].concat(
+  const contributeButtons = new Set([].concat(
     Array.from(document.querySelectorAll('.swg-contribute-button')),
     Array.from(document.querySelectorAll('a[href="#swg-contribute"]'))
-  );
+  ));
   console.log(contributeButtons);
   for (const contributeButton of contributeButtons) {
     contributeButton.addEventListener('click', () => {
@@ -21,10 +21,10 @@ export function handleContributeClicks(subscriptions) {
  * @param {*} subscriptions SwG API
  */
 export function handleSubscribeClicks(subscriptions) {
-  const subscribeButtons = [].concat(
+  const subscribeButtons = new Set([].concat(
     Array.from(document.querySelectorAll('.swg-subscribe-button')),
     Array.from(document.querySelectorAll('a[href="#swg-subscribe"]'))
-  );
+  ));
   for (const subscribeButton of subscribeButtons) {
     subscribeButton.addEventListener('click', () => {
       const skus = getPlayOffersFromElement(subscribeButton);
