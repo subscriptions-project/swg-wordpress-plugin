@@ -36,7 +36,7 @@ class AdminTest extends \WP_UnitTestCase {
 		$this->assertEmpty( $wp_settings_sections );
 
 		Plugin::$instance->setup_sections();
-		$this->assertEquals( 2, count(
+		$this->assertEquals( 1, count(
 			$wp_settings_sections['subscribe_with_google']
 		) );
 	}
@@ -95,8 +95,9 @@ class AdminTest extends \WP_UnitTestCase {
 		Plugin::$instance->setup_fields();
 
 		$keys = array_keys( $wp_registered_settings );
-		$this->assertContains( 'SubscribeWithGoogle_publication_id', $keys );
 		$this->assertContains( 'SubscribeWithGoogle_products', $keys );
-		$this->assertContains( 'SubscribeWithGoogle_chart', $keys );
+		$this->assertContains( 'SubscribeWithGoogle_publication_id', $keys );
+		$this->assertContains( 'SubscribeWithGoogle_oauth_client_id', $keys );
+		$this->assertContains( 'SubscribeWithGoogle_oauth_client_secret', $keys );
 	}
 }
