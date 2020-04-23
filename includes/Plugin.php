@@ -206,12 +206,23 @@ final class Plugin {
 	/** Adds sections to admin settings page. */
 	public function setup_sections() {
 		add_settings_section( $this::key( 'configuration' ), 'Configuration', false, 'subscribe_with_google' );
-		add_settings_section( $this::key( 'report' ), 'Statistics', false, 'subscribe_with_google' );
 	}
 
 	/** Adds fields to admin settings page. */
 	public function setup_fields() {
 		$fields = array(
+			array(
+				'uid'          => $this::key( 'products' ),
+				'label'        => 'Product Names',
+				'section'      => $this::key( 'configuration' ),
+				'type'         => 'textarea',
+				'options'      => false,
+				'placeholder'  => "basic\npremium",
+				'helper'       => '',
+				'supplemental' => 'Product names, one per line.',
+				'default'      => '',
+			),
+
 			array(
 				'uid'          => $this::key( 'publication_id' ),
 				'label'        => 'Publication ID',
@@ -223,25 +234,23 @@ final class Plugin {
 			),
 
 			array(
-				'uid'          => $this::key( 'products' ),
-				'label'        => 'Product Names',
+				'uid'          => $this::key( 'oauth_client_id' ),
+				'label'        => 'OAuth Client ID',
 				'section'      => $this::key( 'configuration' ),
-				'type'         => 'textarea',
+				'type'         => 'text',
 				'options'      => false,
-				'placeholder'  => "basic\npremium",
-				'helper'       => '',
-				'supplemental' => 'Products, one per line.',
-				'default'      => '',
+				'placeholder'  => '',
+				'supplemental' => 'Unique identifier for your Google OAuth Client.',
 			),
 
 			array(
-				'uid'          => $this::key( 'chart' ),
-				'label'        => 'Sample chart',
-				'section'      => $this::key( 'report' ),
-				'type'         => 'chart',
+				'uid'          => $this::key( 'oauth_client_secret' ),
+				'label'        => 'OAuth Client Secret',
+				'section'      => $this::key( 'configuration' ),
+				'type'         => 'text',
 				'options'      => false,
 				'placeholder'  => '',
-				'supplemental' => 'TODO: Create sample chart.',
+				'supplemental' => 'Secret key for your Google OAuth Client.',
 			),
 		);
 
