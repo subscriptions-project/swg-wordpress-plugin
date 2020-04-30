@@ -75,7 +75,7 @@ script:
   - |
     if [[ "$JS" == "1" ]]; then
       npm run build || exit 1 # Build for tests.
-      npm run test:js || exit 1 # JS unit tests
+      npm run test || exit 1 # JS unit tests
       npm run test:size || exit 1 # Bundle size test
 
       # Upload Coverage to CodeCov
