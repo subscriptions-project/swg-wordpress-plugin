@@ -32,6 +32,36 @@ export function handleSubscribeClicks(subscriptions) {
   }
 }
 
+/** Handle clicks on Signin buttons. */
+export function handleSignInClicks() {
+  const signinButtons = new Set([].concat(
+    Array.from(document.querySelectorAll('.swg-signin-button')),
+    Array.from(document.querySelectorAll('a[href="#swg-signin"]'))
+  ));
+  for (const signinButton of signinButtons) {
+    signinButton.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      gapi.load('auth2', async () => {
+        const { code } = await gapi.auth2.init().grantOfflineAccess();
+        const url =
+          SubscribeWithGoogleWpGlobals.API_BASE_URL +
+          '/create-gsi-refresh-token-cookie';
+        await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            gsi_auth_code: code,
+          }),
+        });
+        location.reload();
+      });
+    });
+  }
+}
+
 /**
  * Gets a list of Play Offers from a given Element.
  * @param {!Element} el

@@ -1,7 +1,6 @@
-import { handleSubscribeClicks, handleContributeClicks } from "./buttons";
+import { handleSignInClicks, handleSubscribeClicks, handleContributeClicks } from "./buttons";
 import { handlePaymentResponse } from "./payments";
-import { getOwnedProducts } from "./products";
-import { unlockContent } from "./unlock";
+import { unlockPageMaybe } from "./unlock";
 
 
 // Wait for SwG API to become available.
@@ -10,9 +9,10 @@ import { unlockContent } from "./unlock";
   handlePaymentResponse(subscriptions);
 
   // Handle button clicks.
+  handleSignInClicks();
   handleSubscribeClicks(subscriptions);
   handleContributeClicks(subscriptions);
 
-  // Unlock content for owned products.
-  await getOwnedProducts(subscriptions).then(unlockContent);
+  // Unlock page if possible.
+  unlockPageMaybe();
 });
