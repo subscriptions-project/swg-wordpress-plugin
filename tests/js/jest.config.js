@@ -9,4 +9,9 @@ module.exports = {
 	coveragePathIgnorePatterns: [ '/node_modules/', '<rootDir>/build/' ],
 	coverageReporters: [ 'lcovonly' ],
 	coverageDirectory: '<rootDir>/coverage/js',
+	globals: {
+		SubscribeWithGoogleWpGlobals: {
+			API_BASE_URL: '/api',
+		},
+	},
 };

@@ -2,7 +2,7 @@ import { $ } from "./utils/dom";
 
 
 /** Local storage key where SwG entitlements are cached. */
-const CACHE_KEY = 'subscribewithgoogle-entitlements-cache';
+export const CACHE_KEY = 'subscribewithgoogle-entitlements-cache';
 
 /** Unlocks current page, if possible. */
 export async function unlockPageMaybe() {
@@ -51,7 +51,7 @@ async function userIsEntitledToProduct(product) {
   const response = await fetchEntitlements();
   const products = extractProductsFromEntitlementsResponse(response);
   updateCache(products);
-  return products.indexOf(product) > -1
+  return products.indexOf(product) > -1;
 }
 
 /**
@@ -61,7 +61,7 @@ async function userIsEntitledToProduct(product) {
  */
 function cacheEntitlesUserToProduct(product) {
   try {
-    const cache = JSON.parse(localStorage[CACHE_KEY]);
+    const cache = JSON.parse(window.localStorage[CACHE_KEY]);
     if (cache.expiration < Date.now()) {
       console.log('⌛ Cache expired');
       return false;
@@ -86,7 +86,7 @@ function updateCache(products) {
       expiration,
       products,
     };
-    localStorage[CACHE_KEY] = JSON.stringify(cache);
+    window.localStorage[CACHE_KEY] = JSON.stringify(cache);
   } catch (err) {
     // Sometimes privacy is more important than convenience.
   }
@@ -99,9 +99,9 @@ function updateCache(products) {
 async function fetchEntitlements() {
   console.log('📡 Fetching entitlements');
   const url =
-          SubscribeWithGoogleWpGlobals.API_BASE_URL +
-          '/entitlements';
-  return fetch(url)
+    SubscribeWithGoogleWpGlobals.API_BASE_URL +
+    '/entitlements';
+  return window.fetch(url)
     .then(response => response.json());
 }
 
@@ -114,9 +114,7 @@ function extractProductsFromEntitlementsResponse(response) {
   const products = [];
   const entitlements = response.entitlements || [];
   for (const entitlement of entitlements) {
-    for (const product of entitlement.products) {
-      products.push(product);
-    }
+    products.push(...entitlement.products);
   }
   return products;
 }

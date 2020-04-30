@@ -47,7 +47,7 @@ export function handleSignInClicks() {
         const url =
           SubscribeWithGoogleWpGlobals.API_BASE_URL +
           '/create-gsi-refresh-token-cookie';
-        await fetch(url, {
+        await window.fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

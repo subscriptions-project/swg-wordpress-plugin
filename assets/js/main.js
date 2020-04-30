@@ -14,5 +14,5 @@ import { unlockPageMaybe } from "./unlock";
   handleContributeClicks(subscriptions);
 
   // Unlock page if possible.
-  unlockPageMaybe();
+  return unlockPageMaybe();
 });

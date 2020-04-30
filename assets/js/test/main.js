@@ -1,4 +1,5 @@
 import '../main';
+import { CACHE_KEY } from '../unlock';
 
 const SUBSCRIBERS = self.SWG[0];
 
@@ -13,6 +14,15 @@ describe('main', () => {
   let subscriptions;
 
   beforeEach(() => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => ({
+        entitlements: [{
+          products: ['premium']
+        }],
+      })
+    }));
+    delete global.localStorage[CACHE_KEY];
+
     subscriptions = {
       setOnPaymentResponse: callback => {
         const response = {
@@ -92,7 +102,7 @@ describe('main', () => {
 
   it('marks article as entitled', async () => {
     await SUBSCRIBERS(subscriptions);
-    expect(articleEl.classList.contains('swg-entitled')).toBeTruthy();
+    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeTruthy();
   });
 
   it('handles subscribe button clicks', async () => {
