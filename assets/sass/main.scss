@@ -1,12 +1,12 @@
-.swg-paywall-prompt span {
+.swg--paywall-prompt span {
 	opacity: 0.5;
 }
 
-article:not(.swg-entitled) .swg-paywall {
+article:not(.swg--page-is-unlocked) .swg--locked-content {
 	display: none;
 }
 
-article.swg-entitled .swg-paywall-prompt {
+article:not(.swg--page-is-locked) .swg--paywall-prompt {
 	display: none;
 }
 
