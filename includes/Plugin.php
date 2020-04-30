@@ -22,6 +22,7 @@ final class Plugin {
 	/** Creates the plugin. */
 	public function __construct() {
 		new PostEdit();
+		new GoogleSignIn();
 
 		$this->add_actions();
 		$this->add_filters();
@@ -96,7 +97,7 @@ final class Plugin {
 		// If it's free, just bail.
 		$free_key = $this::key( 'free' );
 		$free     = get_post_meta( get_the_ID(), $free_key, true );
-		if ( 'true' == $free ) {
+		if ( 'true' === $free ) {
 			return $content;
 		}
 
@@ -106,14 +107,14 @@ final class Plugin {
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
 			$content_segments[1] = '
-<p class="swg-paywall-prompt">
+<p class="swg--paywall-prompt">
 	🔒 <span>Subscribe to unlock the rest of this article.</span>
 	<br />
 	<br />
 	<button class="swg-button swg-subscribe-button"></button>
 </p>
 
-<div class="swg-paywall">
+<div class="swg--locked-content">
 ' . $content_segments[1] . '
 </div>
 ';
@@ -155,6 +156,15 @@ final class Plugin {
 			1
 		);
 
+		// Google's API JavaScript library (https://github.com/google/google-api-javascript-client).
+		wp_enqueue_script(
+			'gapi-js',
+			'https://apis.google.com/js/client:platform.js',
+			null,
+			1,
+			true
+		);
+
 		// SwG's open-source JavaScript library (https://github.com/subscriptions-project/swg-js).
 		wp_enqueue_script(
 			'swg-js',
@@ -173,17 +183,24 @@ final class Plugin {
 			true
 		);
 
-		$publication_id = get_option( $this::key( 'publication_id' ) );
-		$product        = get_post_meta( get_the_ID(), $this::key( 'product' ), true );
-		$product_id     = $publication_id . ':' . $product;
+		// Make WP URLs available to SwgPress' JavaScript.
+		$api_base_url = get_option( 'siteurl' ) . '/wp-json/subscribewithgoogle/v1';
+		wp_localize_script(
+			'subscribe-with-google',
+			'SubscribeWithGoogleWpGlobals',
+			array( 'API_BASE_URL' => $api_base_url )
+		);
 
-		$is_free = get_post_meta( get_the_ID(), $this::key( 'free' ), true );
-		$is_free = $is_free ? $is_free : 'false';
-
-		// TODO: Add encrypted document key to head, once it's saved.
+		$publication_id  = get_option( $this::key( 'publication_id' ) );
+		$product         = get_post_meta( get_the_ID(), $this::key( 'product' ), true );
+		$product_id      = $publication_id . ':' . $product;
+		$oauth_client_id = get_option( $this::key( 'oauth_client_id' ) );
+		$is_free         = get_post_meta( get_the_ID(), $this::key( 'free' ), true );
+		$is_free         = $is_free ? $is_free : 'false';
 		?>
 		<meta name="subscriptions-product-id" content="<?php echo esc_attr( $product_id ); ?>" />
 		<meta name="subscriptions-accessible-for-free" content="<?php echo esc_attr( $is_free ); ?>" />
+		<meta name="google-signin-client_id" content="<?php echo esc_attr( $oauth_client_id ); ?>">
 		<?php
 	}
 

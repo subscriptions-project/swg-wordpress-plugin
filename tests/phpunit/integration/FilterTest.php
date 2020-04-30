@@ -66,7 +66,7 @@ class FilterTest extends \WP_UnitTestCase {
 			$post_content
 		);
 		$this->assertContains(
-			'swg-paywall-prompt',
+			'swg--paywall-prompt',
 			$result
 		);
 	}
@@ -80,7 +80,7 @@ class FilterTest extends \WP_UnitTestCase {
 			$post_content
 		);
 		$this->assertContains(
-			'swg-paywall-prompt',
+			'swg--paywall-prompt',
 			$result
 		);
 	}

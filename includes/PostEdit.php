@@ -38,7 +38,7 @@ final class PostEdit {
 		$free_key     = Plugin::key( 'free' );
 		$product_key  = Plugin::key( 'product' );
 		$products_key = Plugin::key( 'products' );
-		$free         = get_post_meta( get_the_ID(), $free_key, true ) == 'true';
+		$free         = get_post_meta( get_the_ID(), $free_key, true ) === 'true';
 		$products_str = trim( get_option( $products_key ) );
 
 		if ( ! $products_str ) {
@@ -61,7 +61,7 @@ final class PostEdit {
 			$product = trim( $product );
 			echo '<option';
 			echo ' value="' . esc_attr( $product ) . '"';
-			if ( $selected_product == $product ) {
+			if ( $selected_product === $product ) {
 				echo ' selected';
 			}
 			echo '>';
