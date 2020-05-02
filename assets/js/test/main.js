@@ -84,30 +84,80 @@ describe('main', () => {
     articleEl.remove();
   });
 
+  it('fetches entitlements', async () => {
+    await SUBSCRIBERS(subscriptions);
+    expect(global.fetch).toBeCalledWith('/api/entitlements');
+  });
+
+  it('fetches entitlements if cache does not have the right product', async () => {
+    global.localStorage[CACHE_KEY] = JSON.stringify({
+      expiration: Date.now() * 2,
+      products: [],
+    });
+    await SUBSCRIBERS(subscriptions);
+    expect(global.fetch).toBeCalledWith('/api/entitlements');
+  });
+
+  it('fetches entitlements if cache is expired', async () => {
+    global.localStorage[CACHE_KEY] = JSON.stringify({
+      expiration: Date.now() / 2,
+      products: ['premium'],
+    });
+    await SUBSCRIBERS(subscriptions);
+    expect(global.fetch).toBeCalledWith('/api/entitlements');
+  });
+
+  it('does not fetch entitlements if cache entitles user', async () => {
+    global.localStorage[CACHE_KEY] = JSON.stringify({
+      expiration: Date.now() * 2,
+      products: ['premium'],
+    });
+    await SUBSCRIBERS(subscriptions);
+    expect(global.fetch).not.toBeCalled();
+  });
+
+  it('marks article as unlocked when a product matches', async () => {
+    await SUBSCRIBERS(subscriptions);
+    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeTruthy();
+  });
+
+  it('marks article as locked when no products match', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => ({
+        entitlements: [{
+          products: []
+        }],
+      })
+    }));
+    await SUBSCRIBERS(subscriptions);
+    expect(articleEl.classList.contains('swg--page-is-locked')).toBeTruthy();
+  });
+
+  it('marks article as locked when request fails', async () => {
+    global.fetch = jest.fn(() => Promise.reject());
+    await SUBSCRIBERS(subscriptions);
+    expect(articleEl.classList.contains('swg--page-is-locked')).toBeTruthy();
+  });
+
   it('handles missing meta element', async () => {
     metaEl.remove();
 
     await SUBSCRIBERS(subscriptions);
-    expect(articleEl.classList.contains('swg-entitled')).toBeFalsy();
+    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeFalsy();
   });
 
   it('handles mismatched product in meta element', async () => {
     metaEl.setAttribute('content', 'exclusive');
 
     await SUBSCRIBERS(subscriptions);
-    expect(articleEl.classList.contains('swg-entitled')).toBeFalsy();
+    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeFalsy();
   });
 
   it('handles missing article element', async () => {
     articleEl.remove();
 
     await SUBSCRIBERS(subscriptions);
-    expect(articleEl.classList.contains('swg-entitled')).toBeFalsy();
-  });
-
-  it('marks article as entitled', async () => {
-    await SUBSCRIBERS(subscriptions);
-    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeTruthy();
+    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeFalsy();
   });
 
   it('handles subscribe button clicks', async () => {
