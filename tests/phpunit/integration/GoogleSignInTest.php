@@ -18,6 +18,7 @@ class GoogleSignInTest extends WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 
 		// Mock the Google Client.
+		GoogleClientMock::reset();
 		GoogleSignIn::$google_client_class = 'SubscribeWithGoogle\WordPress\Tests\GoogleClientMock';
 
 		// Clear cookies.
@@ -47,32 +48,28 @@ class GoogleSignInTest extends WP_UnitTestCase {
 		$this->expectExceptionMessage( 'Access token could not be fetched' );
 		$this->server->dispatch( $request );
 	}
-}
 
+	public function test__entitlements__returns_entitlements() {
+		$_COOKIE['swg_refresh_token'] = 'refresh_token';
+		GoogleClientMock::$access_token_response = array(
+			'access_token' => 'access_token',
+		);
 
-/** Mock of the Google Client. */
-class GoogleClientMock {
-	public static $instance;
-	public static $access_token_response;
+		add_filter('pre_http_request', function() {
+			return array(
+				'body' => '{"entitlements":[{"products":["premium"]}]}',
+			);
+		});
 
-	public function __construct() {
-		$this::$instance = $this;
-	}
+		$request = new WP_REST_Request(
+			'GET',
+			'/subscribewithgoogle/v1/entitlements'
+		);
 
-	public function setClientId( $client_id ) {
-		$this->client_id = $client_id;
-	}
-
-	public function setClientSecret( $client_secret ) {
-		$this->client_secret = $client_secret;
-	}
-
-	public function setRedirectUri( $redirect_uri ) {
-		$this->redirect_uri = $redirect_uri;
-	}
-
-	public function fetchAccessTokenWithRefreshToken( $refresh_token ) {
-		$this->refresh_token = $refresh_token;
-		return $this::$access_token_response;
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals(
+			'{"entitlements":[{"products":["premium"]}]}',
+			$response->data
+		);
 	}
 }

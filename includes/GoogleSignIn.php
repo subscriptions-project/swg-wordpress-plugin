@@ -77,11 +77,12 @@ final class GoogleSignIn {
 		// Set cookie.
 		$ttl = time() + 3600 * 24 * 365 * 100;
 		setcookie( 'swg_refresh_token', $refresh_token, $ttl, '/', null, true, true );
-		die;
 	}
 
 	/**
 	 * Fetches entitlements based on GSI auth code.
+	 * 
+	 * @return string Entitlements response.
 	 */
 	public function get_entitlements() {
 		$access_token = $this->fetch_access_token();
@@ -89,8 +90,7 @@ final class GoogleSignIn {
 		// Get entitlements.
 		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/scenic-2017.appspot.com/entitlements?access_token=' . $access_token;
 		$response         = wp_remote_get( $entitlements_url );
-		echo wp_json_encode( json_decode( $response['body'] ) );
-		die;
+		return wp_json_encode( json_decode( $response['body'] ) );
 	}
 
 	/**
