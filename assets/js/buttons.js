@@ -46,7 +46,7 @@ export function handleSignInClicks() {
         const { code } = await gapi.auth2.init().grantOfflineAccess();
         const url =
           SubscribeWithGoogleWpGlobals.API_BASE_URL +
-          '/create-gsi-refresh-token-cookie';
+          '/create-1p-cookie';
         await window.fetch(url, {
           method: 'POST',
           headers: {

@@ -68,7 +68,7 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals(
-			'{"entitlements":[{"products":["premium"]}]}',
+			json_decode('{"entitlements":[{"products":["premium"]}]}'),
 			$response->data
 		);
 	}

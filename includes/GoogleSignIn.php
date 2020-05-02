@@ -34,10 +34,10 @@ final class GoogleSignIn {
 	public function register_rest_routes() {
 		register_rest_route(
 			'subscribewithgoogle/v1',
-			'/create-gsi-refresh-token-cookie',
+			'/create-1p-cookie',
 			array(
 				'methods'  => 'POST',
-				'callback' => array( $this, 'create_gsi_refresh_token_cookie' ),
+				'callback' => array( $this, 'create_1p_cookie' ),
 			)
 		);
 
@@ -60,7 +60,7 @@ final class GoogleSignIn {
 	 *
 	 * @throws Exception When refresh token can't be fetched.
 	 */
-	public function create_gsi_refresh_token_cookie( $request ) {
+	public function create_1p_cookie( $request ) {
 		// Auth code is needed to get the refresh token.
 		if ( ! isset( $request['gsi_auth_code'] ) ) {
 			throw new Exception( 'gsi_auth_code POST param is missing.' );
@@ -90,7 +90,7 @@ final class GoogleSignIn {
 		// Get entitlements.
 		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/scenic-2017.appspot.com/entitlements?access_token=' . $access_token;
 		$response         = wp_remote_get( $entitlements_url );
-		return wp_json_encode( json_decode( $response['body'] ) );
+		return json_decode( $response['body'] );
 	}
 
 	/**
