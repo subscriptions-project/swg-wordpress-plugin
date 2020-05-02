@@ -34,4 +34,9 @@ class GoogleClientMock {
 		$this->refresh_token = $refresh_token;
 		return $this::$access_token_response;
 	}
+
+	public function fetchAccessTokenWithAuthCode( $auth_code ) {
+		$this->auth_code = $auth_code;
+		return $this::$access_token_response;
+	}
 }

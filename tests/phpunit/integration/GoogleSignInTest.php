@@ -72,4 +72,46 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 			$response->data
 		);
 	}
+
+	public function test__create_1p_cookie__missing_param__throws() {
+		$request = new WP_REST_Request(
+			'POST',
+			'/subscribewithgoogle/v1/create-1p-cookie',
+		);
+
+		$this->expectExceptionMessage( 'gsi_auth_code POST param is missing' );
+		$this->server->dispatch( $request );
+	}
+
+	public function test__create_1p_cookie__could_not_fetch_refresh_token__throws() {
+		$request = new WP_REST_Request(
+			'POST',
+			'/subscribewithgoogle/v1/create-1p-cookie',
+		);
+		$request->set_body_params( array(
+			'gsi_auth_code' => '123',
+		) );
+
+		$this->expectExceptionMessage( 'Refresh token could not be fetched' );
+		$this->server->dispatch( $request );
+	}
+
+	public function test__create_1p_cookie__sets_cookie() {
+		$request = new WP_REST_Request(
+			'POST',
+			'/subscribewithgoogle/v1/create-1p-cookie',
+		);
+		$request->set_body_params( array(
+			'gsi_auth_code' => '123',
+		) );
+		$refresh_token = 'refresh_token_1234567';
+		GoogleClientMock::$access_token_response = array(
+			'refresh_token' => $refresh_token,
+		);
+
+		$response = $this->server->dispatch( $request );
+		$this->assertContains( 'swg_refresh_token=' . $refresh_token, $response->headers['Set-Cookie'] );
+		$this->assertContains( ' secure;', $response->headers['Set-Cookie'] );
+		$this->assertContains( ' HttpOnly;', $response->headers['Set-Cookie'] );
+	}
 }

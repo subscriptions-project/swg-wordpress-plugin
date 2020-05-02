@@ -10,6 +10,7 @@
 namespace SubscribeWithGoogle\WordPress;
 
 use Exception;
+use WP_REST_Response;
 
 /**
  * Supports signing in with Google.
@@ -63,20 +64,30 @@ final class GoogleSignIn {
 	public function create_1p_cookie( $request ) {
 		// Auth code is needed to get the refresh token.
 		if ( ! isset( $request['gsi_auth_code'] ) ) {
-			throw new Exception( 'gsi_auth_code POST param is missing.' );
+			throw new Exception( 'gsi_auth_code POST param is missing' );
 		}
 
 		// Get refresh token.
 		$client   = $this->create_client();
 		$response = $client->fetchAccessTokenWithAuthCode( $request['gsi_auth_code'] );
 		if ( ! isset( $response['refresh_token'] ) ) {
-			throw new Exception( wp_json_encode( $response ) );
+			throw new Exception(
+				'Refresh token could not be fetched. ' .
+				wp_json_encode( $response )
+			);
 		}
 		$refresh_token = $response['refresh_token'];
 
 		// Set cookie.
-		$ttl = time() + 3600 * 24 * 365 * 100;
-		setcookie( 'swg_refresh_token', $refresh_token, $ttl, '/', null, true, true );
+		$expires = date( 'D, j F Y H:i:s', time() + 3600 * 24 * 365 * 100 );
+		return new WP_REST_Response(null, 200, array(
+			'Set-Cookie' =>
+				'swg_refresh_token=' . $refresh_token . '; ' .
+				'expires=' . $expires . ' GMT; ' .
+				'path=/; ' .
+				'secure; ' .
+				'HttpOnly; ',
+		));
 	}
 
 	/**
