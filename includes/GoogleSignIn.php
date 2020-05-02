@@ -81,7 +81,7 @@ final class GoogleSignIn {
 
 	/**
 	 * Fetches entitlements based on GSI auth code.
-	 * 
+	 *
 	 * @return string Entitlements response.
 	 */
 	public function get_entitlements() {
