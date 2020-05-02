@@ -10,7 +10,6 @@ use WP_UnitTestCase;
 class GoogleSignInTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		error_log( '🏃 GoogleSignInTest' );
 		parent::setUp();
 
 		// Start REST server.

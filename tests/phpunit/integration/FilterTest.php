@@ -3,11 +3,11 @@
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\Plugin;
+use WP_UnitTestCase;
 
-class FilterTest extends \WP_UnitTestCase {
+class FilterTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		error_log( '🏃 FilterTest' );
 		parent::setUp();
 
 		// Instantiate plugin.

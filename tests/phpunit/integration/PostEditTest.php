@@ -3,13 +3,13 @@
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\PostEdit;
+use WP_UnitTestCase;
 
-class PostEditTest extends \WP_UnitTestCase {
+class PostEditTest extends WP_UnitTestCase {
 
 	private $post_edit = null;
 
 	public function setUp() {
-		error_log( '🏃 PostEditTest' );
 		parent::setUp();
 
 		$this->post_edit = new PostEdit();

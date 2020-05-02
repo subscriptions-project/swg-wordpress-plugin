@@ -3,14 +3,14 @@
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\PostEdit;
+use WP_UnitTestCase;
 
-class SavePostTest extends \WP_UnitTestCase {
+class SavePostTest extends WP_UnitTestCase {
 
 	private $post_id = null;
 	private $post_edit = null;
 
 	public function setUp() {
-		error_log( '🏃 SavePostTest' );
 		parent::setUp();
 
 		if ( $this->post_id == null ) {

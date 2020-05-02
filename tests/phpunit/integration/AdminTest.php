@@ -3,11 +3,11 @@
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\Plugin;
+use WP_UnitTestCase;
 
-class AdminTest extends \WP_UnitTestCase {
+class AdminTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		error_log( '🏃 AdminTest' );
 		parent::setUp();
 
 		// Instantiate plugin.
