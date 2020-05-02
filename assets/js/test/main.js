@@ -3,6 +3,7 @@ import { CACHE_KEY } from '../unlock';
 
 const SUBSCRIBERS = self.SWG[0];
 
+// TODO: Refactor this into multiple files, or at least describe blocks.
 describe('main', () => {
   let metaEl;
   let articleEl;
@@ -10,6 +11,8 @@ describe('main', () => {
   let contributeLinkEl;
   let subscribeButtonEl;
   let subscribeLinkEl;
+  let signinButtonEl;
+  let signinLinkEl;
   let subscribeButtonElWithoutPlayOffersDefined;
   let subscriptions;
 
@@ -27,6 +30,15 @@ describe('main', () => {
       })
     }));
     delete global.localStorage[CACHE_KEY];
+
+    global.gapi = {
+      auth2: {
+        init: () => ({
+          grantOfflineAccess: () => Promise.resolve({code: 1}),
+        }),
+      },
+      load: jest.fn((name, cb) => cb()),
+    };
 
     subscriptions = {
       setOnPaymentResponse: callback => {
@@ -74,6 +86,16 @@ describe('main', () => {
     subscribeLinkEl.dataset.playOffers = 'basic, premium';
     document.body.appendChild(subscribeLinkEl);
 
+    signinButtonEl = document.createElement('div');
+    signinButtonEl.classList.add('swg-signin-button');
+    signinButtonEl.dataset.playOffers = 'basic, premium';
+    document.body.appendChild(signinButtonEl);
+
+    signinLinkEl = document.createElement('a');
+    signinLinkEl.href = '#swg-signin';
+    signinLinkEl.dataset.playOffers = 'basic, premium';
+    document.body.appendChild(signinLinkEl);
+
     subscribeButtonElWithoutPlayOffersDefined = document.createElement('div');
     subscribeButtonElWithoutPlayOffersDefined.classList.add('swg-subscribe-button');
     document.body.appendChild(subscribeButtonElWithoutPlayOffersDefined);
@@ -86,7 +108,7 @@ describe('main', () => {
 
   it('fetches entitlements', async () => {
     await SUBSCRIBERS(subscriptions);
-    expect(global.fetch).toBeCalledWith('/api/entitlements');
+    expect(fetch).toBeCalledWith('/api/entitlements');
   });
 
   it('fetches entitlements if cache does not have the right product', async () => {
@@ -95,7 +117,7 @@ describe('main', () => {
       products: [],
     });
     await SUBSCRIBERS(subscriptions);
-    expect(global.fetch).toBeCalledWith('/api/entitlements');
+    expect(fetch).toBeCalledWith('/api/entitlements');
   });
 
   it('fetches entitlements if cache is expired', async () => {
@@ -104,7 +126,7 @@ describe('main', () => {
       products: ['premium'],
     });
     await SUBSCRIBERS(subscriptions);
-    expect(global.fetch).toBeCalledWith('/api/entitlements');
+    expect(fetch).toBeCalledWith('/api/entitlements');
   });
 
   it('does not fetch entitlements if cache entitles user', async () => {
@@ -113,7 +135,7 @@ describe('main', () => {
       products: ['premium'],
     });
     await SUBSCRIBERS(subscriptions);
-    expect(global.fetch).not.toBeCalled();
+    expect(fetch).not.toBeCalled();
   });
 
   it('marks article as unlocked when a product matches', async () => {
@@ -213,5 +235,36 @@ describe('main', () => {
       isClosable: true,
       skus: ['basic', 'premium'],
     }]]);
+  });
+
+  it('handles signin button clicks', async () => {
+    await SUBSCRIBERS(subscriptions);
+    global.fetch = jest.fn();
+
+    await signinButtonEl.click();
+
+    expect(gapi.load).toBeCalled();
+    expect(fetch).toBeCalledWith(
+      '/api/create-1p-cookie',
+      {
+        "body": "{\"gsi_auth_code\":1}",
+        "headers": {"Content-Type": "application/json"},
+        "method": "POST"
+      });
+  });
+
+  it('handles signin link clicks', async () => {
+    await SUBSCRIBERS(subscriptions);
+
+    await signinLinkEl.click();
+
+    expect(gapi.load).toBeCalled();
+    expect(fetch).toBeCalledWith(
+      '/api/create-1p-cookie',
+      {
+        "body": "{\"gsi_auth_code\":1}",
+        "headers": {"Content-Type": "application/json"},
+        "method": "POST"
+      });
   });
 });
