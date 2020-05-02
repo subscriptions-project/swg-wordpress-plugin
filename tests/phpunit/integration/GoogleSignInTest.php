@@ -86,7 +86,7 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 	public function test__create_1p_cookie__could_not_fetch_refresh_token__throws() {
 		$request = new WP_REST_Request(
 			'POST',
-			'/subscribewithgoogle/v1/create-1p-cookie',
+			'/subscribewithgoogle/v1/create-1p-cookie'
 		);
 		$request->set_body_params( array(
 			'gsi_auth_code' => '123',
@@ -99,7 +99,7 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 	public function test__create_1p_cookie__sets_cookie() {
 		$request = new WP_REST_Request(
 			'POST',
-			'/subscribewithgoogle/v1/create-1p-cookie',
+			'/subscribewithgoogle/v1/create-1p-cookie'
 		);
 		$request->set_body_params( array(
 			'gsi_auth_code' => '123',
