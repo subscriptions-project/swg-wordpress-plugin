@@ -2,10 +2,10 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
+use PHPUnit_Framework_TestCase;
 use SubscribeWithGoogle\WordPress\Plugin;
-use WP_UnitTestCase;
 
-class ShortcodeTest extends WP_UnitTestCase {
+class ShortcodeTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		parent::setUp();

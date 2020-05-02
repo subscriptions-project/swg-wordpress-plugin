@@ -2,12 +2,12 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
+use PHPUnit_Framework_TestCase;
 use SubscribeWithGoogle\WordPress\GoogleSignIn;
 use WP_REST_Request;
 use WP_REST_Server;
-use WP_UnitTestCase;
 
-class GoogleSignInTest extends WP_UnitTestCase {
+class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		parent::setUp();
