@@ -76,7 +76,7 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 	public function test__create_1p_cookie__missing_param__throws() {
 		$request = new WP_REST_Request(
 			'POST',
-			'/subscribewithgoogle/v1/create-1p-cookie',
+			'/subscribewithgoogle/v1/create-1p-cookie'
 		);
 
 		$this->expectExceptionMessage( 'gsi_auth_code POST param is missing' );
