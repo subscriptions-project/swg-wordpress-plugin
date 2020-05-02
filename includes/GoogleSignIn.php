@@ -9,13 +9,21 @@
 
 namespace SubscribeWithGoogle\WordPress;
 
-use \Exception;
-use SubscribeWithGoogle\WordPress_Dependencies\Google_Client;
+use Exception;
 
 /**
  * Supports signing in with Google.
  */
 final class GoogleSignIn {
+
+	/**
+	 * Identifier of Google Client class.
+	 * Tests can override this.
+	 *
+	 * @var string
+	 */
+	public static $google_client_class =
+		'SubscribeWithGoogle\WordPress_Dependencies\Google_Client';
 
 	/** Adds action handlers. */
 	public function __construct() {
@@ -77,10 +85,6 @@ final class GoogleSignIn {
 	 */
 	public function get_entitlements() {
 		$access_token = $this->fetch_access_token();
-		if ( ! $access_token ) {
-			echo '{}';
-			die;
-		}
 
 		// Get entitlements.
 		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/scenic-2017.appspot.com/entitlements?access_token=' . $access_token;
@@ -93,10 +97,14 @@ final class GoogleSignIn {
 	 * Gets an access token from Google.
 	 *
 	 * @throws Exception When access token can't be fetched.
+	 * @return string Access token from Google.
 	 */
 	private function fetch_access_token() {
 		// Refresh token is needed to get the access token.
-		if ( ! $_COOKIE['swg_refresh_token'] ) {
+		if (
+			! isset( $_COOKIE['swg_refresh_token'] ) ||
+			! $_COOKIE['swg_refresh_token']
+		) {
 			throw new Exception( 'swg_refresh_token COOKIE was missing' );
 		}
 
@@ -116,7 +124,7 @@ final class GoogleSignIn {
 	private function create_client() {
 		$oauth_client_id     = get_option( Plugin::key( 'oauth_client_id' ) );
 		$oauth_client_secret = get_option( Plugin::key( 'oauth_client_secret' ) );
-		$client              = new Google_Client();
+		$client              = new $this::$google_client_class();
 		$client->setClientId( $oauth_client_id );
 		$client->setClientSecret( $oauth_client_secret );
 		$client->setRedirectUri( 'postmessage' );

@@ -58,7 +58,7 @@ final class Plugin {
 	 *
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
-	public function shortcode_subscribe( $atts = [] ) {
+	public function shortcode_subscribe( $atts = array() ) {
 		$html = '<button class="swg-button swg-subscribe-button" data-play-offers="';
 		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];
@@ -72,7 +72,7 @@ final class Plugin {
 	 *
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
-	public function shortcode_contribute( $atts = [] ) {
+	public function shortcode_contribute( $atts = array() ) {
 		$html = '<button class="swg-contribute-button" data-play-offers="';
 		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];
