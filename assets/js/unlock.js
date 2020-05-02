@@ -102,7 +102,8 @@ async function fetchEntitlements() {
     SubscribeWithGoogleWpGlobals.API_BASE_URL +
     '/entitlements';
   return window.fetch(url)
-    .then(response => response.json());
+    .then(response => response.json())
+    .catch(() => ({}));
 }
 
 /**
