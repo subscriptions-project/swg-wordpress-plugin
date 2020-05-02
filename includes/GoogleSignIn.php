@@ -79,15 +79,19 @@ final class GoogleSignIn {
 		$refresh_token = $response['refresh_token'];
 
 		// Set cookie.
-		$expires = date( 'D, j F Y H:i:s', time() + 3600 * 24 * 365 * 100 );
-		return new WP_REST_Response(null, 200, array(
-			'Set-Cookie' =>
-				'swg_refresh_token=' . $refresh_token . '; ' .
-				'expires=' . $expires . ' GMT; ' .
-				'path=/; ' .
-				'secure; ' .
-				'HttpOnly; ',
-		));
+		$expires = gmdate( 'D, j F Y H:i:s', time() + 3600 * 24 * 365 * 100 );
+		return new WP_REST_Response(
+			null,
+			200,
+			array(
+				'Set-Cookie' =>
+					'swg_refresh_token=' . $refresh_token . '; ' .
+					'expires=' . $expires . ' GMT; ' .
+					'path=/; ' .
+					'secure; ' .
+					'HttpOnly; ',
+			)
+		);
 	}
 
 	/**
