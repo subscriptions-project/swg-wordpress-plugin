@@ -14,6 +14,11 @@ describe('main', () => {
   let subscriptions;
 
   beforeEach(() => {
+    delete global.location;
+    global.location = {
+      reload: jest.fn(),
+    };
+    
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => ({
         entitlements: [{

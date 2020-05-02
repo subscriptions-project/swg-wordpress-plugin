@@ -8,6 +8,7 @@ export function handlePaymentResponse(subscriptions) {
       // TODO: Handle payment response.
       response.complete().then(() => {
         // TODO: Update page accordingly.
+        location.reload();
       });
     });
   });
