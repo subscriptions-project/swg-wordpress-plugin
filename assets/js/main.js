@@ -4,15 +4,15 @@ import { unlockPageMaybe } from "./unlock";
 
 
 // Wait for SwG API to become available.
-(self.SWG = self.SWG || []).push(async (subscriptions) => {
+(self.SWG = self.SWG || []).push(async (swg) => {
   // Handle payment response.
-  handlePaymentResponse(subscriptions);
+  handlePaymentResponse(swg);
 
   // Handle button clicks.
   handleSignInClicks();
-  handleSubscribeClicks(subscriptions);
-  handleContributeClicks(subscriptions);
+  handleSubscribeClicks(swg);
+  handleContributeClicks(swg);
 
   // Unlock page if possible.
-  return unlockPageMaybe();
+  return unlockPageMaybe(swg);
 });

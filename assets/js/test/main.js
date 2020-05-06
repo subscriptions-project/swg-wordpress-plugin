@@ -20,6 +20,7 @@ describe('main', () => {
     delete global.location;
     global.location = {
       reload: jest.fn(),
+      hash: '',
     };
     
     global.fetch = jest.fn(() => Promise.resolve({
@@ -151,12 +152,20 @@ describe('main', () => {
         }],
       })
     }));
+    subscriptions.getEntitlements = () => Promise.resolve({
+      entitlements: [
+        {
+          products: [],
+        },
+      ],
+    });
     await SUBSCRIBERS(subscriptions);
     expect(articleEl.classList.contains('swg--page-is-locked')).toBeTruthy();
   });
 
-  it('marks article as locked when request fails', async () => {
+  it('marks article as locked when requests fail', async () => {
     global.fetch = jest.fn(() => Promise.reject());
+    subscriptions.getEntitlements = () => Promise.reject();
     await SUBSCRIBERS(subscriptions);
     expect(articleEl.classList.contains('swg--page-is-locked')).toBeTruthy();
   });

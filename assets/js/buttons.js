@@ -1,8 +1,8 @@
 /**
  * Handle clicks on Contribute buttons.
- * @param {*} subscriptions SwG API
+ * @param {*} swg SwG API
  */
-export function handleContributeClicks(subscriptions) {
+export function handleContributeClicks(swg) {
   const contributeButtons = new Set([].concat(
     Array.from(document.querySelectorAll('.swg-contribute-button')),
     Array.from(document.querySelectorAll('a[href="#swg-contribute"]'))
@@ -10,16 +10,16 @@ export function handleContributeClicks(subscriptions) {
   for (const contributeButton of contributeButtons) {
     contributeButton.addEventListener('click', () => {
       const skus = getPlayOffersFromElement(contributeButton);
-      subscriptions.showContributionOptions({ skus, isClosable: true });
+      swg.showContributionOptions({ skus, isClosable: true });
     });
   }
 }
 
 /**
  * Handle clicks on Subscribe buttons.
- * @param {*} subscriptions SwG API
+ * @param {*} swg SwG API
  */
-export function handleSubscribeClicks(subscriptions) {
+export function handleSubscribeClicks(swg) {
   const subscribeButtons = new Set([].concat(
     Array.from(document.querySelectorAll('.swg-subscribe-button')),
     Array.from(document.querySelectorAll('a[href="#swg-subscribe"]'))
@@ -27,7 +27,7 @@ export function handleSubscribeClicks(subscriptions) {
   for (const subscribeButton of subscribeButtons) {
     subscribeButton.addEventListener('click', () => {
       const skus = getPlayOffersFromElement(subscribeButton);
-      subscriptions.showOffers({ skus, isClosable: true });
+      swg.showOffers({ skus, isClosable: true });
     });
   }
 }
