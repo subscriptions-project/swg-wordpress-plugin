@@ -139,6 +139,16 @@ describe('main', () => {
     expect(fetch).not.toBeCalled();
   });
 
+  it('fetches entitlements if cache is disabled', async () => {
+    global.localStorage[CACHE_KEY] = JSON.stringify({
+      expiration: Date.now() * 2,
+      products: ['premium'],
+    });
+    location.hash = '#swg.wp.experiments=disablecache';
+    await SUBSCRIBERS(subscriptions);
+    expect(fetch).toBeCalledWith('/api/entitlements');
+  });
+
   it('marks article as unlocked when a product matches', async () => {
     await SUBSCRIBERS(subscriptions);
     expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeTruthy();
