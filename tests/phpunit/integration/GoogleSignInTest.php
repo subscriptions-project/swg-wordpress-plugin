@@ -23,9 +23,55 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 
 		// Clear cookies.
 		$_COOKIE = [];
+
+		// Set site URL.
+		update_option( 'siteurl', 'https://do.ma.in/pa/th' );
+
+		// Set referer.
+		$_SERVER['HTTP_REFERER'] = 'https://do.ma.in/pa/th/y';
 	}
 
-	public function test__entitlements__missing_cookie__throws() {
+	public function test__verify_request_origin__no_referer__throws() {
+		$_SERVER['HTTP_REFERER'] = null;
+
+		$this->expectExceptionMessage( 'Request has no referer' );
+		GoogleSignIn::verify_request_origin();
+	}
+
+	public function test__verify_request_origin__invalid_scheme__throws() {
+		$_SERVER['HTTP_REFERER'] = 'http://do.ma.in/pa/th';
+
+		$this->expectExceptionMessage( 'Request scheme was not valid' );
+		GoogleSignIn::verify_request_origin();
+	}
+
+	public function test__verify_request_origin__invalid_host__throws() {
+		$_SERVER['HTTP_REFERER'] = 'https://d0.ma.in/pa/th';
+
+		$this->expectExceptionMessage( 'Request host was not valid' );
+		GoogleSignIn::verify_request_origin();
+	}
+
+	public function test__verify_request_origin__invalid_path__throws() {
+		$_SERVER['HTTP_REFERER'] = 'https://do.ma.in/p4/th';
+
+		$this->expectExceptionMessage( 'Request path did not belong to WP site' );
+		GoogleSignIn::verify_request_origin();
+	}
+
+	public function test__get_entitlements__invalid_referer__throws() {
+		$_SERVER['HTTP_REFERER'] = null;
+
+		$request = new WP_REST_Request(
+			'GET',
+			'/subscribewithgoogle/v1/entitlements'
+		);
+
+		$this->expectExceptionMessage( 'Request has no referer' );
+		$this->server->dispatch( $request );
+	}
+
+	public function test__get_entitlements__missing_cookie__throws() {
 		unset( $_COOKIE['swg_refresh_token'] );
 
 		$request = new WP_REST_Request(
@@ -37,7 +83,7 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 		$this->server->dispatch( $request );
 	}
 
-	public function test__entitlements__could_not_fetch_access_token__throws() {
+	public function test__get_entitlements__could_not_fetch_access_token__throws() {
 		$_COOKIE['swg_refresh_token'] = 'token';
 
 		$request = new WP_REST_Request(
@@ -49,7 +95,7 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 		$this->server->dispatch( $request );
 	}
 
-	public function test__entitlements__returns_entitlements() {
+	public function test__get_entitlements__returns_entitlements() {
 		$_COOKIE['swg_refresh_token'] = 'refresh_token';
 		GoogleClientMock::$access_token_response = array(
 			'access_token' => 'access_token',
@@ -71,6 +117,18 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 			json_decode('{"entitlements":[{"products":["premium"]}]}'),
 			$response->data
 		);
+	}
+
+	public function test__create_1p_cookie__invalid_referer__throws() {
+		$_SERVER['HTTP_REFERER'] = null;
+
+		$request = new WP_REST_Request(
+			'POST',
+			'/subscribewithgoogle/v1/create-1p-cookie'
+		);
+
+		$this->expectExceptionMessage( 'Request has no referer' );
+		$this->server->dispatch( $request );
 	}
 
 	public function test__create_1p_cookie__missing_param__throws() {
