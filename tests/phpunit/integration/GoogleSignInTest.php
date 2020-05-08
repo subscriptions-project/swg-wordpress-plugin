@@ -119,6 +119,50 @@ class GoogleSignInTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function test__get_grant_status__invalid_referer__returns_grant_false() {
+		$_SERVER['HTTP_REFERER'] = null;
+		$_COOKIE['swg_refresh_token'] = 'refresh_token';
+		GoogleClientMock::$access_token_response = array(
+			'access_token' => 'access_token',
+		);
+
+		add_filter('pre_http_request', function() {
+			return array(
+				'body' => '{"entitlements":[{"products":["premium"]}]}',
+			);
+		});
+
+		$request = new WP_REST_Request(
+			'GET',
+			'/subscribewithgoogle/v1/grant-status'
+		);
+
+		$response = $this->server->dispatch( $request );
+		$this->assertFalse( $response->data['granted'] );
+	}
+
+	public function test__get_grant_status__returns_grant_true() {
+		$_COOKIE['swg_refresh_token'] = 'refresh_token';
+		GoogleClientMock::$access_token_response = array(
+			'access_token' => 'access_token',
+		);
+
+		add_filter('pre_http_request', function() {
+			return array(
+				'body' => '{"entitlements":[{"products":["premium"]}]}',
+			);
+		});
+
+		$request = new WP_REST_Request(
+			'GET',
+			'/subscribewithgoogle/v1/grant-status'
+		);
+		$request->set_query_params( array( 'product' => 'premium' ) );
+
+		$response = $this->server->dispatch( $request );
+		$this->assertTrue( $response->data['granted'] );
+	}
+
 	public function test__create_1p_cookie__invalid_referer__throws() {
 		$_SERVER['HTTP_REFERER'] = null;
 

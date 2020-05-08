@@ -1,5 +1,11 @@
 <?php
 
+
+function is_amp_endpoint() {
+	global $is_amp;
+	return $is_amp;
+}
+
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\Plugin;
@@ -31,6 +37,10 @@ class WpHeadTest extends WP_UnitTestCase {
 
 		// Instantiate plugin.
 		Plugin::load();
+
+		// Reset AMP var.
+		global $is_amp;
+		$is_amp = false;
 	}
 
 	public function test__handle_wp_head__adds_scripts_and_styles() {
@@ -44,6 +54,19 @@ class WpHeadTest extends WP_UnitTestCase {
 
 		$styles = wp_styles();
 		$this->assertContains( 'subscribe-with-google', $styles->queue );
+	}
+
+	public function test__handle_wp_head__is_amp__adds_amp_extension() {
+		global $is_amp;
+		$is_amp = true;
+
+		Plugin::$instance->handle_wp_head();
+
+		$this->expectOutputRegex(
+			'/custom-element="amp-subscriptions-google"/'
+		);
+
+		Plugin::$instance->handle_wp_head();
 	}
 
 	public function test__adds_product_id_meta_tag__basic() {

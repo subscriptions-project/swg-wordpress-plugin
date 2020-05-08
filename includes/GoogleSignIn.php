@@ -50,6 +50,15 @@ final class GoogleSignIn {
 				'callback' => array( $this, 'get_entitlements' ),
 			)
 		);
+
+		register_rest_route(
+			'subscribewithgoogle/v1',
+			'/grant-status',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_grant_status' ),
+			)
+		);
 	}
 
 	/**
@@ -99,7 +108,7 @@ final class GoogleSignIn {
 	/**
 	 * Fetches entitlements based on GSI auth code.
 	 *
-	 * @return string Entitlements response.
+	 * @return * Entitlements response.
 	 */
 	public function get_entitlements() {
 		$this::verify_request_origin();
@@ -110,6 +119,38 @@ final class GoogleSignIn {
 		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/scenic-2017.appspot.com/entitlements?access_token=' . $access_token;
 		$response         = wp_remote_get( $entitlements_url );
 		return json_decode( $response['body'] );
+	}
+
+	/**
+	 * Returns grant status for a given product.
+	 *
+	 * @param WP_REST_Request $request with `product`.
+	 *
+	 * @return * Grant status response.
+	 */
+	public function get_grant_status( $request ) {
+		try {
+			$entitlements = $this->get_entitlements()->entitlements;
+		} catch ( Exception $e ) {
+			$entitlements = null;
+		}
+
+		// Search for product in entitlements.
+		$granted = false;
+		if ( $entitlements ) {
+			foreach ( $entitlements as $entitlement ) {
+				if ( in_array( $request['product'], $entitlement->products, true ) ) {
+					$granted = true;
+					break;
+				}
+			}
+		}
+
+		return array(
+			'granted'     => $granted,
+			'grantReason' => 'SUBSCRIBER',
+			'data'        => null,
+		);
 	}
 
 	/**
