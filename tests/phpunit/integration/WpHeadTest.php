@@ -1,11 +1,4 @@
 <?php
-
-
-function is_amp_endpoint() {
-	global $is_amp;
-	return $is_amp;
-}
-
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\Plugin;
