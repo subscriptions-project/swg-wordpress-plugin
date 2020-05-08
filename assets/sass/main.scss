@@ -6,7 +6,11 @@ html:not([amp]) article:not(.swg--page-is-unlocked) .swg--locked-content {
 	display: none;
 }
 
-article:not(.swg--page-is-locked) .swg--paywall-prompt {
+html:not([amp]) article:not(.swg--page-is-locked) .swg--paywall-prompt {
+	display: none;
+}
+
+html[amp] [href="#swg-signin"] {
 	display: none;
 }
 
