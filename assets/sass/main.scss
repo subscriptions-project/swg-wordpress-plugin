@@ -2,7 +2,7 @@
 	opacity: 0.5;
 }
 
-body:not(.i-amphtml-subs-ready) article:not(.swg--page-is-unlocked) .swg--locked-content {
+html:not([amp]) article:not(.swg--page-is-unlocked) .swg--locked-content {
 	display: none;
 }
 
