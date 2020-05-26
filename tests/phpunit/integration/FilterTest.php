@@ -84,4 +84,15 @@ class FilterTest extends WP_UnitTestCase {
 			$result
 		);
 	}
+
+	public function test__signin_menu_link__gets_amp_attributes_added() {
+		$result = Plugin::$instance->filter_menu_items(
+			'<li><a href="#swg-signin">Sign in</a></li>'
+		);
+
+		$this->assertContains(
+			'subscriptions-action=',
+			$result
+		);
+	}
 }

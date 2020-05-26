@@ -45,6 +45,7 @@ final class Plugin {
 	/** Adds WordPress filters. */
 	private function add_filters() {
 		add_filter( 'the_content', array( $this, 'filter_the_content' ) );
+		add_filter( 'wp_nav_menu_items', array( $this, 'filter_menu_items' ) );
 	}
 
 	/** Adds WordPress shortcodes. */
@@ -128,6 +129,21 @@ final class Plugin {
 		$content = implode( $more_tag, $content_segments );
 
 		return $content;
+	}
+
+	/**
+	 * Filters menu items HTML.
+	 *
+	 * @param string $menu_html HTML of a menu.
+	 */
+	public function filter_menu_items( $menu_html ) {
+		$swg_signin_link = 'href="#swg-signin"';
+		$menu_html       = str_replace(
+			$swg_signin_link,
+			$swg_signin_link . ' subscriptions-action="login" subscriptions-display="NOT data.isLoggedIn"',
+			$menu_html
+		);
+		return $menu_html;
 	}
 
 	/** Adds admin menu item. */
