@@ -1,6 +1,6 @@
 <?php
 /**
- * Class SubscribeWithGoogle\WordPress\Admin
+ * Class SubscribeWithGoogle\WordPress\AdminPage
  *
  * @package   SubscribeWithGoogle\WordPress
  * @copyright 2020 Google LLC
@@ -10,24 +10,23 @@
 namespace SubscribeWithGoogle\WordPress;
 
 /**
- * Adds admin features.
+ * Adds admin page.
  */
-final class Admin {
+final class AdminPage {
 
 	/** Adds WordPress actions. */
 	public function __construct() {
-		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu_item' ) );
-		add_action( 'admin_init', array( __CLASS__, 'setup_sections' ) );
-		add_action( 'admin_init', array( __CLASS__, 'setup_fields' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'add_link' ) );
+		add_action( 'admin_init', array( __CLASS__, 'prepare' ) );
 	}
 
-	/** Adds admin menu item. */
-	public static function add_admin_menu_item() {
+	/** Adds link to admin menu. */
+	public static function add_link() {
 		$page_title = 'Subscribe with Google';
 		$menu_title = 'Subscribe with Google';
 		$capability = 'manage_options';
 		$slug       = 'subscribe_with_google';
-		$callback   = array( __CLASS__, 'plugin_settings_page_content' );
+		$callback   = array( __CLASS__, 'render' );
 		$icon       = 'dashicons-megaphone';
 		$position   = 100;
 
@@ -42,8 +41,7 @@ final class Admin {
 		);
 	}
 
-	/** Renders the admin settings page. */
-	public static function plugin_settings_page_content() {
+	public static function render() {
 		?>
 		<div class="wrap">
 		<h2>Subscribe with Google</h2>
@@ -58,13 +56,13 @@ final class Admin {
 		<?php
 	}
 
-	/** Adds sections to admin settings page. */
-	public static function setup_sections() {
+	public static function prepare() {
 		add_settings_section( Plugin::key( 'configuration' ), 'Configuration', false, 'subscribe_with_google' );
+
+		self::prepare_fields();
 	}
 
-	/** Adds fields to admin settings page. */
-	public static function setup_fields() {
+	public static function prepare_fields() {
 		$fields = array(
 			array(
 				'uid'          => Plugin::key( 'products' ),
@@ -113,7 +111,7 @@ final class Admin {
 			add_settings_field(
 				$field['uid'],
 				$field['label'],
-				array( __CLASS__, 'field_callback' ),
+				array( __CLASS__, 'render_field' ),
 				'subscribe_with_google',
 				$field['section'],
 				$field
@@ -128,7 +126,7 @@ final class Admin {
 	 *
 	 * @param array[string]string $arguments Describes how field should render.
 	 */
-	public static function field_callback( $arguments ) {
+	public static function render_field( $arguments ) {
 		// Get the current value.
 		$value = get_option( $arguments['uid'] );
 

@@ -21,7 +21,7 @@ final class Plugin {
 
 	/** Creates the plugin. */
 	public function __construct() {
-		new Admin();
+		new AdminPage();
 		new EditPost();
 		new Filters();
 		new GoogleSignIn();
