@@ -16,8 +16,8 @@ final class Shortcodes {
 
 	/** Registers shortcodes. */
 	public function __construct() {
-		add_shortcode( 'swg-contribute', array( $this, 'contribute' ) );
-		add_shortcode( 'swg-subscribe', array( $this, 'subscribe' ) );
+		add_shortcode( 'swg-contribute', array( __CLASS__, 'contribute' ) );
+		add_shortcode( 'swg-subscribe', array( __CLASS__, 'subscribe' ) );
 	}
 
 	/**

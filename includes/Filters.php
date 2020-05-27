@@ -16,8 +16,8 @@ final class Filters {
 
 	/** Adds WordPress filters. */
 	public function __construct() {
-		add_filter( 'the_content', array( $this, 'the_content' ) );
-		add_filter( 'wp_nav_menu_items', array( $this, 'wp_nav_menu_items' ) );
+		add_filter( 'the_content', array( __CLASS__, 'the_content' ) );
+		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'wp_nav_menu_items' ) );
 	}
 
 	/**

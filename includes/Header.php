@@ -16,7 +16,7 @@ final class Header {
 
 	/** Registers action. */
 	public function __construct() {
-		add_action( 'wp_head', array( $this, 'modify' ) );
+		add_action( 'wp_head', array( __CLASS__, 'modify' ) );
 	}
 
 	/** Adds to the <head> element on Post view pages. */

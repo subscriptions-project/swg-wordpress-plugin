@@ -33,20 +33,20 @@ final class Plugin {
 	/** Adds WordPress actions. */
 	private function add_actions() {
 		// Admin menu.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu_item' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu_item' ) );
 
 		// Admin page.
-		add_action( 'admin_init', array( $this, 'setup_sections' ) );
-		add_action( 'admin_init', array( $this, 'setup_fields' ) );
+		add_action( 'admin_init', array( __CLASS__, 'setup_sections' ) );
+		add_action( 'admin_init', array( __CLASS__, 'setup_fields' ) );
 	}
 
 	/** Adds admin menu item. */
-	public function add_admin_menu_item() {
+	public static function add_admin_menu_item() {
 		$page_title = 'Subscribe with Google';
 		$menu_title = 'Subscribe with Google';
 		$capability = 'manage_options';
 		$slug       = 'subscribe_with_google';
-		$callback   = array( $this, 'plugin_settings_page_content' );
+		$callback   = array( __CLASS__, 'plugin_settings_page_content' );
 		$icon       = 'dashicons-megaphone';
 		$position   = 100;
 
@@ -132,7 +132,7 @@ final class Plugin {
 			add_settings_field(
 				$field['uid'],
 				$field['label'],
-				array( $this, 'field_callback' ),
+				array( __CLASS__, 'field_callback' ),
 				'subscribe_with_google',
 				$field['section'],
 				$field

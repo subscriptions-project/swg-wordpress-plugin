@@ -28,17 +28,17 @@ final class GoogleSignIn {
 
 	/** Adds action handlers. */
 	public function __construct() {
-		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
+		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
 	}
 
 	/** Registers custom REST routes. */
-	public function register_rest_routes() {
+	public static function register_rest_routes() {
 		register_rest_route(
 			'subscribewithgoogle/v1',
 			'/create-1p-cookie',
 			array(
 				'methods'  => 'POST',
-				'callback' => array( $this, 'create_1p_cookie' ),
+				'callback' => array( __CLASS__, 'create_1p_cookie' ),
 			)
 		);
 
@@ -47,7 +47,7 @@ final class GoogleSignIn {
 			'/entitlements',
 			array(
 				'methods'  => 'GET',
-				'callback' => array( $this, 'get_entitlements' ),
+				'callback' => array( __CLASS__, 'get_entitlements' ),
 			)
 		);
 
@@ -56,7 +56,7 @@ final class GoogleSignIn {
 			'/grant-status',
 			array(
 				'methods'  => 'GET',
-				'callback' => array( $this, 'get_grant_status' ),
+				'callback' => array( __CLASS__, 'get_grant_status' ),
 			)
 		);
 	}
