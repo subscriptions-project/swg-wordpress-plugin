@@ -2,13 +2,13 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
-use SubscribeWithGoogle\WordPress\PostEdit;
+use SubscribeWithGoogle\WordPress\EditPost;
 use WP_UnitTestCase;
 
-class SavePostTest extends WP_UnitTestCase {
+class EditPostSaveTest extends WP_UnitTestCase {
 
 	private $post_id = null;
-	private $post_edit = null;
+	private $edit_post = null;
 
 	public function setUp() {
 		parent::setUp();
@@ -40,7 +40,7 @@ class SavePostTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_product'
 		);
 
-		$this->post_edit = new PostEdit();
+		$this->edit_post = new EditPost();
 	}
 
 	public function tearDown() {
@@ -67,7 +67,7 @@ class SavePostTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'false'
 		);
-		$this->post_edit->save_post( $this->post_id );
+		$this->edit_post->save_post( $this->post_id );
 
 		// Verify updates didn't happen.
 		$this->assertPostMeta( 'free', '' );
@@ -87,7 +87,7 @@ class SavePostTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_nonce' => $nonce,
 			'SubscribeWithGoogle_product' => 'premium',
 		);
-		$this->post_edit->save_post( $this->post_id );
+		$this->edit_post->save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'false' );
@@ -108,7 +108,7 @@ class SavePostTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'true',
 		);
-		$this->post_edit->save_post( $this->post_id );
+		$this->edit_post->save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'true' );

@@ -23,7 +23,7 @@ final class Plugin {
 	public function __construct() {
 		new Filters();
 		new GoogleSignIn();
-		new PostEdit();
+		new EditPost();
 		new Shortcodes();
 
 		$this->add_actions();

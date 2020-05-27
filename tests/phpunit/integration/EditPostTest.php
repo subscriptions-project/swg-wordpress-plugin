@@ -2,17 +2,17 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
-use SubscribeWithGoogle\WordPress\PostEdit;
+use SubscribeWithGoogle\WordPress\EditPost;
 use WP_UnitTestCase;
 
-class PostEditTest extends WP_UnitTestCase {
+class EditPostTest extends WP_UnitTestCase {
 
 	private $post_edit = null;
 
 	public function setUp() {
 		parent::setUp();
 
-		$this->post_edit = new PostEdit();
+		$this->post_edit = new EditPost();
 	}
 
 	public function test__adds_metabox() {

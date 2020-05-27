@@ -1,6 +1,6 @@
 <?php
 /**
- * Class SubscribeWithGoogle\WordPress\PostEdit
+ * Class SubscribeWithGoogle\WordPress\EditPost
  *
  * @package   SubscribeWithGoogle\WordPress
  * @copyright 2019 Google LLC
@@ -10,7 +10,7 @@
 namespace SubscribeWithGoogle\WordPress;
 
 /** Supports editing of posts. */
-final class PostEdit {
+final class EditPost {
 
 	/** Adds action handlers. */
 	public function __construct() {
