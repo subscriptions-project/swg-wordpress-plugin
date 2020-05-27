@@ -75,15 +75,6 @@ class AdminPageTest extends PHPUnit_Framework_TestCase {
 		) );
 	}
 
-	public function test__admin_page__renders_settings_fields__chart() {
-		$this->expectOutputString('📊 📈');
-
-		AdminPage::render_field( array(
-			'type' => 'chart',
-			'uid' => 'TODO: Make actual charts 😂',
-		) );
-	}
-
 	public function test__admin_page__registers_settings_fields() {
 		global $wp_registered_settings;
 

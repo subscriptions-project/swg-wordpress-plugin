@@ -149,11 +149,6 @@ final class AdminPage {
 					esc_attr( $value )
 				);
 				break;
-			case 'chart':
-				printf(
-					'📊 📈'
-				);
-				break;
 		}
 
 		// If there is supplemental text.
