@@ -70,8 +70,8 @@ final class GoogleSignIn {
 	 *
 	 * @throws Exception When refresh token can't be fetched.
 	 */
-	public function create_1p_cookie( $request ) {
-		$this::verify_request_origin();
+	public static function create_1p_cookie( $request ) {
+		GoogleSignIn::verify_request_origin();
 
 		// Auth code is needed to get the refresh token.
 		if ( ! isset( $request['gsi_auth_code'] ) ) {
@@ -79,7 +79,7 @@ final class GoogleSignIn {
 		}
 
 		// Get refresh token.
-		$client   = $this->create_client();
+		$client   = GoogleSignIn::create_client();
 		$response = $client->fetchAccessTokenWithAuthCode( $request['gsi_auth_code'] );
 		if ( ! isset( $response['refresh_token'] ) ) {
 			throw new Exception(
@@ -110,10 +110,10 @@ final class GoogleSignIn {
 	 *
 	 * @return * Entitlements response.
 	 */
-	public function get_entitlements() {
-		$this::verify_request_origin();
+	public static function get_entitlements() {
+		GoogleSignIn::verify_request_origin();
 
-		$access_token = $this->fetch_access_token();
+		$access_token = GoogleSignIn::fetch_access_token();
 
 		// Get entitlements.
 		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/scenic-2017.appspot.com/entitlements?access_token=' . $access_token;
@@ -128,9 +128,9 @@ final class GoogleSignIn {
 	 *
 	 * @return * Grant status response.
 	 */
-	public function get_grant_status( $request ) {
+	public static function get_grant_status( $request ) {
 		try {
-			$entitlements = $this->get_entitlements()->entitlements;
+			$entitlements = GoogleSignIn::get_entitlements()->entitlements;
 		} catch ( Exception $e ) {
 			$entitlements = null;
 		}
@@ -192,7 +192,7 @@ final class GoogleSignIn {
 	 * @throws Exception When access token can't be fetched.
 	 * @return string Access token from Google.
 	 */
-	private function fetch_access_token() {
+	private static function fetch_access_token() {
 		// Refresh token is needed to get the access token.
 		if (
 			! isset( $_COOKIE['swg_refresh_token'] ) ||
@@ -202,7 +202,7 @@ final class GoogleSignIn {
 		}
 
 		// Get access token.
-		$client   = $this->create_client();
+		$client   = GoogleSignIn::create_client();
 		$response = $client->fetchAccessTokenWithRefreshToken( $_COOKIE['swg_refresh_token'] );
 		if ( ! isset( $response['access_token'] ) ) {
 			throw new Exception(
@@ -214,10 +214,10 @@ final class GoogleSignIn {
 	}
 
 	/** Creates a Google API client. */
-	private function create_client() {
+	private static function create_client() {
 		$oauth_client_id     = get_option( Plugin::key( 'oauth_client_id' ) );
 		$oauth_client_secret = get_option( Plugin::key( 'oauth_client_secret' ) );
-		$client              = new $this::$google_client_class();
+		$client              = new GoogleSignIn::$google_client_class();
 		$client->setClientId( $oauth_client_id );
 		$client->setClientSecret( $oauth_client_secret );
 		$client->setRedirectUri( 'postmessage' );
