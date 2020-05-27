@@ -15,7 +15,7 @@ namespace SubscribeWithGoogle\WordPress;
 final class Filters {
 
 	/** Adds WordPress filters. */
-	function __construct() {
+	public function __construct() {
 		add_filter( 'the_content', array( $this, 'the_content' ) );
 		add_filter( 'wp_nav_menu_items', array( $this, 'wp_nav_menu_items' ) );
 	}
@@ -26,7 +26,7 @@ final class Filters {
 	 * @param string $content Initial content of Post.
 	 * @return string Filtered content of Post.
 	 */
-	public function the_content( $content ) {
+	public static function the_content( $content ) {
 		// Check if we're inside the main loop in a single post page.
 		if ( ! is_single() || ! is_main_query() ) {
 			return $content;
@@ -74,7 +74,7 @@ final class Filters {
 	 *
 	 * @param string $menu_html HTML of a menu.
 	 */
-	public function wp_nav_menu_items( $menu_html ) {
+	public static function wp_nav_menu_items( $menu_html ) {
 		$swg_signin_link = 'href="#swg-signin"';
 		$menu_html       = str_replace(
 			$swg_signin_link,
