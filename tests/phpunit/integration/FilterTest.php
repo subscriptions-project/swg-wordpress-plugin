@@ -2,16 +2,18 @@
 
 namespace SubscribeWithGoogle\WordPress\Tests;
 
+use SubscribeWithGoogle\WordPress\Filters;
 use SubscribeWithGoogle\WordPress\Plugin;
 use WP_UnitTestCase;
 
 class FilterTest extends WP_UnitTestCase {
 
+	private $filters;
+
 	public function setUp() {
 		parent::setUp();
 
-		// Instantiate plugin.
-		Plugin::load();
+		$this->filters = new Filters;
 	}
 	
 	/**
@@ -39,7 +41,7 @@ class FilterTest extends WP_UnitTestCase {
 	public function test__index_page__does_not_modify_content() {
 		$post_content = $this->create_post('');
 		$this->go_to("/posts");
-		$result = Plugin::$instance->filter_the_content( $post_content );
+		$result = $this->filters->the_content( $post_content );
 
 		$this->assertEquals(
 			$result,
@@ -49,7 +51,7 @@ class FilterTest extends WP_UnitTestCase {
 
 	public function test__free_post__does_not_modify_content() {
 		$post_content = $this->create_post('true');
-		$result = Plugin::$instance->filter_the_content( $post_content );
+		$result = $this->filters->the_content( $post_content );
 
 		$this->assertEquals(
 			$result,
@@ -59,7 +61,7 @@ class FilterTest extends WP_UnitTestCase {
 
 	public function test__implicitly_paid_post__returns_filtered_content() {
 		$post_content = $this->create_post('');
-		$result = Plugin::$instance->filter_the_content( $post_content );
+		$result = $this->filters->the_content( $post_content );
 
 		$this->assertNotEquals(
 			$result,
@@ -73,7 +75,7 @@ class FilterTest extends WP_UnitTestCase {
 
 	public function test__explicitly_paid_post__returns_filtered_content() {
 		$post_content = $this->create_post('false');
-		$result = Plugin::$instance->filter_the_content( $post_content );
+		$result = $this->filters->the_content( $post_content );
 
 		$this->assertNotEquals(
 			$result,
@@ -86,7 +88,7 @@ class FilterTest extends WP_UnitTestCase {
 	}
 
 	public function test__signin_menu_link__gets_amp_attributes_added() {
-		$result = Plugin::$instance->filter_menu_items(
+		$result = $this->filters->wp_nav_menu_items(
 			'<li><a href="#swg-signin">Sign in</a></li>'
 		);
 

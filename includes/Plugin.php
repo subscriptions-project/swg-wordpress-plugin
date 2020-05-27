@@ -21,12 +21,12 @@ final class Plugin {
 
 	/** Creates the plugin. */
 	public function __construct() {
+		new Filters();
 		new GoogleSignIn();
 		new PostEdit();
 		new Shortcodes();
 
 		$this->add_actions();
-		$this->add_filters();
 	}
 
 	/** Adds WordPress actions. */
@@ -40,76 +40,6 @@ final class Plugin {
 
 		// Post view pages.
 		add_action( 'wp_head', array( $this, 'handle_wp_head' ) );
-	}
-
-	/** Adds WordPress filters. */
-	private function add_filters() {
-		add_filter( 'the_content', array( $this, 'filter_the_content' ) );
-		add_filter( 'wp_nav_menu_items', array( $this, 'filter_menu_items' ) );
-	}
-
-	/**
-	 * Filters content on Post view pages.
-	 *
-	 * @param string $content Initial content of Post.
-	 * @return string Filtered content of Post.
-	 */
-	public function filter_the_content( $content ) {
-		// Check if we're inside the main loop in a single post page.
-		if ( ! is_single() || ! is_main_query() ) {
-			return $content;
-		}
-
-		// Verify this post is supposed to be locked, even.
-		// If it's free, just bail.
-		$free_key = $this::key( 'free' );
-		$free     = get_post_meta( get_the_ID(), $free_key, true );
-		if ( 'true' === $free ) {
-			return $content;
-		}
-
-		$more_tag         = '<span id="more-' . get_the_ID() . '"></span>';
-		$content_segments = explode( $more_tag, $content );
-
-		// Add Paywall wrapper & prompt.
-		if ( count( $content_segments ) > 1 ) {
-			$content_segments[1] = '
-<p class="swg--paywall-prompt" subscriptions-section="content-not-granted">
-	🔒 <span>Subscribe to unlock the rest of this article.</span>
-	<br />
-	<br />
-	<button
-		class="swg-button swg-subscribe-button"
-		subscriptions-action="subscribe"
-		subscriptions-display="true"
-		subscriptions-service="subscribe.google.com">
-	</button>
-</p>
-
-<div class="swg--locked-content" subscriptions-section="content">
-' . $content_segments[1] . '
-</div>
-';
-		}
-
-		$content = implode( $more_tag, $content_segments );
-
-		return $content;
-	}
-
-	/**
-	 * Filters menu items HTML.
-	 *
-	 * @param string $menu_html HTML of a menu.
-	 */
-	public function filter_menu_items( $menu_html ) {
-		$swg_signin_link = 'href="#swg-signin"';
-		$menu_html       = str_replace(
-			$swg_signin_link,
-			$swg_signin_link . ' subscriptions-action="login" subscriptions-display="NOT data.isLoggedIn"',
-			$menu_html
-		);
-		return $menu_html;
 	}
 
 	/** Adds admin menu item. */
