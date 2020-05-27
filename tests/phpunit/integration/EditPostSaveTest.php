@@ -8,7 +8,6 @@ use WP_UnitTestCase;
 class EditPostSaveTest extends WP_UnitTestCase {
 
 	private $post_id = null;
-	private $edit_post = null;
 
 	public function setUp() {
 		parent::setUp();
@@ -39,8 +38,6 @@ class EditPostSaveTest extends WP_UnitTestCase {
 			$this->post_id,
 			'SubscribeWithGoogle_product'
 		);
-
-		$this->edit_post = new EditPost();
 	}
 
 	public function tearDown() {
@@ -67,7 +64,7 @@ class EditPostSaveTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'false'
 		);
-		$this->edit_post->save_post( $this->post_id );
+		EditPost::save_post( $this->post_id );
 
 		// Verify updates didn't happen.
 		$this->assertPostMeta( 'free', '' );
@@ -87,7 +84,7 @@ class EditPostSaveTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_nonce' => $nonce,
 			'SubscribeWithGoogle_product' => 'premium',
 		);
-		$this->edit_post->save_post( $this->post_id );
+		EditPost::save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'false' );
@@ -108,7 +105,7 @@ class EditPostSaveTest extends WP_UnitTestCase {
 			'SubscribeWithGoogle_product' => 'premium',
 			'SubscribeWithGoogle_free' => 'true',
 		);
-		$this->edit_post->save_post( $this->post_id );
+		EditPost::save_post( $this->post_id );
 
 		// Verify updates.
 		$this->assertPostMeta( 'free', 'true' );

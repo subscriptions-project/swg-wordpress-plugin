@@ -15,18 +15,18 @@ final class EditPost {
 	/** Adds action handlers. */
 	public function __construct() {
 		// Render meta box on Post Edit page.
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', array( self::class, 'add_meta_boxes' ) );
 
 		// Handle Posts being saved.
-		add_action( 'save_post', array( $this, 'save_post' ) );
+		add_action( 'save_post', array( self::class, 'save_post' ) );
 	}
 
 	/** Adds meta boxes to the Post edit page. */
-	public function add_meta_boxes() {
+	public static function add_meta_boxes() {
 		add_meta_box(
 			Plugin::key( 'post-edit-metabox' ),
 			'📰 Subscribe with Google',
-			array( $this, 'render_post_edit_fields' ),
+			array( self::class, 'render_post_edit_fields' ),
 			'post',
 			'advanced',
 			'high'
@@ -34,7 +34,7 @@ final class EditPost {
 	}
 
 	/** Renders post edit fields. */
-	public function render_post_edit_fields() {
+	public static function render_post_edit_fields() {
 		$free_key     = Plugin::key( 'free' );
 		$product_key  = Plugin::key( 'product' );
 		$products_key = Plugin::key( 'products' );
@@ -92,7 +92,7 @@ final class EditPost {
 	 *
 	 * @param string $post_id ID of the post being saved.
 	 */
-	public function save_post( $post_id ) {
+	public static function save_post( $post_id ) {
 		$product_key = Plugin::key( 'product' );
 		$free_key    = Plugin::key( 'free' );
 		$nonce_key   = Plugin::key( 'nonce' );
