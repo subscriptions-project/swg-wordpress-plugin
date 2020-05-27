@@ -15,10 +15,10 @@ final class EditPost {
 	/** Adds action handlers. */
 	public function __construct() {
 		// Render meta box on Post Edit page.
-		add_action( 'add_meta_boxes', array( self::class, 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
 
 		// Handle Posts being saved.
-		add_action( 'save_post', array( self::class, 'save_post' ) );
+		add_action( 'save_post', array( __CLASS__, 'save_post' ) );
 	}
 
 	/** Adds meta boxes to the Post edit page. */
@@ -26,7 +26,7 @@ final class EditPost {
 		add_meta_box(
 			Plugin::key( 'post-edit-metabox' ),
 			'📰 Subscribe with Google',
-			array( self::class, 'render_post_edit_fields' ),
+			array( __CLASS__, 'render_post_edit_fields' ),
 			'post',
 			'advanced',
 			'high'
