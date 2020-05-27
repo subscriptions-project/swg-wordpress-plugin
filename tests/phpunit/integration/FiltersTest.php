@@ -5,7 +5,7 @@ namespace SubscribeWithGoogle\WordPress\Tests;
 use SubscribeWithGoogle\WordPress\Filters;
 use WP_UnitTestCase;
 
-class FilterTest extends WP_UnitTestCase {
+class FiltersTest extends WP_UnitTestCase {
 
 	/**
 	 * Creates a test post.

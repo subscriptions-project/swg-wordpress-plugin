@@ -5,7 +5,7 @@ namespace SubscribeWithGoogle\WordPress\Tests;
 use PHPUnit_Framework_TestCase;
 use SubscribeWithGoogle\WordPress\Shortcodes;
 
-class ShortcodeTest extends PHPUnit_Framework_TestCase {
+class ShortcodesTest extends PHPUnit_Framework_TestCase {
 
 	public function test__subscribe__with_play_offers() {
 		$result = Shortcodes::subscribe(
