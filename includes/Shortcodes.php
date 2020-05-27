@@ -25,7 +25,7 @@ final class Shortcodes {
 	 *
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
-	public function contribute( $atts = array() ) {
+	public static function contribute( $atts = array() ) {
 		$html = '<button class="swg-contribute-button" data-play-offers="';
 		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];
@@ -39,7 +39,7 @@ final class Shortcodes {
 	 *
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
-	public function subscribe( $atts = array() ) {
+	public static function subscribe( $atts = array() ) {
 		$html = '<button class="swg-button swg-subscribe-button" data-play-offers="';
 		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];

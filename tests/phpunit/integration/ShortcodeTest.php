@@ -7,16 +7,8 @@ use SubscribeWithGoogle\WordPress\Shortcodes;
 
 class ShortcodeTest extends PHPUnit_Framework_TestCase {
 
-	private $shortcodes;
-
-	public function setUp() {
-		parent::setUp();
-
-		$this->shortcodes = new Shortcodes;
-	}
-
 	public function test__subscribe__with_play_offers() {
-		$result = $this->shortcodes->subscribe(
+		$result = Shortcodes::subscribe(
 			array(
 				'play-offers' => 'sku1, sku2'
 			)
@@ -29,7 +21,7 @@ class ShortcodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test__subscribe__without_play_offers() {
-		$result = $this->shortcodes->subscribe();
+		$result = Shortcodes::subscribe();
 
 		$this->assertEquals(
 			$result,
@@ -38,7 +30,7 @@ class ShortcodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test__contribute__with_play_offers() {
-		$result = $this->shortcodes->contribute(
+		$result = Shortcodes::contribute(
 			array(
 				'play-offers' => 'sku1, sku2'
 			)
@@ -51,7 +43,7 @@ class ShortcodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test__contribute__without_play_offers() {
-		$result = $this->shortcodes->contribute();
+		$result = Shortcodes::contribute();
 
 		$this->assertEquals(
 			$result,
