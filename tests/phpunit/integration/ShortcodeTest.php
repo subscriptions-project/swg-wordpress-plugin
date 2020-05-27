@@ -3,19 +3,20 @@
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use PHPUnit_Framework_TestCase;
-use SubscribeWithGoogle\WordPress\Plugin;
+use SubscribeWithGoogle\WordPress\Shortcodes;
 
 class ShortcodeTest extends PHPUnit_Framework_TestCase {
+
+	private $shortcodes;
 
 	public function setUp() {
 		parent::setUp();
 
-		// Instantiate plugin.
-		Plugin::load();
+		$this->shortcodes = new Shortcodes;
 	}
 
 	public function test__subscribe__with_play_offers() {
-		$result = Plugin::$instance->shortcode_subscribe(
+		$result = $this->shortcodes->subscribe(
 			array(
 				'play-offers' => 'sku1, sku2'
 			)
@@ -28,7 +29,7 @@ class ShortcodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test__subscribe__without_play_offers() {
-		$result = Plugin::$instance->shortcode_subscribe();
+		$result = $this->shortcodes->subscribe();
 
 		$this->assertEquals(
 			$result,
@@ -37,7 +38,7 @@ class ShortcodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test__contribute__with_play_offers() {
-		$result = Plugin::$instance->shortcode_contribute(
+		$result = $this->shortcodes->contribute(
 			array(
 				'play-offers' => 'sku1, sku2'
 			)
@@ -50,7 +51,7 @@ class ShortcodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test__contribute__without_play_offers() {
-		$result = Plugin::$instance->shortcode_contribute();
+		$result = $this->shortcodes->contribute();
 
 		$this->assertEquals(
 			$result,

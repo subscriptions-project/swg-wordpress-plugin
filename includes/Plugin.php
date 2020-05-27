@@ -21,12 +21,12 @@ final class Plugin {
 
 	/** Creates the plugin. */
 	public function __construct() {
-		new PostEdit();
 		new GoogleSignIn();
+		new PostEdit();
+		new Shortcodes();
 
 		$this->add_actions();
 		$this->add_filters();
-		$this->add_shortcodes();
 	}
 
 	/** Adds WordPress actions. */
@@ -46,40 +46,6 @@ final class Plugin {
 	private function add_filters() {
 		add_filter( 'the_content', array( $this, 'filter_the_content' ) );
 		add_filter( 'wp_nav_menu_items', array( $this, 'filter_menu_items' ) );
-	}
-
-	/** Adds WordPress shortcodes. */
-	private function add_shortcodes() {
-		add_shortcode( 'swg-subscribe', array( $this, 'shortcode_subscribe' ) );
-		add_shortcode( 'swg-contribute', array( $this, 'shortcode_contribute' ) );
-	}
-
-	/**
-	 * Shortcode for rendering a Subscribe button.
-	 *
-	 * @param array[string]string $atts Attributes affecting shortcode.
-	 */
-	public function shortcode_subscribe( $atts = array() ) {
-		$html = '<button class="swg-button swg-subscribe-button" data-play-offers="';
-		if ( isset( $atts['play-offers'] ) ) {
-			$html .= $atts['play-offers'];
-		}
-		$html .= '"></button>';
-		return $html;
-	}
-
-	/**
-	 * Shortcode for rendering a Contribute button.
-	 *
-	 * @param array[string]string $atts Attributes affecting shortcode.
-	 */
-	public function shortcode_contribute( $atts = array() ) {
-		$html = '<button class="swg-contribute-button" data-play-offers="';
-		if ( isset( $atts['play-offers'] ) ) {
-			$html .= $atts['play-offers'];
-		}
-		$html .= '">Contribute with Google</button>';
-		return $html;
 	}
 
 	/**
