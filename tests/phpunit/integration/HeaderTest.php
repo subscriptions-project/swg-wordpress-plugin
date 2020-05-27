@@ -1,10 +1,11 @@
 <?php
 namespace SubscribeWithGoogle\WordPress\Tests;
 
+use SubscribeWithGoogle\WordPress\Header;
 use SubscribeWithGoogle\WordPress\Plugin;
 use WP_UnitTestCase;
 
-class WpHeadTest extends WP_UnitTestCase {
+class HeaderTest extends WP_UnitTestCase {
 
 	private $post_id = null;
 
@@ -37,7 +38,7 @@ class WpHeadTest extends WP_UnitTestCase {
 	}
 
 	public function test__handle_wp_head__adds_scripts_and_styles() {
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 
 		$this->expectOutputRegex( '/subscriptions-product-id/' );
 
@@ -53,13 +54,13 @@ class WpHeadTest extends WP_UnitTestCase {
 		global $is_amp;
 		$is_amp = true;
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 
 		$this->expectOutputRegex(
 			'/custom-element="amp-subscriptions-google"/'
 		);
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 	}
 
 	public function test__adds_product_id_meta_tag__basic() {
@@ -73,7 +74,7 @@ class WpHeadTest extends WP_UnitTestCase {
 			'/\<meta name="subscriptions-product-id" content="example.com:basic" \/\>/'
 		);
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 	}
 
 	public function test__adds_product_id_meta_tag__premium() {
@@ -87,7 +88,7 @@ class WpHeadTest extends WP_UnitTestCase {
 			'/\<meta name="subscriptions-product-id" content="example.com:premium" \/\>/'
 		);
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 	}
 
 	public function test__adds_free_meta_tag__true() {
@@ -101,7 +102,7 @@ class WpHeadTest extends WP_UnitTestCase {
 			'/\<meta name="subscriptions-accessible-for-free" content="true" \/\>/'
 		);
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 	}
 
 	public function test__adds_free_meta_tag__false() {
@@ -115,7 +116,7 @@ class WpHeadTest extends WP_UnitTestCase {
 			'/\<meta name="subscriptions-accessible-for-free" content="false" \/\>/'
 		);
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 	}
 
 	public function test__adds_free_meta_tag__defaults_to_false() {
@@ -129,6 +130,6 @@ class WpHeadTest extends WP_UnitTestCase {
 			'/\<meta name="subscriptions-accessible-for-free" content="false" \/\>/'
 		);
 
-		Plugin::$instance->handle_wp_head();
+		Header::modify();
 	}
 }
