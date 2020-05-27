@@ -29,9 +29,6 @@ class HeaderTest extends WP_UnitTestCase {
 			$this->go_to("/?p={$this->post_id}");
 		}
 
-		// Instantiate plugin.
-		Plugin::load();
-
 		// Reset AMP var.
 		global $is_amp;
 		$is_amp = false;
