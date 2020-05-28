@@ -41,6 +41,7 @@ final class AdminPage {
 		);
 	}
 
+	/** Renders the admin page. */
 	public static function render() {
 		?>
 		<div class="wrap">
@@ -56,104 +57,110 @@ final class AdminPage {
 		<?php
 	}
 
+	/** Prepares the admin page to be rendered. */
 	public static function prepare() {
 		add_settings_section( Plugin::key( 'configuration' ), 'Configuration', false, 'subscribe_with_google' );
 
-		self::prepare_fields();
+		self::prepare_settings();
 	}
 
-	public static function prepare_fields() {
-		$fields = array(
+	/** Prepares settings to be rendered. */
+	public static function prepare_settings() {
+		self::add_setting(
 			array(
-				'uid'          => Plugin::key( 'products' ),
-				'label'        => 'Product Names',
-				'section'      => Plugin::key( 'configuration' ),
-				'type'         => 'textarea',
-				'options'      => false,
-				'placeholder'  => "basic\npremium",
-				'helper'       => '',
-				'supplemental' => 'Product names, one per line.',
-				'default'      => '',
-			),
-
-			array(
-				'uid'          => Plugin::key( 'publication_id' ),
-				'label'        => 'Publication ID',
-				'section'      => Plugin::key( 'configuration' ),
-				'type'         => 'text',
-				'options'      => false,
-				'placeholder'  => 'your.publication.id',
-				'supplemental' => 'Unique indentifier for your publication.',
-			),
-
-			array(
-				'uid'          => Plugin::key( 'oauth_client_id' ),
-				'label'        => 'OAuth Client ID',
-				'section'      => Plugin::key( 'configuration' ),
-				'type'         => 'text',
-				'options'      => false,
-				'placeholder'  => '',
-				'supplemental' => 'Unique identifier for your Google OAuth Client.',
-			),
-
-			array(
-				'uid'          => Plugin::key( 'oauth_client_secret' ),
-				'label'        => 'OAuth Client Secret',
-				'section'      => Plugin::key( 'configuration' ),
-				'type'         => 'text',
-				'options'      => false,
-				'placeholder'  => '',
-				'supplemental' => 'Secret key for your Google OAuth Client.',
-			),
+				'id'          => 'products',
+				'label'       => 'Product Names',
+				'type'        => 'textarea',
+				'description' => 'Product names, one per line.',
+			)
 		);
 
-		foreach ( $fields as $field ) {
-			add_settings_field(
-				$field['uid'],
-				$field['label'],
-				array( __CLASS__, 'render_field' ),
-				'subscribe_with_google',
-				$field['section'],
-				$field
-			);
+		self::add_setting(
+			array(
+				'id'          => 'publication_id',
+				'label'       => 'Publication ID',
+				'type'        => 'text',
+				'description' => 'Unique indentifier for your publication.',
+			)
+		);
 
-			register_setting( 'subscribe_with_google', $field['uid'] );
-		}
+		self::add_setting(
+			array(
+				'id'          => 'oauth_client_id',
+				'label'       => 'OAuth Client ID',
+				'type'        => 'text',
+				'description' => 'Unique identifier for your Google OAuth Client.',
+			)
+		);
+
+		self::add_setting(
+			array(
+				'id'          => 'oauth_client_secret',
+				'label'       => 'OAuth Client Secret',
+				'type'        => 'text',
+				'description' => 'Secret key for your Google OAuth Client.',
+			)
+		);
 	}
 
 	/**
-	 * Adds a settings field.
+	 * Adds a setting to the admin page.
 	 *
-	 * @param array[string]string $arguments Describes how field should render.
+	 * @param array[string]string $setting describes the setting.
 	 */
-	public static function render_field( $arguments ) {
-		// Get the current value.
-		$value = get_option( $arguments['uid'] );
+	private static function add_setting( $setting ) {
+		$setting['options'] = false;
+		$setting['section'] = Plugin::key( 'configuration' );
+		$setting['uid']     = Plugin::key( $setting['id'] );
+		$setting['value']   = get_option( $setting['uid'] );
 
-		// Check which type of field we want.
-		switch ( $arguments['type'] ) {
-			case 'text':
-				printf(
-					'<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
-					esc_attr( $arguments['uid'] ),
-					esc_attr( $arguments['type'] ),
-					esc_attr( $arguments['placeholder'] ),
-					esc_attr( $value )
-				);
-				break;
-			case 'textarea':
-				printf(
-					'<textarea style="min-height: 96px;" name="%1$s" id="%1$s" placeholder="%2$s">%3$s</textarea>',
-					esc_attr( $arguments['uid'] ),
-					esc_attr( $arguments['placeholder'] ),
-					esc_attr( $value )
-				);
-				break;
-		}
+		$render_fn = 'render_' . $setting['type'] . '_setting';
+		$page      = 'subscribe_with_google';
 
-		// If there is supplemental text.
-		if ( isset( $arguments['supplemental'] ) ) {
-			printf( '<p class="description">%s</p>', esc_attr( $arguments['supplemental'] ) );
-		}
+		add_settings_field(
+			$setting['uid'],
+			$setting['label'],
+			array( __CLASS__, $render_fn ),
+			$page,
+			$setting['section'],
+			$setting
+		);
+
+		register_setting( 'subscribe_with_google', $setting['uid'] );
+	}
+
+
+	/**
+	 * Renders a textarea setting on the admin page.
+	 *
+	 * @param array[string]string $setting describes the setting.
+	 */
+	public static function render_textarea_setting( $setting ) {
+		echo '<textarea';
+		echo ' id="' . esc_attr( $setting['uid'] ) . '"';
+		echo ' name="' . esc_attr( $setting['uid'] ) . '"';
+		echo ' style="min-height: 96px;"'; // TODO: Add external stylesheet.
+		echo '>';
+		echo esc_attr( $setting['value'] );
+		echo '</textarea>';
+		echo '<p class="description">';
+		echo esc_attr( $setting['description'] );
+		echo '</p>';
+	}
+
+	/**
+	 * Renders a text setting on the admin page.
+	 *
+	 * @param array[string]string $setting describes the setting.
+	 */
+	public static function render_text_setting( $setting ) {
+		echo '<input';
+		echo ' id="' . esc_attr( $setting['uid'] ) . '"';
+		echo ' name="' . esc_attr( $setting['uid'] ) . '"';
+		echo ' value="' . esc_attr( $setting['value'] ) . '"';
+		echo '/>';
+		echo '<p class="description">';
+		echo esc_attr( $setting['description'] );
+		echo '</p>';
 	}
 }

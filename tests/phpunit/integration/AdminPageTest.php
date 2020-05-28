@@ -46,39 +46,38 @@ class AdminPageTest extends PHPUnit_Framework_TestCase {
 
 	public function test__admin_page__renders_settings_fields__text() {
 		$this->expectOutputString(
-			'<input name="SubscribeWithGoogle_publication_id" id="SubscribeWithGoogle_publication_id" type="text" placeholder="Add products here" value="example.com" /><p class="description">Extra text</p>'
+			'<input id="SubscribeWithGoogle_publication_id" name="SubscribeWithGoogle_publication_id" value="example.com"/><p class="description">Extra text</p>'
 		);
 
 		// Define publication ID.
 		update_option( 'SubscribeWithGoogle_publication_id', 'example.com' );
 
-		AdminPage::render_field( array(
+		AdminPage::render_text_setting( array(
 			'uid' => 'SubscribeWithGoogle_publication_id',
-			'type' => 'text',
-			'placeholder' => 'Add products here',
-			'supplemental' => 'Extra text',
+			'description' => 'Extra text',
+			'value' => 'example.com'
 		) );
 	}
 
 	public function test__admin_page__renders_settings_fields__textarea() {
 		$this->expectOutputString(
-			'<textarea style="min-height: 96px;" name="SubscribeWithGoogle_publication_id" id="SubscribeWithGoogle_publication_id" placeholder="Add products here">example.com</textarea>'
+			'<textarea id="SubscribeWithGoogle_publication_id" name="SubscribeWithGoogle_publication_id" style="min-height: 96px;">example.com</textarea><p class="description">Extra text</p>'
 		);
 
 		// Define publication ID.
 		update_option( 'SubscribeWithGoogle_publication_id', 'example.com' );
 
-		AdminPage::render_field( array(
+		AdminPage::render_textarea_setting( array(
 			'uid' => 'SubscribeWithGoogle_publication_id',
-			'type' => 'textarea',
-			'placeholder' => 'Add products here',
+			'description' => 'Extra text',
+			'value' => 'example.com'
 		) );
 	}
 
 	public function test__admin_page__registers_settings_fields() {
 		global $wp_registered_settings;
 
-		AdminPage::prepare_fields();
+		AdminPage::prepare_settings();
 
 		$keys = array_keys( $wp_registered_settings );
 		$this->assertContains( 'SubscribeWithGoogle_products', $keys );
