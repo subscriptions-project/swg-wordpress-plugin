@@ -26,19 +26,25 @@ final class EditPost {
 		add_meta_box(
 			Plugin::key( 'post-edit-metabox' ),
 			'📰 Subscribe with Google',
-			array( __CLASS__, 'render_post_edit_fields' ),
+			array( __CLASS__, 'render' ),
 			'post',
 			'advanced',
 			'high'
 		);
 	}
 
-	/** Renders post edit fields. */
-	public static function render_post_edit_fields() {
-		$free_key     = Plugin::key( 'free' );
+	/** Renders meta box. */
+	public static function render() {
+		self::render_products_dropdown();
+		self::render_free_checkbox();
+
+		wp_nonce_field( Plugin::key( 'saving_settings' ), Plugin::key( 'nonce' ) );
+	}
+
+	/** Renders products dropdown. */
+	public static function render_products_dropdown() {
 		$product_key  = Plugin::key( 'product' );
 		$products_key = Plugin::key( 'products' );
-		$free         = get_post_meta( get_the_ID(), $free_key, true ) === 'true';
 		$products_str = trim( get_option( $products_key ) );
 
 		if ( ! $products_str ) {
@@ -49,7 +55,6 @@ final class EditPost {
 			return;
 		}
 
-		// Products dropdown.
 		$products         = explode( "\n", $products_str );
 		$selected_product = get_post_meta( get_the_ID(), $product_key, true );
 		echo 'Product&nbsp; ';
@@ -71,8 +76,13 @@ final class EditPost {
 		echo '</select>';
 		echo '<br />';
 		echo '<br />';
+	}
 
-		// Free checkbox.
+	/** Renders free checkbox. */
+	public static function render_free_checkbox() {
+		$free_key = Plugin::key( 'free' );
+		$free     = get_post_meta( get_the_ID(), $free_key, true ) === 'true';
+
 		echo 'Is Free&nbsp; ';
 		echo '<input';
 		echo ' id="' . esc_attr( $free_key ) . '"';
@@ -83,8 +93,6 @@ final class EditPost {
 			echo ' checked';
 		}
 		echo '/>';
-
-		wp_nonce_field( Plugin::key( 'saving_settings' ), Plugin::key( 'nonce' ) );
 	}
 
 	/**

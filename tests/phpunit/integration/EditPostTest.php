@@ -23,7 +23,7 @@ class EditPostTest extends WP_UnitTestCase {
 			"/Please define products on the SwG setup page 😄/"
 		);
 
-		EditPost::render_post_edit_fields();
+		EditPost::render();
 	}
 
 	public function test__renders_metabox__products_dropdown() {
@@ -34,7 +34,7 @@ class EditPostTest extends WP_UnitTestCase {
 		// Define products.
 		update_option( 'SubscribeWithGoogle_products', "basic\npremium" );
 
-		EditPost::render_post_edit_fields();
+		EditPost::render();
 	}
 
 	public function test__renders_metabox__products_dropdown__with_selection() {
@@ -50,7 +50,7 @@ class EditPostTest extends WP_UnitTestCase {
 		$this->go_to( "/?p=$post_id" );
 		update_post_meta( $post_id, 'SubscribeWithGoogle_product', 'premium' );
 
-		EditPost::render_post_edit_fields();
+		EditPost::render();
 	}
 
 	public function test__renders_metabox__free_checkbox__unchecked() {
@@ -61,7 +61,7 @@ class EditPostTest extends WP_UnitTestCase {
 		// Define products.
 		update_option( 'SubscribeWithGoogle_products', "basic\npremium" );
 
-		EditPost::render_post_edit_fields();
+		EditPost::render();
 	}
 
 	public function test__renders_metabox__free_checkbox__checked() {
@@ -77,6 +77,6 @@ class EditPostTest extends WP_UnitTestCase {
 		$this->go_to( "/?p=$post_id" );
 		update_post_meta( $post_id, 'SubscribeWithGoogle_free', 'true' );
 
-		EditPost::render_post_edit_fields();
+		EditPost::render();
 	}
 }
