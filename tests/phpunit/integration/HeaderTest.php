@@ -36,8 +36,7 @@ class HeaderTest extends WP_UnitTestCase {
 
 	public function test__handle_wp_head__adds_scripts_and_styles() {
 		Header::modify();
-
-		$this->expectOutputRegex( '/subscriptions-product-id/' );
+		$this->expectOutputRegex( '/"@type": "NewsArticle",/' );
 
 		$scripts = wp_scripts();
 		$this->assertContains( 'swg-js', $scripts->queue );
@@ -68,7 +67,7 @@ class HeaderTest extends WP_UnitTestCase {
 		);
 
 		$this->expectOutputRegex(
-			'/\<meta name="subscriptions-product-id" content="example.com:basic" \/\>/'
+			'/"productID": "example.com:basic"/'
 		);
 
 		Header::modify();
@@ -82,7 +81,7 @@ class HeaderTest extends WP_UnitTestCase {
 		);
 
 		$this->expectOutputRegex(
-			'/\<meta name="subscriptions-product-id" content="example.com:premium" \/\>/'
+			'/"productID": "example.com:premium"/'
 		);
 
 		Header::modify();
@@ -96,7 +95,7 @@ class HeaderTest extends WP_UnitTestCase {
 		);
 
 		$this->expectOutputRegex(
-			'/\<meta name="subscriptions-accessible-for-free" content="true" \/\>/'
+			'/"isAccessibleForFree": true,/'
 		);
 
 		Header::modify();
@@ -110,7 +109,7 @@ class HeaderTest extends WP_UnitTestCase {
 		);
 
 		$this->expectOutputRegex(
-			'/\<meta name="subscriptions-accessible-for-free" content="false" \/\>/'
+			'/"isAccessibleForFree": false,/'
 		);
 
 		Header::modify();
@@ -124,7 +123,7 @@ class HeaderTest extends WP_UnitTestCase {
 		);
 
 		$this->expectOutputRegex(
-			'/\<meta name="subscriptions-accessible-for-free" content="false" \/\>/'
+			'/"isAccessibleForFree": false,/'
 		);
 
 		Header::modify();

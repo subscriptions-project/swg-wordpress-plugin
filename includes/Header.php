@@ -75,20 +75,34 @@ final class Header {
 			<?php
 		}
 
-		// Add meta tags.
-		$publication_id  = get_option( Plugin::key( 'publication_id' ) );
-		$product         = get_post_meta( get_the_ID(), Plugin::key( 'product' ), true );
-		$product_id      = $publication_id . ':' . $product;
-		$oauth_client_id = get_option( Plugin::key( 'oauth_client_id' ) );
-		$is_free         = get_post_meta( get_the_ID(), Plugin::key( 'free' ), true );
-		$is_free         = $is_free ? $is_free : 'false';
+		// Add ld+json for swg-js.
+		$publication_id = get_option( Plugin::key( 'publication_id' ) );
+		$product        = get_post_meta( get_the_ID(), Plugin::key( 'product' ), true );
+		$product_id     = $publication_id . ':' . $product;
+		$is_free        = get_post_meta( get_the_ID(), Plugin::key( 'free' ), true );
+		$is_free        = $is_free ? $is_free : 'false';
+		// TODO: Add this after the AMP WP plugin adds their ld+json.
 		?>
-		<meta name="subscriptions-product-id" content="<?php echo esc_attr( $product_id ); ?>" />
-		<meta name="subscriptions-accessible-for-free" content="<?php echo esc_attr( $is_free ); ?>" />
+		<script type=application/ld+json>
+		{
+			"@context": "http:\/\/schema.org",
+			"@type": "NewsArticle",
+			"isAccessibleForFree": <?php echo esc_js( $is_free ); ?>,
+			"isPartOf": {
+				"@type": ["CreativeWork", "Product"],
+				"productID": "<?php echo esc_js( $product_id ); ?>"
+			}
+		}
+		</script>
+
+		<?php
+		// Add meta tag for Google Sign In.
+		$oauth_client_id = get_option( Plugin::key( 'oauth_client_id' ) );
+		?>
 		<meta name="google-signin-client_id" content="<?php echo esc_attr( $oauth_client_id ); ?>">
 
 		<?php
-		// Add JSON for AMP.
+		// Add configuration JSON for AMP extensions.
 		$site_url          = get_option( 'siteurl' );
 		$authorization_url = $site_url . '/wp-json/subscribewithgoogle/v1/grant-status?product=' . $product_id;
 		$actions_login     = $site_url . '/wp-login.php';
