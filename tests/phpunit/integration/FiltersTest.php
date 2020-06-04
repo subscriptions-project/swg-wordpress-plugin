@@ -7,6 +7,14 @@ use WP_UnitTestCase;
 
 class FiltersTest extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+
+		// Reset AMP var.
+		global $is_amp;
+		$is_amp = false;
+	}
+
 	/**
 	 * Creates a test post.
 	 * 
@@ -85,6 +93,42 @@ class FiltersTest extends WP_UnitTestCase {
 
 		$this->assertContains(
 			'subscriptions-action=',
+			$result
+		);
+	}
+
+	public function test__body_class__on_non_single_post__does_not_modify() {
+		$classes = array( 'sample-class' );
+		$result = Filters::body_class( $classes );
+
+		$this->assertEquals(
+			$classes,
+			$result
+		);
+	}
+
+	public function test__body_class__on_non_amp_url__does_not_modify() {
+		$this->create_post('');
+
+		$classes = array( 'sample-class' );
+		$result = Filters::body_class( $classes );
+
+		$this->assertEquals(
+			$classes,
+			$result
+		);
+	}
+
+	public function test__body_class__adds_amp_class() {
+		global $is_amp;
+		$is_amp = true;
+		$this->create_post('');
+
+		$classes = array( 'sample-class' );
+		$result = Filters::body_class( $classes );
+
+		$this->assertEquals(
+			array_merge($classes, ['swg--is-amp']),
 			$result
 		);
 	}
