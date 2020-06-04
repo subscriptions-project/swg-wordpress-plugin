@@ -2,11 +2,11 @@
 	opacity: 0.5;
 }
 
-html:not([amp]) article:not(.swg--page-is-unlocked) .swg--locked-content {
+body:not(.swg--is-amp) article:not(.swg--page-is-unlocked) .swg--locked-content {
 	display: none;
 }
 
-html:not([amp]) article:not(.swg--page-is-locked) .swg--paywall-prompt {
+body:not(.swg--is-amp) article:not(.swg--page-is-locked) .swg--paywall-prompt {
 	display: none;
 }
 

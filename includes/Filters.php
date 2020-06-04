@@ -16,8 +16,29 @@ final class Filters {
 
 	/** Adds WordPress filters. */
 	public function __construct() {
+		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'the_content', array( __CLASS__, 'the_content' ) );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'wp_nav_menu_items' ) );
+	}
+
+	/**
+	 * Filters body classes on Post view pages.
+	 *
+	 * @param string[] $classes already assigned to body.
+	 */
+	public static function body_class( $classes ) {
+		// Check if we're inside the main loop in a single post page.
+		if ( ! is_single() || ! is_main_query() ) {
+			return $classes;
+		}
+
+		// Check that we're in AMP mode.
+		if ( ! Plugin::is_amp() ) {
+			return $classes;
+		}
+
+		$classes[] = 'swg--is-amp';
+		return $classes;
 	}
 
 	/**
