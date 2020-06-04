@@ -5,10 +5,10 @@ const SUBSCRIBERS = self.SWG[0];
 
 // TODO: Refactor this into multiple files, or at least describe blocks.
 describe('main', () => {
-  let metaEl;
   let articleEl;
   let contributeButtonEl;
   let contributeLinkEl;
+  let ldJsonEl;
   let subscribeButtonEl;
   let subscribeLinkEl;
   let signinButtonEl;
@@ -59,10 +59,20 @@ describe('main', () => {
       showOffers: jest.fn(),
     };
 
-    metaEl = document.createElement('meta');
-    metaEl.setAttribute('name', 'subscriptions-product-id');
-    metaEl.setAttribute('content', 'premium');
-    document.body.appendChild(metaEl);
+    ldJsonEl = document.createElement('script');
+    ldJsonEl.setAttribute('type', 'application/ld+json');
+    ldJsonEl.innerText = `
+    {
+			"@context": "http://schema.org",
+			"@type": "NewsArticle",
+			"isAccessibleForFree": false,
+			"isPartOf": {
+				"@type": ["CreativeWork", "Product"],
+				"productID": "premium"
+			}
+    }
+    `;
+    document.head.appendChild(ldJsonEl);
 
     articleEl = document.createElement('article');
     document.body.appendChild(articleEl);
@@ -103,7 +113,7 @@ describe('main', () => {
   });
 
   afterEach(() => {
-    metaEl.remove();
+    ldJsonEl.remove();
     articleEl.remove();
   });
 
@@ -181,14 +191,14 @@ describe('main', () => {
   });
 
   it('handles missing meta element', async () => {
-    metaEl.remove();
+    ldJsonEl.remove();
 
     await SUBSCRIBERS(subscriptions);
     expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeFalsy();
   });
 
   it('handles mismatched product in meta element', async () => {
-    metaEl.setAttribute('content', 'exclusive');
+    ldJsonEl.innerText = ldJsonEl.innerText.replace('premium', 'exclusive');
 
     await SUBSCRIBERS(subscriptions);
     expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeFalsy();

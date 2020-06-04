@@ -1,4 +1,4 @@
-import { $ } from "./utils/dom";
+import { $, $$ } from "./utils/dom";
 
 
 /** Local storage key where SwG entitlements are cached. */
@@ -32,12 +32,14 @@ export async function unlockPageMaybe(swg) {
  * @return {string}
  */
 function getProduct() {
-  const metaEl = $('meta[name=subscriptions-product-id]');
-  if (!metaEl) {
-    return null;
+  const linkingDataScripts = $$('script[type="application/ld+json"]');
+  for (const linkingDataScript of linkingDataScripts) {
+    const linkingData = JSON.parse(linkingDataScript.innerText);
+    if (linkingData.isPartOf && linkingData.isPartOf.productID) {
+      return linkingData.isPartOf.productID;
+    }
   }
-  const product = metaEl.getAttribute('content');
-  return product;
+  return null;
 }
 
 /**
