@@ -1,4 +1,5 @@
 import { $, $$ } from "./utils/dom";
+import { experimentIsOn } from "./experiments";
 
 
 /** Local storage key where SwG entitlements are cached. */
@@ -65,7 +66,7 @@ async function userIsEntitledToProduct(product, swg) {
  * @return {boolean}
  */
 function cacheEntitlesUserToProduct(product) {
-  if (location.hash.includes('swg.wp.experiments=disablecache')) {
+  if (experimentIsOn('disablecache')) {
     console.log('👷 Disabling cache');
     return false;
   }
@@ -148,6 +149,11 @@ async function fetchEntitledProductsWith1pCookie() {
  * @return {Promise<!Array<string>>}
  */
 async function fetchEntitledProductsWith3pCookie(swg) {
+  if (experimentIsOn('disable3p')) {
+    console.log('👷 Disabling 3p entitlements');
+    return Promise.resolve([]);
+  }
+
   console.log('📡 Fetching entitlements with 3p cookie');
   return swg.getEntitlements()
     .catch(() => ({}))

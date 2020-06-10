@@ -159,6 +159,13 @@ describe('main', () => {
     expect(fetch).toBeCalledWith('/api/entitlements');
   });
 
+  it('conditionally disables 3p entitlements', async () => {
+    subscriptions.getEntitlements = jest.fn();
+    location.hash = '#swg.wp.experiments=disable3p';
+    await SUBSCRIBERS(subscriptions);
+    expect(subscriptions.getEntitlements).not.toBeCalled();
+  });
+
   it('marks article as unlocked when a product matches', async () => {
     await SUBSCRIBERS(subscriptions);
     expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeTruthy();
