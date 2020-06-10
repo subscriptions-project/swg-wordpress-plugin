@@ -15,5 +15,9 @@ html[amp] [href="#swg-contribute"] {
 }
 
 button.swg-button {
-	background-color: white;
+	background-color: white !important;
+}
+
+button.swg-button:hover {
+	background-color: #f8f8f8 !important;
 }
