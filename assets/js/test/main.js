@@ -22,7 +22,7 @@ describe('main', () => {
       reload: jest.fn(),
       hash: '',
     };
-    
+
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => ({
         entitlements: [{
@@ -35,7 +35,7 @@ describe('main', () => {
     global.gapi = {
       auth2: {
         init: () => ({
-          grantOfflineAccess: () => Promise.resolve({code: 1}),
+          grantOfflineAccess: () => Promise.resolve({ code: 1 }),
         }),
       },
       load: jest.fn((name, cb) => cb()),
@@ -281,10 +281,10 @@ describe('main', () => {
 
     expect(gapi.load).toBeCalled();
     expect(fetch).toBeCalledWith(
-      '/api/create-1p-cookie',
+      '/api/create-1p-gsi-cookie',
       {
         "body": "{\"gsi_auth_code\":1}",
-        "headers": {"Content-Type": "application/json"},
+        "headers": { "Content-Type": "application/json" },
         "method": "POST"
       });
   });
@@ -296,10 +296,10 @@ describe('main', () => {
 
     expect(gapi.load).toBeCalled();
     expect(fetch).toBeCalledWith(
-      '/api/create-1p-cookie',
+      '/api/create-1p-gsi-cookie',
       {
         "body": "{\"gsi_auth_code\":1}",
-        "headers": {"Content-Type": "application/json"},
+        "headers": { "Content-Type": "application/json" },
         "method": "POST"
       });
   });
