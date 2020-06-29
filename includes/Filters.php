@@ -123,7 +123,7 @@ final class Filters {
 			$free     = get_post_meta( get_the_ID(), $free_key, true );
 
 			if ( $product ) {
-				if ( $free ) {
+				if ( $free == 'true' ) {
 					echo 'Free';
 				} else {
 					echo implode( ',', $product );
