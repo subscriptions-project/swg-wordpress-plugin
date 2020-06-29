@@ -119,8 +119,15 @@ final class Filters {
 			$product_key = Plugin::key( 'product' );
 			$product     = get_post_meta( $post_ID, $product_key );
 
+			$free_key = Plugin::key( 'free' );
+			$free     = get_post_meta( get_the_ID(), $free_key, true );
+
 			if ( $product ) {
-				echo implode( ',', $product );
+				if ( $free ) {
+					echo 'Free';
+				} else {
+					echo implode( ',', $product );
+				}
 			}
 		}
 	}
