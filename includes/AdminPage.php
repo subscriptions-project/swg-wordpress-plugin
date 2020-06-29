@@ -14,8 +14,6 @@ namespace SubscribeWithGoogle\WordPress;
  */
 final class AdminPage {
 
-
-
 	/** Adds WordPress actions. */
 	public function __construct() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_link' ) );

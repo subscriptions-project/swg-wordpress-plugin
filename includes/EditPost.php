@@ -12,7 +12,7 @@ namespace SubscribeWithGoogle\WordPress;
 /** Supports editing of posts. */
 final class EditPost {
 
-	/** Adds action handlers. */
+	/** Adds ≈action handlers. */
 	public function __construct() {
 		// Render meta box on Post Edit page.
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
@@ -25,10 +25,10 @@ final class EditPost {
 	public static function add_meta_boxes() {
 		add_meta_box(
 			Plugin::key( 'post-edit-metabox' ),
-			'📰 Subscribe with Google',
+			'Subscribe with Google',
 			array( __CLASS__, 'render' ),
 			'post',
-			'advanced',
+			'side',
 			'high'
 		);
 	}
