@@ -18,19 +18,19 @@ final class AdminPage {
 
 	/** Adds WordPress actions. */
 	public function __construct() {
-		 add_action( 'admin_menu', array( __CLASS__, 'add_link' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'add_link' ) );
 		add_action( 'admin_init', array( __CLASS__, 'prepare' ) );
 	}
 
 	/** Adds link to admin menu. */
 	public static function add_link() {
-		 $page_title = 'Subscribe with Google';
-		$menu_title  = 'Subscribe with Google';
-		$capability  = 'manage_options';
-		$slug        = 'subscribe_with_google';
-		$callback    = array( __CLASS__, 'render' );
-		$icon        = 'dashicons-editor-table';
-		$position    = 100;
+		$page_title = 'Subscribe with Google';
+		$menu_title = 'Subscribe with Google';
+		$capability = 'manage_options';
+		$slug       = 'subscribe_with_google';
+		$callback   = array( __CLASS__, 'render' );
+		$icon       = 'dashicons-editor-table';
+		$position   = 100;
 
 		add_menu_page(
 			$page_title,
