@@ -139,7 +139,7 @@ final class GoogleSignIn {
 
 		// Search for product in entitlements.
 		$granted = false;
-		if ( $entitlements ) {
+		if ( $entitlements && is_array( $entitlements ) ) {
 			foreach ( $entitlements as $entitlement ) {
 				if ( in_array( $request['product'], $entitlement->products, true ) ) {
 					$granted = true;
