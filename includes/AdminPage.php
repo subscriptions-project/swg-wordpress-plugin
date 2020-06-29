@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class SubscribeWithGoogle\WordPress\AdminPage
  *
@@ -12,22 +13,25 @@ namespace SubscribeWithGoogle\WordPress;
 /**
  * Adds admin page.
  */
-final class AdminPage {
+final class AdminPage
+{
 
 	/** Adds WordPress actions. */
-	public function __construct() {
-		add_action( 'admin_menu', array( __CLASS__, 'add_link' ) );
-		add_action( 'admin_init', array( __CLASS__, 'prepare' ) );
+	public function __construct()
+	{
+		add_action('admin_menu', array(__CLASS__, 'add_link'));
+		add_action('admin_init', array(__CLASS__, 'prepare'));
 	}
 
 	/** Adds link to admin menu. */
-	public static function add_link() {
+	public static function add_link()
+	{
 		$page_title = 'Subscribe with Google';
 		$menu_title = 'Subscribe with Google';
 		$capability = 'manage_options';
 		$slug       = 'subscribe_with_google';
-		$callback   = array( __CLASS__, 'render' );
-		$icon       = 'dashicons-megaphone';
+		$callback   = array(__CLASS__, 'render');
+		$icon       = 'dashicons-editor-table';
 		$position   = 100;
 
 		add_menu_page(
@@ -42,36 +46,40 @@ final class AdminPage {
 	}
 
 	/** Renders the admin page. */
-	public static function render() {
-		?>
+	public static function render()
+	{
+?>
 		<div class="wrap">
-		<h2>Subscribe with Google</h2>
-		<form method="post" action="options.php">
-		<?php
-		settings_fields( 'subscribe_with_google' );
-		do_settings_sections( 'subscribe_with_google' );
-		submit_button();
-		?>
-		</form>
+			<h2>Subscribe with Google</h2>
+			<form method="post" action="options.php">
+				<?php
+				settings_fields('subscribe_with_google');
+				do_settings_sections('subscribe_with_google');
+				submit_button();
+				?>
+			</form>
 		</div>
-		<?php
+<?php
 	}
 
 	/** Prepares the admin page to be rendered. */
-	public static function prepare() {
-		add_settings_section( Plugin::key( 'configuration' ), 'Configuration', false, 'subscribe_with_google' );
+	public static function prepare()
+	{
+		add_settings_section(Plugin::key('configuration'), 'Configuration', false, 'subscribe_with_google');
 
 		self::prepare_settings();
 	}
 
 	/** Prepares settings to be rendered. */
-	public static function prepare_settings() {
+	public static function prepare_settings()
+	{
 		self::add_setting(
 			array(
 				'id'          => 'products',
 				'label'       => 'Product Names',
 				'type'        => 'textarea',
 				'description' => 'Product names, one per line.',
+				'class' 	  => 'regular-text ltr'
 			)
 		);
 
@@ -81,6 +89,7 @@ final class AdminPage {
 				'label'       => 'Publication ID',
 				'type'        => 'text',
 				'description' => 'Unique indentifier for your publication.',
+				'class' 	  => 'regular-text ltr'
 			)
 		);
 
@@ -90,6 +99,7 @@ final class AdminPage {
 				'label'       => 'OAuth Client ID',
 				'type'        => 'text',
 				'description' => 'Unique identifier for your Google OAuth Client.',
+				'class' 	  => 'regular-text ltr'
 			)
 		);
 
@@ -99,6 +109,7 @@ final class AdminPage {
 				'label'       => 'OAuth Client Secret',
 				'type'        => 'text',
 				'description' => 'Secret key for your Google OAuth Client.',
+				'class' 	  => 'regular-text ltr'
 			)
 		);
 	}
@@ -108,11 +119,12 @@ final class AdminPage {
 	 *
 	 * @param array[string]string $setting describes the setting.
 	 */
-	private static function add_setting( $setting ) {
+	private static function add_setting($setting)
+	{
 		$setting['options'] = false;
-		$setting['section'] = Plugin::key( 'configuration' );
-		$setting['uid']     = Plugin::key( $setting['id'] );
-		$setting['value']   = get_option( $setting['uid'] );
+		$setting['section'] = Plugin::key('configuration');
+		$setting['uid']     = Plugin::key($setting['id']);
+		$setting['value']   = get_option($setting['uid']);
 
 		$render_fn = 'render_' . $setting['type'] . '_setting';
 		$page      = 'subscribe_with_google';
@@ -120,13 +132,13 @@ final class AdminPage {
 		add_settings_field(
 			$setting['uid'],
 			$setting['label'],
-			array( __CLASS__, $render_fn ),
+			array(__CLASS__, $render_fn),
 			$page,
 			$setting['section'],
 			$setting
 		);
 
-		register_setting( 'subscribe_with_google', $setting['uid'] );
+		register_setting('subscribe_with_google', $setting['uid']);
 	}
 
 
@@ -135,16 +147,18 @@ final class AdminPage {
 	 *
 	 * @param array[string]string $setting describes the setting.
 	 */
-	public static function render_textarea_setting( $setting ) {
+	public static function render_textarea_setting($setting)
+	{
 		echo '<textarea';
-		echo ' id="' . esc_attr( $setting['uid'] ) . '"';
-		echo ' name="' . esc_attr( $setting['uid'] ) . '"';
+		echo ' id="' . esc_attr($setting['uid']) . '"';
+		echo ' name="' . esc_attr($setting['uid']) . '"';
 		echo ' style="min-height: 96px;"'; // TODO: Add external stylesheet.
+		echo ' class="regular-text ltr"';
 		echo '>';
-		echo esc_attr( $setting['value'] );
+		echo esc_attr($setting['value']);
 		echo '</textarea>';
 		echo '<p class="description">';
-		echo esc_attr( $setting['description'] );
+		echo esc_attr($setting['description']);
 		echo '</p>';
 	}
 
@@ -153,14 +167,16 @@ final class AdminPage {
 	 *
 	 * @param array[string]string $setting describes the setting.
 	 */
-	public static function render_text_setting( $setting ) {
+	public static function render_text_setting($setting)
+	{
 		echo '<input';
-		echo ' id="' . esc_attr( $setting['uid'] ) . '"';
-		echo ' name="' . esc_attr( $setting['uid'] ) . '"';
-		echo ' value="' . esc_attr( $setting['value'] ) . '"';
+		echo ' id="' . esc_attr($setting['uid']) . '"';
+		echo ' name="' . esc_attr($setting['uid']) . '"';
+		echo ' value="' . esc_attr($setting['value']) . '"';
+		echo ' class="regular-text ltr"';
 		echo '/>';
 		echo '<p class="description">';
-		echo esc_attr( $setting['description'] );
+		echo esc_attr($setting['description']);
 		echo '</p>';
 	}
 }
