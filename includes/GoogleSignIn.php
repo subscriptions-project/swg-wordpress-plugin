@@ -114,11 +114,11 @@ final class GoogleSignIn {
 	public static function get_entitlements() {
 		self::verify_request_origin();
 
-		$access_token = self::fetch_access_token();
-		$publication_id = get_option(Plugin::key('publication_id'));
+		$access_token   = self::fetch_access_token();
+		$publication_id = get_option( Plugin::key( 'publication_id' ) );
 
 		// Get entitlements.
-		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/'.$publication_id.'/entitlements?access_token=' . $access_token;
+		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/' . $publication_id . '/entitlements?access_token=' . $access_token;
 		$response         = wp_remote_get( $entitlements_url );
 		return json_decode( $response['body'] );
 	}
