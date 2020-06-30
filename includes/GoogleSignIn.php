@@ -72,7 +72,7 @@ final class GoogleSignIn {
 	 * @throws Exception When refresh token can't be fetched.
 	 */
 	public static function create_1p_gsi_cookie( $request ) {
-		self::verify_request_origin();
+		Rest::verify_request_origin();
 
 		// Auth code is needed to get the refresh token.
 		if ( ! isset( $request['gsi_auth_code'] ) ) {
@@ -112,7 +112,7 @@ final class GoogleSignIn {
 	 * @return * Entitlements response.
 	 */
 	public static function get_entitlements() {
-		self::verify_request_origin();
+		Rest::verify_request_origin();
 
 		$access_token   = self::fetch_access_token();
 		$publication_id = get_option( Plugin::key( 'publication_id' ) );
@@ -153,39 +153,6 @@ final class GoogleSignIn {
 			'grantReason' => 'SUBSCRIBER',
 			'data'        => null,
 		);
-	}
-
-	/**
-	 * Verifies the request originated from the WP site.
-	 *
-	 * @throws Exception When origin isn't valid.
-	 */
-	public static function verify_request_origin() {
-		// Require referer.
-		if (
-			! isset( $_SERVER['HTTP_REFERER'] ) ||
-			is_null( $_SERVER['HTTP_REFERER'] )
-		) {
-			throw new Exception( 'Request has no referer.' );
-		}
-
-		$request_url = wp_parse_url( $_SERVER['HTTP_REFERER'] );
-		$site_url    = wp_parse_url( get_option( 'siteurl' ) );
-
-		// Verify scheme.
-		if ( $request_url['scheme'] !== $site_url['scheme'] ) {
-			throw new Exception( 'Request scheme was not valid.' );
-		}
-
-		// Verify host.
-		if ( $request_url['host'] !== $site_url['host'] ) {
-			throw new Exception( 'Request host was not valid.' );
-		}
-
-		// Verify path.
-		if ( strpos( $request_url['path'], $site_url['path'] ) !== 0 ) {
-			throw new Exception( 'Request path did not belong to WP site.' );
-		}
 	}
 
 	/**
