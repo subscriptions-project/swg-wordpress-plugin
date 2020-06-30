@@ -1,0 +1,13 @@
+{
+	"files.watcherExclude": {
+		"**/node_modules/**": true,
+		"**/vendor/**": true,
+		"**/third-party/**": true
+	},
+	"editor.insertSpaces": false,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"editor.formatOnSave": true,
+	"phpSniffer.autoDetect": true
+}
