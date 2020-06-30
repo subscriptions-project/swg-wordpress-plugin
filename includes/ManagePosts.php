@@ -40,16 +40,16 @@ final class ManagePosts {
 	public static function manage_posts_custom_column( $column_name, $post_ID ) {
 		if ( 'swg_product' === $column_name ) {
 			$product_key = Plugin::key( 'product' );
-			$product     = get_post_meta( $post_ID, $product_key );
+			$product     = get_post_meta( $post_ID, $product_key, true );
 
 			$free_key = Plugin::key( 'free' );
-			$free     = get_post_meta( get_the_ID(), $free_key, true );
+			$free     = get_post_meta( $post_ID, $free_key, true );
 
 			if ( $product ) {
 				if ( 'true' === $free ) {
 					echo 'Free';
 				} else {
-					echo esc_attr( implode( ',', $product ) );
+					echo esc_attr( $product );
 				}
 			}
 		}
