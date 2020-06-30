@@ -19,8 +19,6 @@ final class Filters {
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'the_content', array( __CLASS__, 'the_content' ) );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'wp_nav_menu_items' ) );
-		add_filter( 'manage_posts_columns', array( __CLASS__, 'swg_columns_head' ) );
-		add_action( 'manage_posts_custom_column', array( __CLASS__, 'swg_columns_content' ), 1, 2 );
 	}
 
 	/**
@@ -105,30 +103,5 @@ final class Filters {
 			$menu_html
 		);
 		return $menu_html;
-	}
-
-	// ADD NEW COLUMN
-	public static function swg_columns_head( $defaults ) {
-		$defaults['swg_product'] = 'SwG Product';
-		return $defaults;
-	}
-
-	// SHOW THE FEATURED IMAGE
-	public static function swg_columns_content( $column_name, $post_ID ) {
-		if ( $column_name == 'swg_product' ) {
-			$product_key = Plugin::key( 'product' );
-			$product     = get_post_meta( $post_ID, $product_key );
-
-			$free_key = Plugin::key( 'free' );
-			$free     = get_post_meta( get_the_ID(), $free_key, true );
-
-			if ( $product ) {
-				if ( $free == 'true' ) {
-					echo 'Free';
-				} else {
-					echo implode( ',', $product );
-				}
-			}
-		}
 	}
 }

@@ -46,7 +46,7 @@ class AdminPageTest extends PHPUnit_Framework_TestCase {
 
 	public function test__admin_page__renders_settings_fields__text() {
 		$this->expectOutputString(
-			'<input id="SubscribeWithGoogle_publication_id" name="SubscribeWithGoogle_publication_id" value="example.com"/><p class="description">Extra text</p>'
+			'<input id="SubscribeWithGoogle_publication_id" name="SubscribeWithGoogle_publication_id" value="example.com" class="regular-text ltr"/><p class="description">Extra text</p>'
 		);
 
 		// Define publication ID.
@@ -61,7 +61,7 @@ class AdminPageTest extends PHPUnit_Framework_TestCase {
 
 	public function test__admin_page__renders_settings_fields__textarea() {
 		$this->expectOutputString(
-			'<textarea id="SubscribeWithGoogle_publication_id" name="SubscribeWithGoogle_publication_id" style="min-height: 96px;">example.com</textarea><p class="description">Extra text</p>'
+			'<textarea id="SubscribeWithGoogle_publication_id" name="SubscribeWithGoogle_publication_id" style="min-height: 96px;" class="regular-text ltr">example.com</textarea><p class="description">Extra text</p>'
 		);
 
 		// Define publication ID.

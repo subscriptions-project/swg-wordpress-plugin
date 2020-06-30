@@ -26,6 +26,7 @@ final class Plugin {
 		new Filters();
 		new GoogleSignIn();
 		new Header();
+		new ManagePosts();
 		new Shortcodes();
 	}
 

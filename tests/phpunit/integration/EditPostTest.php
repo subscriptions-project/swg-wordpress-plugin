@@ -14,7 +14,7 @@ class EditPostTest extends WP_UnitTestCase {
 
 		$this->assertContains(
 			'SubscribeWithGoogle_post-edit-metabox',
-			array_keys( $wp_meta_boxes['post']['advanced']['high'] )
+			array_keys( $wp_meta_boxes['post']['side']['high'] )
 		);
 	}
 

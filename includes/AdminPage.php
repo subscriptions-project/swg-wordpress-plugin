@@ -71,7 +71,6 @@ final class AdminPage {
 				'label'       => 'Product Names',
 				'type'        => 'textarea',
 				'description' => 'Product names, one per line.',
-				'class'       => 'regular-text ltr',
 			)
 		);
 
@@ -81,7 +80,6 @@ final class AdminPage {
 				'label'       => 'Publication ID',
 				'type'        => 'text',
 				'description' => 'Unique indentifier for your publication.',
-				'class'       => 'regular-text ltr',
 			)
 		);
 
@@ -91,7 +89,6 @@ final class AdminPage {
 				'label'       => 'OAuth Client ID',
 				'type'        => 'text',
 				'description' => 'Unique identifier for your Google OAuth Client.',
-				'class'       => 'regular-text ltr',
 			)
 		);
 
@@ -101,7 +98,6 @@ final class AdminPage {
 				'label'       => 'OAuth Client Secret',
 				'type'        => 'text',
 				'description' => 'Secret key for your Google OAuth Client.',
-				'class'       => 'regular-text ltr',
 			)
 		);
 	}
