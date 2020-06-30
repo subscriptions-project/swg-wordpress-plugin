@@ -114,10 +114,11 @@ final class GoogleSignIn {
 	public static function get_entitlements() {
 		self::verify_request_origin();
 
-		$access_token = self::fetch_access_token();
+		$access_token   = self::fetch_access_token();
+		$publication_id = get_option( Plugin::key( 'publication_id' ) );
 
 		// Get entitlements.
-		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/scenic-2017.appspot.com/entitlements?access_token=' . $access_token;
+		$entitlements_url = 'https://subscribewithgoogle.googleapis.com/v1/publications/' . $publication_id . '/entitlements?access_token=' . $access_token;
 		$response         = wp_remote_get( $entitlements_url );
 		return json_decode( $response['body'] );
 	}
@@ -138,7 +139,7 @@ final class GoogleSignIn {
 
 		// Search for product in entitlements.
 		$granted = false;
-		if ( $entitlements ) {
+		if ( $entitlements && is_array( $entitlements ) ) {
 			foreach ( $entitlements as $entitlement ) {
 				if ( in_array( $request['product'], $entitlement->products, true ) ) {
 					$granted = true;
