@@ -24,7 +24,6 @@ Before you start developing in SwG WordPress Plugin, check out these resources:
 
 ## Setup
 
-TODO: Expand this...
 - Install a working WordPress 4.7+ site with PHP 5.6+
 - Install Composer
 - Install PHP dependencies with `composer`
@@ -35,6 +34,7 @@ TODO: Expand this...
 - Now the plugin is ready to test on your WP site!
 
 ### Optional: Using VS Code
+
 - Install VS Code
 - Open the plugin directory in VS Code
 - Install PHP Intelephense plugin (`bmewburn.vscode-intelephense-client`)
