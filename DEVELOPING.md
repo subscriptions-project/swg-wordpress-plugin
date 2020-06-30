@@ -25,7 +25,7 @@ Before you start developing in SwG WordPress Plugin, check out these resources:
 ## Setup
 
 TODO: Expand this...
-- Install a working WordPress 4.7+ with PHP 5.6+
+- Install a working WordPress 4.7+ site with PHP 5.6+
 - Install Composer
 - Install PHP dependencies with `composer`
 - Install Nodejs
