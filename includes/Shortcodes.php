@@ -13,14 +13,13 @@ namespace SubscribeWithGoogle\WordPress;
 /**
  * Adds shortcodes.
  */
-final class Shortcodes
-{
+final class Shortcodes {
+
 
 	/** Registers shortcodes. */
-	public function __construct()
-	{
-		add_shortcode('swg-contribute', array(__CLASS__, 'contribute'));
-		add_shortcode('swg-subscribe', array(__CLASS__, 'subscribe'));
+	public function __construct() {
+		add_shortcode( 'swg-contribute', array( __CLASS__, 'contribute' ) );
+		add_shortcode( 'swg-subscribe', array( __CLASS__, 'subscribe' ) );
 	}
 
 	/**
@@ -28,10 +27,9 @@ final class Shortcodes
 	 *
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
-	public static function contribute($atts = array())
-	{
+	public static function contribute( $atts = array() ) {
 		$html = '<button class="swg-contribute-button" data-play-offers="';
-		if (isset($atts['play-offers'])) {
+		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];
 		}
 		$html .= '">Contribute with Google</button>';
@@ -43,10 +41,9 @@ final class Shortcodes
 	 *
 	 * @param array[string]string $atts Attributes affecting shortcode.
 	 */
-	public static function subscribe($atts = array())
-	{
+	public static function subscribe( $atts = array() ) {
 		$html = '<button class="swg-button swg-subscribe-button" data-play-offers="';
-		if (isset($atts['play-offers'])) {
+		if ( isset( $atts['play-offers'] ) ) {
 			$html .= $atts['play-offers'];
 		}
 		$html .= '"></button>';

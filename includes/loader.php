@@ -11,8 +11,8 @@
 namespace SubscribeWithGoogle\WordPress;
 
 // Define global constants.
-define('SUBSCRIBEWITHGOOGLE_PLUGIN_BASENAME', plugin_basename(SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE));
-define('SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH', plugin_dir_path(SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE));
+define( 'SUBSCRIBEWITHGOOGLE_PLUGIN_BASENAME', plugin_basename( SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE ) );
+define( 'SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH', plugin_dir_path( SUBSCRIBEWITHGOOGLE_PLUGIN_MAIN_FILE ) );
 
 /**
  * Loads generated class maps for autoloading.
@@ -20,8 +20,7 @@ define('SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH', plugin_dir_path(SUBSCRIBEWITHGOOGL
  * @since 1.0.0
  * @access private
  */
-function autoload_classes()
-{
+function autoload_classes() {
 	$class_map = array_merge(
 		// SwG classes.
 		include SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH . 'includes/vendor/composer/autoload_classmap.php',
@@ -30,9 +29,9 @@ function autoload_classes()
 	);
 
 	spl_autoload_register(
-		function ($class) use ($class_map) {
-			if (isset($class_map[$class]) && file_exists($class_map[$class])) {
-				require_once $class_map[$class];
+		function ( $class ) use ( $class_map ) {
+			if ( isset( $class_map[ $class ] ) && file_exists( $class_map[ $class ] ) ) {
+				require_once $class_map[ $class ];
 
 				return true;
 			}
@@ -49,12 +48,11 @@ autoload_classes();
  * @since 1.0.0
  * @access private
  */
-function autoload_vendor_files()
-{
+function autoload_vendor_files() {
 	// Third-party files.
 	$files = require SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH . 'third-party/vendor/autoload_files.php';
-	foreach ($files as $file_identifier => $file) {
-		if (file_exists($file)) {
+	foreach ( $files as $file_identifier => $file ) {
+		if ( file_exists( $file ) ) {
 			require_once $file;
 		}
 	}
@@ -67,7 +65,7 @@ Plugin::load();
 /**
  * WP CLI Commands
  */
-if (defined('WP_CLI') && WP_CLI) {
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH . 'bin/authentication-cli.php';
 	require_once SUBSCRIBEWITHGOOGLE_PLUGIN_DIR_PATH . 'bin/reset-cli.php';
 }
