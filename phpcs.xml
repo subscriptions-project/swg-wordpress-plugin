@@ -12,6 +12,10 @@
 		<exclude name="WordPress.Files.FileName"/>
 	</rule>
 
+	<rule ref="Squiz.Commenting.FileComment.SpacingAfterOpen">
+		<severity>0</severity>
+	</rule>
+
 	<!-- Use correct textdomain -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
