@@ -34,6 +34,13 @@ TODO: Expand this...
 - Compile JavaScript and CSS with `yarn watch`
 - Now the plugin is ready to test on your WP site!
 
+### Optional
+- Install VS Code
+- Open the plugin directory in VS Code
+- Install PHP Intelephense plugin (bmewburn.vscode-intelephense-client)
+- Install PHP Sniffer plugin (wongjn.php-sniffer)
+- Install ESLint plugin (dbaeumer.vscode-eslint)
+
 ## Bash commands
 
 Use the following Bash commands:
