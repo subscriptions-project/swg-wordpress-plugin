@@ -34,7 +34,7 @@ TODO: Expand this...
 - Compile JavaScript and CSS with `yarn watch`
 - Now the plugin is ready to test on your WP site!
 
-### Optional
+### Optional: Using VS Code
 - Install VS Code
 - Open the plugin directory in VS Code
 - Install PHP Intelephense plugin (bmewburn.vscode-intelephense-client)
