@@ -41,10 +41,10 @@ Use the following Bash commands:
 | Command                                                                 | Description                                                           |
 | ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `yarn watch`                                                       | Compiles JS and CSS, then watches for changes.                      |
+| `yarn test`                                                       | Runs JS tests.                      |
 | `composer test`                                                       | Runs PHP tests.                      |
 | `composer lint`                                                             | Validates PHP with PHPCS.                              |
 | `composer lint-fix`                                                     | Automatically fixes (most) PHP linting issues with PHPCS.|
-| `yarn test`                                                       | Runs JS tests.                      |
 
 ## Repository Layout
 <pre>
