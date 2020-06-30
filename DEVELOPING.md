@@ -37,9 +37,9 @@ TODO: Expand this...
 ### Optional: Using VS Code
 - Install VS Code
 - Open the plugin directory in VS Code
-- Install PHP Intelephense plugin (bmewburn.vscode-intelephense-client)
-- Install PHP Sniffer plugin (wongjn.php-sniffer)
-- Install ESLint plugin (dbaeumer.vscode-eslint)
+- Install PHP Intelephense plugin (`bmewburn.vscode-intelephense-client`)
+- Install PHP Sniffer plugin (`wongjn.php-sniffer`)
+- Install ESLint plugin (`dbaeumer.vscode-eslint`)
 
 ## Bash commands
 
