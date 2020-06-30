@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class SubscribeWithGoogle\WordPress\Plugin
  *
@@ -10,7 +11,8 @@
 namespace SubscribeWithGoogle\WordPress;
 
 /** Main class for the plugin. */
-final class Plugin {
+final class Plugin
+{
 
 	/**
 	 * Main instance of the plugin.
@@ -20,7 +22,8 @@ final class Plugin {
 	public static $instance = null;
 
 	/** Creates the plugin. */
-	public function __construct() {
+	public function __construct()
+	{
 		new AdminPage();
 		new EditPost();
 		new Filters();
@@ -30,8 +33,9 @@ final class Plugin {
 	}
 
 	/** Loads the plugin main instance and initializes it. */
-	public static function load() {
-		if ( null === static::$instance ) {
+	public static function load()
+	{
+		if (null === static::$instance) {
 			static::$instance = new static();
 		}
 	}
@@ -42,7 +46,8 @@ final class Plugin {
 	 * @param string $key Key to namespace.
 	 * @return string Namespaced key.
 	 */
-	public static function key( $key ) {
+	public static function key($key)
+	{
 		return 'SubscribeWithGoogle_' . $key;
 	}
 
@@ -51,7 +56,8 @@ final class Plugin {
 	 *
 	 * @return boolean
 	 */
-	public static function is_amp() {
-		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	public static function is_amp()
+	{
+		return function_exists('is_amp_endpoint') && is_amp_endpoint();
 	}
 }
