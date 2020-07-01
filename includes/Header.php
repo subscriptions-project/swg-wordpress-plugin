@@ -59,6 +59,11 @@ final class Header {
 
 			// Make WP URLs available to SwgPress' JavaScript.
 			$api_base_url = get_option( 'siteurl' ) . '/wp-json/subscribewithgoogle/v1';
+
+			$documentID = 'false';
+			if ( is_single() ) {
+				$documentID = 'g' . hash( 'md5', get_post( get_the_ID() )->post_name );
+			}
 			wp_localize_script(
 				'subscribe-with-google',
 				'SubscribeWithGoogleWpGlobals',
@@ -129,6 +134,12 @@ final class Header {
 			}
 		}
 		</script>
+
+		<style>
+			#<?php echo $documentID; ?> {
+				display: none;
+			}
+		</style>
 		<?php
 	}
 }
