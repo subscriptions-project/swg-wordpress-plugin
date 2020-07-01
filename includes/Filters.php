@@ -63,6 +63,7 @@ final class Filters {
 
 		$more_tag         = '<span id="more-' . get_the_ID() . '"></span>';
 		$content_segments = explode( $more_tag, $content );
+		$documentID       = 'g' . hash( 'md5', get_post( get_the_ID() )->post_name );
 
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
@@ -79,7 +80,7 @@ final class Filters {
 	</button>
 </p>
 
-<div class="swg--locked-content" subscriptions-section="content">
+<div id="' . $documentID . '" class="swg--locked-content" subscriptions-section="content">
 ' . $content_segments[1] . '
 </div>
 ';
