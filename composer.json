@@ -76,8 +76,8 @@
     ],
     "lint": "phpcs",
     "lint-fix": "phpcbf",
-    "test":  "phpunit",
-    "test-on-travis":  "phpunit --coverage-clover=coverage/php/coverage.xml",
-    "coverage":  "phpunit --coverage-html=coverage/php"
+    "test": "phpunit",
+    "test-on-travis": "phpunit --coverage-clover=coverage/php/coverage.xml",
+    "coverage": "phpunit --coverage-html=coverage/php"
   }
 }
