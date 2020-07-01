@@ -5,9 +5,9 @@ module.exports = {
 		'<rootDir>/assets/**/test/*.js',
 		'<rootDir>/assets/**/?(*.)test.js',
 	],
-	collectCoverageFrom: [ 'assets/js/**/*.{js,jsx}' ],
-	coveragePathIgnorePatterns: [ '/node_modules/', '<rootDir>/build/' ],
-	coverageReporters: [ 'lcovonly' ],
+	collectCoverageFrom: ['assets/js/**/*.{js,jsx}'],
+	coveragePathIgnorePatterns: ['/node_modules/', '<rootDir>/build/'],
+	coverageReporters: ['lcovonly', 'text'],
 	coverageDirectory: '<rootDir>/coverage/js',
 	globals: {
 		SubscribeWithGoogleWpGlobals: {
