@@ -1,4 +1,5 @@
 import { handleSignInClicks, handleSubscribeClicks, handleContributeClicks } from "./buttons";
+import { handleRightClicks } from "./clicks";
 import { handlePaymentResponse } from "./payments";
 import { unlockPageMaybe } from "./unlock";
 
@@ -12,6 +13,7 @@ import { unlockPageMaybe } from "./unlock";
   handleSignInClicks();
   handleSubscribeClicks(swg);
   handleContributeClicks(swg);
+  handleRightClicks();
 
   // Unlock page if possible.
   return unlockPageMaybe(swg);
