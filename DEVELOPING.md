@@ -27,6 +27,7 @@ Before you start developing in SwG WordPress Plugin, check out these resources:
 - Install a working WordPress 4.7+ site with PHP 5.6+
 - Install Composer
 - Install PHP dependencies with `composer`
+- Run the `./tests/bin/run-wp-unit-tests.sh` script once, make sure it can connect to MySQL. By default it will try using the credentials root/root, but feel free to change this as needed in your local development environment.
 - Install Nodejs
 - Install Yarn
 - Install JavaScript dependencies with `yarn`
