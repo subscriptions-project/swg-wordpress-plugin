@@ -1,4 +1,5 @@
 import { $, $$ } from "./utils/dom";
+import { handleErrors } from "./utils/fetch";
 import { experimentIsOn } from "./experiments";
 
 
@@ -20,12 +21,25 @@ export async function unlockPageMaybe(swg) {
     return;
   }
 
-  const entitled = await userIsEntitledToProduct(product, swg);
-  if (entitled) {
-    $article.classList.add('swg--page-is-unlocked');
-  } else {
-    $article.classList.add('swg--page-is-locked');
-  }
+  getFullPostIfUserIsEntitled();
+
+}
+
+/**
+ * Fetches the full HTML content of the unlocked page and replaces the current content with it
+ * 
+ */
+async function getFullPostIfUserIsEntitled() {
+  let articleHtmlUrl = '/wp-json/wp/v2/posts/' + SubscribeWithGoogleWpGlobals.POST_ID;
+
+  fetch(articleHtmlUrl)
+    .then(handleErrors)
+    .then(response => response.json())
+    .then((data) => {
+      let contentHtml = data;
+      console.log($('.entry-content'));
+      $('.entry-content').innerHTML = contentHtml;
+    });
 }
 
 /**
