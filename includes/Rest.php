@@ -42,10 +42,5 @@ final class Rest {
 		if ( $request_url['host'] !== $site_url['host'] ) {
 			throw new Exception( 'Request host was not valid.' );
 		}
-
-		// Verify path.
-		if ( strpos( $request_url['path'], $site_url['path'] ) !== 0 ) {
-			throw new Exception( 'Request path did not belong to WP site.' );
-		}
 	}
 }

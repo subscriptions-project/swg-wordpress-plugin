@@ -40,12 +40,4 @@ class RestTest extends PHPUnit_Framework_TestCase
 		$this->expectExceptionMessage('Request host was not valid');
 		Rest::verify_request_origin();
 	}
-
-	public function test__verify_request_origin__invalid_path__throws()
-	{
-		$_SERVER['HTTP_REFERER'] = 'https://do.ma.in/p4/th';
-
-		$this->expectExceptionMessage('Request path did not belong to WP site');
-		Rest::verify_request_origin();
-	}
 }
