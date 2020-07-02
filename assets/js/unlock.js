@@ -29,6 +29,7 @@ export async function unlockPageMaybe(swg) {
 /**
  * Fetches the full HTML content of the unlocked page and replaces the current content with it
  * 
+ * @param {*} $article The page's Article element
  */
 async function getFullPostIfUserIsEntitled($article) {
   let articleHtmlUrl = '/wp-json/wp/v2/posts/' + SubscribeWithGoogleWpGlobals.POST_ID;
