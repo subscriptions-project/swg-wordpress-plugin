@@ -19,6 +19,18 @@ use WP_Error;
 final class PostRestAPI {
 
 
+
+	/**
+	 * Identifier of GoogleSignIn class.
+	 * Tests can override this.
+	 *
+	 * @var string
+	 */
+	public static $google_sign_in_class =
+	'SubscribeWithGoogle\WordPress\GoogleSignIn';
+
+	protected static $gsi_client;
+
 	/** Adds action handlers. */
 	public function __construct() {
 		 add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
@@ -43,11 +55,13 @@ final class PostRestAPI {
 	 */
 	public static function get_post( $request ) {
 
+		self::$gsi_client = new self::$google_sign_in_class();
+
 		$post_ID = $request['id'];
 		$query   = get_post( $post_ID );
 		$content = apply_filters( 'the_content', $query->post_content );
 
-		$entitled_products_for_user = self::get_entitled_products_for_entitlements( GoogleSignIn::get_entitlements() );
+		$entitled_products_for_user = self::get_entitled_products_for_entitlements( self::$gsi_client::get_entitlements() );
 
 		$product_key = Plugin::key( 'product' );
 		$product     = get_post_meta( $post_ID, $product_key, true );
