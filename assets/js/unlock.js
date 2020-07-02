@@ -21,7 +21,8 @@ export async function unlockPageMaybe(swg) {
     return;
   }
 
-  getFullPostIfUserIsEntitled();
+  $article.classList.add('swg--page-is-locked');
+  getFullPostIfUserIsEntitled($article);
 
 }
 
@@ -29,7 +30,7 @@ export async function unlockPageMaybe(swg) {
  * Fetches the full HTML content of the unlocked page and replaces the current content with it
  * 
  */
-async function getFullPostIfUserIsEntitled() {
+async function getFullPostIfUserIsEntitled($article) {
   let articleHtmlUrl = '/wp-json/wp/v2/posts/' + SubscribeWithGoogleWpGlobals.POST_ID;
 
   fetch(articleHtmlUrl)
@@ -37,9 +38,12 @@ async function getFullPostIfUserIsEntitled() {
     .then(response => response.json())
     .then((data) => {
       let contentHtml = data;
-      console.log($('.entry-content'));
       $('.entry-content').innerHTML = contentHtml;
-    });
+      $article.classList.add('swg--entitlements-have-loaded')
+    })
+    .catch((err) => {
+      $article.classList.add('swg--entitlements-have-loaded')
+    })
 }
 
 /**
