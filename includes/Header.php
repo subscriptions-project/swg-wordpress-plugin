@@ -48,11 +48,11 @@ final class Header {
 				true
 			);
 
-			if (is_single()) {
+			if ( is_single() ) {
 				// JavaScript for SwgPress.
 				wp_enqueue_script(
 					'subscribe-with-google',
-					plugins_url('../dist/assets/js/main.js', __FILE__),
+					plugins_url( '../dist/assets/js/main.js', __FILE__ ),
 					null,
 					1,
 					true
@@ -66,7 +66,7 @@ final class Header {
 				'SubscribeWithGoogleWpGlobals',
 				array(
 					'API_BASE_URL' => $api_base_url,
-					'POST_ID' => get_the_ID()
+					'POST_ID'      => get_the_ID(),
 				)
 			);
 		} else {
