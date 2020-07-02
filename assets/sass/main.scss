@@ -14,10 +14,6 @@ body:not(.swg--is-amp) article:not(.swg--page-is-locked) .swg--paywall-prompt {
 	display: none;
 }
 
-body:not(.swg--is-amp) article:not(.swg--entitlements-have-loaded) .swg--paywall-prompt {
-	display: none;
-}
-
 html[amp] [href="#swg-contribute"] {
 	display: none;
 }
