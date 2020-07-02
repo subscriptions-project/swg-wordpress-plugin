@@ -82,9 +82,6 @@ final class Filters {
 	</button>
 </p>
 
-<div class="swg--locked-content" subscriptions-section="content">
-' . $content_segments[1] . '
-</div>
 ';
 		}
 
