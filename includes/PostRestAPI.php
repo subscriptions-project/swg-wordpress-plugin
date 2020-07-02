@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class SubscribeWithGoogle\WordPress\PostRestAPI
  *
@@ -19,7 +18,6 @@ use WP_Error;
 final class PostRestAPI {
 
 
-
 	/**
 	 * Identifier of GoogleSignIn class.
 	 * Tests can override this.
@@ -29,11 +27,9 @@ final class PostRestAPI {
 	public static $google_sign_in_class =
 	'SubscribeWithGoogle\WordPress\GoogleSignIn';
 
-	protected static $gsi_client;
-
 	/** Adds action handlers. */
 	public function __construct() {
-		 add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
+		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
 	}
 
 	/** Registers custom REST routes. */
@@ -55,13 +51,13 @@ final class PostRestAPI {
 	 */
 	public static function get_post( $request ) {
 
-		self::$gsi_client = new self::$google_sign_in_class();
+		$google_sign_in_client = new self::$google_sign_in_class();
 
 		$post_ID = $request['id'];
 		$query   = get_post( $post_ID );
 		$content = apply_filters( 'the_content', $query->post_content );
 
-		$entitled_products_for_user = self::get_entitled_products_for_entitlements( self::$gsi_client::get_entitlements() );
+		$entitled_products_for_user = self::get_entitled_products_for_entitlements( $google_sign_in_client::get_entitlements() );
 
 		$product_key = Plugin::key( 'product' );
 		$product     = get_post_meta( $post_ID, $product_key, true );
@@ -78,13 +74,19 @@ final class PostRestAPI {
 		$publication_id      = get_option( Plugin::key( 'publication_id' ) );
 		$product_id_for_post = $publication_id . ':' . $product;
 
-		if ( in_array( $product_id_for_post, $entitled_products_for_user ) ) {
+		if ( in_array( $product_id_for_post, $entitled_products_for_user, true ) ) {
 			return $content;
 		}
 
 		return new WP_Error( 'missing_entitlements', __( 'You are not entitled to this content' ), array( 'status' => 401 ) );
 	}
 
+	/**
+	 * Collect the products from all of the entitlements
+	 *
+	 * @param Object $entitlements The entitlements returned by the SwG API.
+	 * @return String[] Array of strings representing product IDs, i.e. "example.com:basic".
+	 */
 	protected static function get_entitled_products_for_entitlements( $entitlements ) {
 		$products = array();
 		if ( isset( $entitlements->entitlements ) ) {
