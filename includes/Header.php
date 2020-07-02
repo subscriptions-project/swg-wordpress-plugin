@@ -48,21 +48,26 @@ final class Header {
 				true
 			);
 
-			// JavaScript for SwgPress.
-			wp_enqueue_script(
-				'subscribe-with-google',
-				plugins_url( '../dist/assets/js/main.js', __FILE__ ),
-				null,
-				1,
-				true
-			);
+			if (is_single()) {
+				// JavaScript for SwgPress.
+				wp_enqueue_script(
+					'subscribe-with-google',
+					plugins_url('../dist/assets/js/main.js', __FILE__),
+					null,
+					1,
+					true
+				);
+			}
 
 			// Make WP URLs available to SwgPress' JavaScript.
 			$api_base_url = get_option( 'siteurl' ) . '/wp-json/subscribewithgoogle/v1';
 			wp_localize_script(
 				'subscribe-with-google',
 				'SubscribeWithGoogleWpGlobals',
-				array( 'API_BASE_URL' => $api_base_url )
+				array(
+					'API_BASE_URL' => $api_base_url,
+					'POST_ID' => get_the_ID()
+				)
 			);
 		} else {
 			// Add SwG's AMP extension.
