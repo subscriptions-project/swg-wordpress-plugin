@@ -81,10 +81,6 @@ final class Filters {
 		subscriptions-service="subscribe.google.com">
 	</button>
 </p>
-
-<div class="swg--locked-content" subscriptions-section="content">
-' . $content_segments[1] . '
-</div>
 ';
 		}
 
