@@ -18,4 +18,12 @@ class GoogleSignInMock
 	{
 		return self::$entitlements;
 	}
+
+	public static function verify_google_id_token($token){
+		return json_decode(
+			json_encode([
+				'user_id' => '123456789'
+			])
+		);
+	}
 }
