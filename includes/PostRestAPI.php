@@ -60,8 +60,8 @@ final class PostRestAPI {
 
 		try {
 			$entitlementsResponse = $google_sign_in_client::get_entitlements();
-		} catch (Exception $e){
-			return new WP_Error('entitlement-check-error', __('You are not signed in to Google'), array('status' => 500));
+		} catch ( Exception $e ) {
+			return new WP_Error( 'entitlement-check-error', __( 'You are not signed in to Google' ), array( 'status' => 500 ) );
 		}
 
 		$entitled_products_for_user = self::get_entitled_products_for_entitlements( $entitlementsResponse );
