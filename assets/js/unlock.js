@@ -1,5 +1,4 @@
 import { $, $$ } from "./utils/dom";
-import { handleErrors } from "./utils/fetch";
 import { experimentIsOn } from "./experiments";
 
 
@@ -30,7 +29,12 @@ async function getFullPostIfUserIsEntitled($article) {
   let articleHtmlUrl = '/wp-json/wp/v2/posts/' + SubscribeWithGoogleWpGlobals.POST_ID;
 
   fetch(articleHtmlUrl)
-    .then(handleErrors)
+    .then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    })
     .then(response => response.json())
     .then((data) => {
       let contentHtml = data;
