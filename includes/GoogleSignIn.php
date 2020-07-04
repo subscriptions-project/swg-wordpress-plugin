@@ -192,4 +192,25 @@ final class GoogleSignIn {
 		$client->setRedirectUri( 'postmessage' );
 		return $client;
 	}
+
+	public static function verify_google_id_token($token){
+		// I tried using the Google Client to validate the token, but it fails because of some
+		// missing class, Math BigInteger, which doesn't seem to be fixed by the composer dependencies
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://www.googleapis.com/oauth2/v1/tokeninfo?id_token='.$token);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$response = curl_exec($ch);
+
+		// stop if fails
+		if (!$response) {
+			// TODO: Add proper error handling
+			die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
+		}
+
+		// close curl resource to free up system resources 
+		curl_close($ch);
+
+		return json_decode($response);
+	}
 }
