@@ -17,7 +17,7 @@ use WP_User_Query;
 final class RegisterWithGoogleSignIn {
 
 	public function __construct() {
-		 add_action( 'login_head', array( __CLASS__, 'add_gsi_meta_tag' ) );
+		 add_action( 'login_head', array( __CLASS__, 'add_header_scripts' ) );
 		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
 	}
 
@@ -33,19 +33,23 @@ final class RegisterWithGoogleSignIn {
 		);
 	}
 
-		/**
-		 * Register the user with the Google ID.
-		 * If the user already exists, update their data.
-		 * Once the user has been found or created, log them in.
-		 *
-		 * @param WP_REST_Request $request with the incoming user data.
-		 */
+	/**
+	 * Register the user with the Google ID.
+	 * If the user already exists, update their data.
+	 * Once the user has been found or created, log them in.
+	 *
+	 * @param WP_REST_Request $request with the incoming user data.
+	 */
 	public static function register_or_login_user( $request ) {
 
 		Rest::verify_request_origin();
 
+
 		$request_body = json_decode( $request->get_body() );
-		$google_id    = $request_body->google_id;
+		$idToken = $request_body->google_id_token;
+		$response = GoogleSignIn::verify_google_id_token($idToken);
+
+		$google_id = $response->user_id;
 
 		$user_query     = new WP_User_Query(
 			array(
@@ -61,9 +65,9 @@ final class RegisterWithGoogleSignIn {
 		}
 
 		$userdata = array(
-			'user_pass'            => $request_body->password,
+			'user_pass'            => wp_generate_password(),
 			'user_login'           => $request_body->username,
-			'user_nicename'        => $request_body->username,
+			'user_nicename'        => $request_body->name,
 			'user_email'           => $request_body->email,
 			'show_admin_bar_front' => 'false',
 			'role'                 => 'Subscriber',
@@ -93,20 +97,78 @@ final class RegisterWithGoogleSignIn {
 			true
 		);
 
-		$generatedPassword = wp_generate_password();
-		$oauth_client_id   = esc_attr( get_option( Plugin::key( 'oauth_client_id' ) ) );
-
 		return <<<HTML
-			<div id="g-signin2"></div>
-			<hr/>
+			<div id="gsi-button" onclick="onClick()" data-onsuccess="onSignIn"></div>
+			<br/>
 			HTML;
 
 	}
 
-	public static function add_gsi_meta_tag() {
-		// Add meta tag for Google Sign In.
-		$oauth_client_id = get_option( Plugin::key( 'oauth_client_id' ) );
+	public static function add_header_scripts() {
 
-		echo '<meta name="google-signin-client_id" content="' . esc_attr( $oauth_client_id ) . '">';
+		$oauth_client_id   = esc_attr( get_option( Plugin::key( 'oauth_client_id' ) ) );
+		?>
+			<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+			<meta name="google-signin-client_id" content="<?= $oauth_client_id ?>">
+
+			<script>
+				var wasClicked = false;
+
+				function onClick(){
+					wasClicked = true;
+				}
+
+				function onSuccess(googleUser) {
+					if ( ! wasClicked) return;
+
+					var google_id_token = googleUser.getAuthResponse().id_token;
+					let profile = googleUser.getBasicProfile();
+					let data = {
+						google_id_token,
+						username : profile.getEmail(),
+						email : profile.getEmail(),
+						name : profile.getName()
+					}
+
+					let url = "/wp-json/subscribe-with-google/v1/register-user"
+					postData(url, data)
+					.then(data => {
+						console.log(data);
+						let urlParams = new URLSearchParams(window.location.search);
+						var continueUrl = urlParams.get('continue');
+						if ( ! continueUrl) {
+							continueUrl = "/";
+						}
+						window.location = continueUrl;
+
+					});
+					wasClicked = false;
+				}
+
+				async function postData(url = '', data = {}) {
+					const response = await fetch(url, {
+							method: 'POST',
+							cache: 'no-cache',
+							body: JSON.stringify(data)
+						});
+					return response.json();
+				}
+
+				function onFailure(error) {
+					console.log(error);
+				}
+				function renderButton() {
+				gapi.signin2.render('gsi-button', {
+					'scope': 'profile email',
+					'width': 270,
+					'height': 50,
+					'longtitle': true,
+					'theme': 'light',
+					'onsuccess': onSuccess,
+					'onfailure': onFailure
+				});
+				}
+			</script>
+		<?php
 	}
 }
