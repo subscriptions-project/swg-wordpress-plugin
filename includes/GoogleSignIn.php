@@ -192,7 +192,12 @@ final class GoogleSignIn {
 		$client->setRedirectUri( 'postmessage' );
 		return $client;
 	}
-
+	
+	/**
+	 * Validate the provided Google ID Token with the oauth API.
+	 *
+	 * @param string token Google ID Token passed from the front-end.
+	 */
 	public static function verify_google_id_token( $token ) {
 		// I tried using the Google Client to validate the token, but it fails because of some
 		// missing class, Math BigInteger, which doesn't seem to be fixed by the composer dependencies
