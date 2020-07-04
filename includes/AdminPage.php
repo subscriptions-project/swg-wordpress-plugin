@@ -9,6 +9,8 @@
 
 namespace SubscribeWithGoogle\WordPress;
 
+use WP_User_Query;
+
 /**
  * Adds admin page.
  */
@@ -18,6 +20,23 @@ final class AdminPage {
 	public function __construct() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_link' ) );
 		add_action( 'admin_init', array( __CLASS__, 'prepare' ) );
+		add_action( 'admin_post_swg_zero_reset_meter', array( __CLASS__, 'swg_zero_reset_meter' ) );
+	}
+
+	public static function swg_zero_reset_meter() {
+		check_admin_referer( 'swg_reset_meter_nonce' );
+		wp_verify_nonce( $_REQUEST['my_nonce'], 'swg_reset_meter_nonce' );
+		$wp_user_query = new WP_User_Query( array( 'role' => 'Subscriber' ) );
+		$users         = $wp_user_query->get_results();
+
+		if ( ! empty( $users ) ) {
+
+			foreach ( $users as $user ) {
+				update_user_meta( $user->id, Plugin::key( 'free_articles_remaining' ), 10, true );
+			}
+		}
+
+		return wp_redirect( '/wp-admin/admin.php?page=subscribe_with_google' );
 	}
 
 	/** Adds link to admin menu. */
@@ -42,7 +61,7 @@ final class AdminPage {
 	}
 
 	/** Renders the admin page. */
-	public static function render() {          ?>
+	public static function render() {             ?>
 		<div class="wrap">
 			<h2>Subscribe with Google</h2>
 			<form method="post" action="options.php">
@@ -52,6 +71,16 @@ final class AdminPage {
 				submit_button();
 				?>
 			</form>
+
+			<hr />
+
+			<form method="post" action="/wp-admin/admin-post.php">
+				<input type="hidden" name="action" value="swg_zero_reset_meter">
+				<input type="hidden" name="should_reset_swg_meter" value="true">
+				<?php wp_nonce_field( 'swg_reset_meter_nonce' ); ?>
+				<?php submit_button( 'Reset All Meters' ); ?>
+			</form>
+
 		</div>
 		<?php
 	}
