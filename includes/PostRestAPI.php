@@ -9,6 +9,7 @@
 
 namespace SubscribeWithGoogle\WordPress;
 
+use Exception;
 use WP_REST_Request;
 use WP_Error;
 
@@ -57,7 +58,13 @@ final class PostRestAPI {
 		$query   = get_post( $post_ID );
 		$content = apply_filters( 'the_content', $query->post_content );
 
-		$entitled_products_for_user = self::get_entitled_products_for_entitlements( $google_sign_in_client::get_entitlements() );
+		try {
+			$entitlementsResponse = $google_sign_in_client::get_entitlements();
+		} catch (Exception $e){
+			return new WP_Error('entitlement-check-error', __('You are not signed in to Google'), array('status' => 500));
+		}
+
+		$entitled_products_for_user = self::get_entitled_products_for_entitlements( $entitlementsResponse );
 
 		$product_key = Plugin::key( 'product' );
 		$product     = get_post_meta( $post_ID, $product_key, true );
