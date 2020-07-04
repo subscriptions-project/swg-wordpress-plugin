@@ -16,6 +16,15 @@ use WP_User_Query;
 
 final class RegisterWithGoogleSignIn {
 
+	/**
+	 * Identifier of GoogleSignIn class.
+	 * Tests can override this.
+	 *
+	 * @var string
+	 */
+	public static $google_sign_in_class =
+	'SubscribeWithGoogle\WordPress\GoogleSignIn';
+
 	public function __construct() {
 		add_action( 'login_head', array( __CLASS__, 'add_header_scripts' ) );
 		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
@@ -44,9 +53,11 @@ final class RegisterWithGoogleSignIn {
 
 		Rest::verify_request_origin();
 
+		$google_sign_in_client = new self::$google_sign_in_class();
+
 		$request_body = json_decode( $request->get_body() );
 		$idToken      = $request_body->google_id_token;
-		$response     = GoogleSignIn::verify_google_id_token( $idToken );
+		$response     = $google_sign_in_client::verify_google_id_token( $idToken );
 
 		$google_id = $response->user_id;
 
@@ -81,9 +92,8 @@ final class RegisterWithGoogleSignIn {
 	}
 
 	public static function loginUser( $user ) {
-
-		wp_set_current_user( $user->id );
-		wp_set_auth_cookie( $user->id );
+		wp_set_current_user( $user->ID );
+		wp_set_auth_cookie( $user->ID );
 	}
 
 	public static function googleSignInButtonHtml() {
