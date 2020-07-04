@@ -17,7 +17,7 @@ use WP_User_Query;
 final class RegisterWithGoogleSignIn {
 
 	public function __construct() {
-		 add_action( 'login_head', array( __CLASS__, 'add_header_scripts' ) );
+		add_action( 'login_head', array( __CLASS__, 'add_header_scripts' ) );
 		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
 	}
 
