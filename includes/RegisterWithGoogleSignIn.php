@@ -44,10 +44,9 @@ final class RegisterWithGoogleSignIn {
 
 		Rest::verify_request_origin();
 
-
 		$request_body = json_decode( $request->get_body() );
-		$idToken = $request_body->google_id_token;
-		$response = GoogleSignIn::verify_google_id_token($idToken);
+		$idToken      = $request_body->google_id_token;
+		$response     = GoogleSignIn::verify_google_id_token( $idToken );
 
 		$google_id = $response->user_id;
 
@@ -106,10 +105,10 @@ final class RegisterWithGoogleSignIn {
 
 	public static function add_header_scripts() {
 
-		$oauth_client_id   = esc_attr( get_option( Plugin::key( 'oauth_client_id' ) ) );
+		$oauth_client_id = esc_attr( get_option( Plugin::key( 'oauth_client_id' ) ) );
 		?>
 			<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
-			<meta name="google-signin-client_id" content="<?= $oauth_client_id ?>">
+			<meta name="google-signin-client_id" content="<?php echo $oauth_client_id; ?>">
 
 			<script>
 				var wasClicked = false;
