@@ -19,7 +19,7 @@ final class Filters {
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'the_content', array( __CLASS__, 'the_content' ) );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'wp_nav_menu_items' ) );
-		add_action('user_register', array(__CLASS__, 'user_was_created'), 10, 1);
+		add_action( 'user_register', array( __CLASS__, 'user_was_created' ), 10, 1 );
 	}
 
 	/**
@@ -67,7 +67,7 @@ final class Filters {
 
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
-			$content_segments[1] = self::paywallContentForSession($content_segments);
+			$content_segments[1] = self::paywallContentForSession( $content_segments );
 		}
 
 		$content = implode( $more_tag, $content_segments );
@@ -90,29 +90,29 @@ final class Filters {
 		return $menu_html;
 	}
 
-	public static function user_was_created($user_id){
-		update_user_meta($user_id, Plugin::key('free_articles_remaining'), 10);
+	public static function user_was_created( $user_id ) {
+		update_user_meta( $user_id, Plugin::key( 'free_articles_remaining' ), 10 );
 	}
 
-	protected static function paywallContentForSession($content_segments){
-		if (is_user_logged_in()){
-			$user_id = get_current_user_id();
-			$remaining = intval(get_user_meta($user_id, Plugin::key('free_articles_remaining'), true));
+	protected static function paywallContentForSession( $content_segments ) {
+		if ( is_user_logged_in() ) {
+			$user_id     = get_current_user_id();
+			$remaining   = intval( get_user_meta( $user_id, Plugin::key( 'free_articles_remaining' ), true ) );
 			$viewsPlural = $remaining == 1 ? 'view' : 'views';
-			$loginText = "You have ${remaining} ${viewsPlural} remaining this month";
+			$loginText   = "You have ${remaining} ${viewsPlural} remaining this month";
 
-			if ($remaining > 0){
-			$newRemaining = $remaining - 1;
-			update_user_meta($user_id, Plugin::key('free_articles_remaining'), $newRemaining);
+			if ( $remaining > 0 ) {
+				$newRemaining = $remaining - 1;
+				update_user_meta( $user_id, Plugin::key( 'free_articles_remaining' ), $newRemaining );
 				return <<<HTML
 				<div class="meter-message">{$loginText}</div>
 				$content_segments[1];
 				HTML;
 			}
 		} else {
-			$loginText = "<a href='/wp-login.php?action=register&continue=".urlencode(get_permalink())."'>Register an account</a> or <a href='/wp-login.php'>log in</a> to continue";
+			$loginText = "<a href='/wp-login.php?action=register&continue=" . urlencode( get_permalink() ) . "'>Register an account</a> or <a href='/wp-login.php'>log in</a> to continue";
 		}
-		
+
 		return <<<HTML
 <p class="swg--paywall-checking-entitlements">
 			Checking for entitlements...
