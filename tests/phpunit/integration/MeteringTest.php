@@ -45,7 +45,7 @@ class MeteringTest extends WP_UnitTestCase
 		
 		$user_id = wp_create_user('Test Name', 'password', 'email@example.com');
 		$user = get_user_by('id', $user_id);
-		RegisterWithGoogleSignIn::loginUser($user);
+		RegisterWithGoogleSignIn::login_user($user);
 
 		$this->go_to("/?p=" . $this->post_ids[0]);
 		$content = Filters::the_content(get_post($this->post_ids[0])->post_content);
@@ -58,7 +58,7 @@ class MeteringTest extends WP_UnitTestCase
 		
 		$user_id = wp_create_user('Test Name', 'password', 'email@example.com');
 		$user = get_user_by('id', $user_id);
-		RegisterWithGoogleSignIn::loginUser($user);
+		RegisterWithGoogleSignIn::login_user($user);
 
 		$this->go_to("/?p=" . $this->post_ids[0]);
 		Filters::the_content(get_post($this->post_ids[0])->post_content);
@@ -77,7 +77,7 @@ class MeteringTest extends WP_UnitTestCase
 		$user_id = wp_create_user('Test Name', 'password', 'email@example.com');
 		update_user_meta( $user_id, Plugin::key( 'free_articles_remaining' ), 10 );
 		$user = get_user_by('id', $user_id);
-		RegisterWithGoogleSignIn::loginUser($user);
+		RegisterWithGoogleSignIn::login_user($user);
 
 		$this->go_to("/?p=" . $this->post_ids[0]);
 		Filters::the_content(get_post($this->post_ids[0])->post_content);
