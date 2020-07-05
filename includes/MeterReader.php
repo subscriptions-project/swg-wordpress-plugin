@@ -14,28 +14,28 @@ namespace SubscribeWithGoogle\WordPress;
  */
 final class MeterReader {
 
-	public static function addReadRecordForUrlToUser($url, $user_id){
+	public static function addReadRecordForUrlToUser( $url, $user_id ) {
 		$urlRecord = get_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), true );
-		if ( ! $urlRecord ){
-			$urlRecord = [];
+		if ( ! $urlRecord ) {
+			$urlRecord = array();
 		}
 
-		if (! self::urlReadRecordExistsForUser($url, $user_id)){
+		if ( ! self::urlReadRecordExistsForUser( $url, $user_id ) ) {
 			$urlRecord[] = $url;
 		}
 
-		update_user_meta($user_id, Plugin::key( 'free_urls_accessed' ), $urlRecord);
+		update_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), $urlRecord );
 
 	}
 
-	public static function getReadRecordCountForUser($user_id){
+	public static function getReadRecordCountForUser( $user_id ) {
 		$urlRecord = get_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), true );
-		return $urlRecord ? count($urlRecord) : 0;
+		return $urlRecord ? count( $urlRecord ) : 0;
 	}
-	
-	public static function urlReadRecordExistsForUser($url, $user_id){
+
+	public static function urlReadRecordExistsForUser( $url, $user_id ) {
 		$urlRecord = get_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), true );
-		return  in_array($url, $urlRecord);
+		return in_array( $url, $urlRecord );
 	}
 
 }

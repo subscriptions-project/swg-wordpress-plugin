@@ -91,19 +91,19 @@ final class Filters {
 	}
 
 	public static function user_was_created( $user_id ) {
-		update_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), [] );
+		update_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), array() );
 	}
 
 	protected static function paywallContentForSession( $content_segments ) {
 		if ( is_user_logged_in() ) {
-			$url = get_permalink();
+			$url         = get_permalink();
 			$user_id     = get_current_user_id();
-			$remaining   = 10 - MeterReader::getReadRecordCountForUser($user_id);
+			$remaining   = 10 - MeterReader::getReadRecordCountForUser( $user_id );
 			$viewsPlural = $remaining == 1 ? 'view' : 'views';
 			$loginText   = "You have ${remaining} ${viewsPlural} remaining";
 
-			if ( $remaining > 0 || MeterReader::urlReadRecordExistsForUser($url, $user_id)) {
-				MeterReader::addReadRecordForUrlToUser($url, $user_id);
+			if ( $remaining > 0 || MeterReader::urlReadRecordExistsForUser( $url, $user_id ) ) {
+				MeterReader::addReadRecordForUrlToUser( $url, $user_id );
 				return <<<HTML
 				<div class="meter-message">{$loginText}</div>
 				$content_segments[1];

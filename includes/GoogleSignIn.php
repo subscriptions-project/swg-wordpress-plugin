@@ -192,7 +192,7 @@ final class GoogleSignIn {
 		$client->setRedirectUri( 'postmessage' );
 		return $client;
 	}
-	
+
 	/**
 	 * Validate the provided Google ID Token with the oauth API.
 	 *
