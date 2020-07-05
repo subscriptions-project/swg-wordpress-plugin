@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * Returns true if a given experiment is on.
  * @param {string} experiment to check.

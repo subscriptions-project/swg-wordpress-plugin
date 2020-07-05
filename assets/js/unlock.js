@@ -27,7 +27,7 @@ export async function unlockPageMaybe(swg) {
  */
 async function getFullPostIfUserIsEntitled($article) {
   let articleHtmlUrl = '/wp-json/wp/v2/posts/' + SubscribeWithGoogleWpGlobals.POST_ID;
-
+  /* istanbul ignore next */
   fetch(articleHtmlUrl)
     .then(response => {
       if (!response.ok) {
