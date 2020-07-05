@@ -67,7 +67,7 @@ final class Filters {
 
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
-			$content_segments[1] = self::paywallContentForSession( $content_segments );
+			$content_segments[1] = self::paywall_content_for_session( $content_segments );
 		}
 
 		$content = implode( $more_tag, $content_segments );
@@ -90,27 +90,37 @@ final class Filters {
 		return $menu_html;
 	}
 
+	/**
+	 * Whenever a user is created, add an empty array to their `free_urls_accessed` meta
+	 *
+	 * @param Int $user_id The WP_User ID that was just created.
+	 */
 	public static function user_was_created( $user_id ) {
 		update_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), array() );
 	}
 
-	protected static function paywallContentForSession( $content_segments ) {
+	/**
+	 * Build the paywall for the current user based on login state.
+	 *
+	 * @param Array $content_segments The segments of content for the page.
+	 */
+	protected static function paywall_content_for_session( $content_segments ) {
 		if ( is_user_logged_in() ) {
-			$url         = get_permalink();
-			$user_id     = get_current_user_id();
-			$remaining   = 10 - MeterReader::getReadRecordCountForUser( $user_id );
-			$viewsPlural = $remaining == 1 ? 'view' : 'views';
-			$loginText   = "You have ${remaining} ${viewsPlural} remaining";
+			$url          = get_permalink();
+			$user_id      = get_current_user_id();
+			$remaining    = 10 - MeterReader::get_read_record_count_for_user( $user_id );
+			$views_plural = 1 === $remaining ? 'view' : 'views';
+			$login_text   = "You have ${remaining} ${views_plural} remaining";
 
-			if ( $remaining > 0 || MeterReader::urlReadRecordExistsForUser( $url, $user_id ) ) {
-				MeterReader::addReadRecordForUrlToUser( $url, $user_id );
+			if ( $remaining > 0 || MeterReader::url_read_record_exists_for_user( $url, $user_id ) ) {
+				MeterReader::add_read_record_for_url_to_user( $url, $user_id );
 				return <<<HTML
-				<div class="meter-message">{$loginText}</div>
+				<div class="meter-message">{$login_text}</div>
 				$content_segments[1];
-				HTML;
+HTML;
 			}
 		} else {
-			$loginText = "<a href='/wp-login.php?action=register&continue=" . urlencode( get_permalink() ) . "'>Register an account</a> or <a href='/wp-login.php'>log in</a> to continue";
+			$login_text = "<a href='/wp-login.php?action=register&continue=" . rawurlencode( get_permalink() ) . "'>Register an account</a> or <a href='/wp-login.php'>log in</a> to continue";
 		}
 
 		return <<<HTML
@@ -121,7 +131,7 @@ final class Filters {
 	🔒 <span>Subscribe to unlock the rest of this article.</span>
 	<br />
 	<br/>
-	<span class="text-small">{$loginText}</span>
+	<span class="text-small">{$login_text}</span>
 	<br />
 	<br/>
 	<button

@@ -59,12 +59,12 @@ final class PostRestAPI {
 		$content = apply_filters( 'the_content', $query->post_content );
 
 		try {
-			$entitlementsResponse = $google_sign_in_client::get_entitlements();
+			$entitlements_response = $google_sign_in_client::get_entitlements();
 		} catch ( Exception $e ) {
 			return new WP_Error( 'entitlement-check-error', __( 'You are not signed in to Google' ), array( 'status' => 500 ) );
 		}
 
-		$entitled_products_for_user = self::get_entitled_products_for_entitlements( $entitlementsResponse );
+		$entitled_products_for_user = self::get_entitled_products_for_entitlements( $entitlements_response );
 
 		$product_key = Plugin::key( 'product' );
 		$product     = get_post_meta( $post_ID, $product_key, true );

@@ -23,6 +23,7 @@ final class AdminPage {
 		add_action( 'admin_post_swg_zero_reset_meter', array( __CLASS__, 'swg_zero_reset_meter' ) );
 	}
 
+	/** Reset the read meter for all users */
 	public static function swg_zero_reset_meter() {
 		check_admin_referer( 'swg_reset_meter_nonce' );
 		wp_verify_nonce( $_REQUEST['my_nonce'], 'swg_reset_meter_nonce' );
@@ -32,11 +33,11 @@ final class AdminPage {
 		if ( ! empty( $users ) ) {
 
 			foreach ( $users as $user ) {
-				update_user_meta( $user->id, Plugin::key( 'free_articles_remaining' ), 10, true );
+				update_user_meta( $user->id, Plugin::key( 'free_urls_accessed' ), array() );
 			}
 		}
 
-		return wp_redirect( '/wp-admin/admin.php?page=subscribe_with_google' );
+		return wp_safe_redirect( '/wp-admin/admin.php?page=subscribe_with_google' );
 	}
 
 	/** Adds link to admin menu. */

@@ -196,26 +196,23 @@ final class GoogleSignIn {
 	/**
 	 * Validate the provided Google ID Token with the oauth API.
 	 *
-	 * @param string token Google ID Token passed from the front-end.
+	 * @param String $token Google ID Token passed from the front-end.
 	 */
 	public static function verify_google_id_token( $token ) {
 		// I tried using the Google Client to validate the token, but it fails because of some
-		// missing class, Math BigInteger, which doesn't seem to be fixed by the composer dependencies
+		// missing class, Math BigInteger, which doesn't seem to be fixed by the composer dependencies.
 
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, 'https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=' . $token );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		$response = curl_exec( $ch );
+		$response = wp_remote_get( 'https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=' . $token );
 
-		// stop if fails
-		if ( ! $response ) {
-			// TODO: Add proper error handling
-			die( 'Error: "' . curl_error( $ch ) . '" - Code: ' . curl_errno( $ch ) );
+		if ( ! is_wp_error( $response ) ) {
+			if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+				return wp_remote_retrieve_body( $response );
+			} else {
+				$error_message = wp_remote_retrieve_response_message( $response );
+			}
+		} else {
+			$error_message = $response->get_error_message();
 		}
-
-		// close curl resource to free up system resources
-		curl_close( $ch );
-
-		return json_decode( $response );
+		// TODO: Add error handling.
 	}
 }
