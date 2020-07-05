@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class SubscribeWithGoogle\WordPress\RegisterWithGoogleSignIn
  *
@@ -14,6 +13,9 @@ use WP_REST_Request;
 use WP_User;
 use WP_User_Query;
 
+/**
+ * An implementation for one-click Google Sign In account creation and lookup.
+ */
 final class RegisterWithGoogleSignIn {
 
 	/**
@@ -25,6 +27,7 @@ final class RegisterWithGoogleSignIn {
 	public static $google_sign_in_class =
 	'SubscribeWithGoogle\WordPress\GoogleSignIn';
 
+	/** Inject the login head scripts and initialize the rest routes */
 	public function __construct() {
 		add_action( 'login_head', array( __CLASS__, 'add_header_scripts' ) );
 		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
@@ -56,8 +59,8 @@ final class RegisterWithGoogleSignIn {
 		$google_sign_in_client = new self::$google_sign_in_class();
 
 		$request_body = json_decode( $request->get_body() );
-		$idToken      = $request_body->google_id_token;
-		$response     = $google_sign_in_client::verify_google_id_token( $idToken );
+		$id_token     = $request_body->google_id_token;
+		$response     = $google_sign_in_client::verify_google_id_token( $id_token );
 
 		$google_id = $response->user_id;
 
@@ -70,7 +73,7 @@ final class RegisterWithGoogleSignIn {
 		$existing_users = $user_query->get_results();
 
 		if ( count( $existing_users ) ) {
-			self::loginUser( ( $existing_users[0] ) );
+			self::login_user( ( $existing_users[0] ) );
 			return array( 'success' => true );
 		}
 
@@ -85,18 +88,36 @@ final class RegisterWithGoogleSignIn {
 
 		$new_user_id = wp_insert_user( $userdata );
 		update_user_meta( $new_user_id, 'google_id', $google_id );
-		$newUser = get_userdata( $new_user_id );
-		self::loginUser( $newUser );
+		$new_user = get_userdata( $new_user_id );
+		self::login_user( $new_user );
 
 		return array( 'success' => true );
 	}
 
-	public static function loginUser( $user ) {
+	/**
+	 * Log the provided user into the WP authentication system.
+	 *
+	 * @param WP_User $user The user to be logged in.
+	 */
+	public static function login_user( $user ) {
 		wp_set_current_user( $user->ID );
 		wp_set_auth_cookie( $user->ID );
 	}
 
-	public static function googleSignInButtonHtml() {
+	/**
+	 * Render the HTML+JS required to display and handle the Google Sign In button.
+	 *
+	 * @return String HTML to display the button with proper handlers.
+	 */
+	public static function google_sign_in_button_html() {
+
+		wp_enqueue_script(
+			'google-gsi-platform',
+			'https://apis.google.com/js/platform.js?onload=renderButton',
+			null,
+			1,
+			true
+		);
 
 		wp_enqueue_script(
 			'subscribe-with-google',
@@ -109,16 +130,16 @@ final class RegisterWithGoogleSignIn {
 		return <<<HTML
 			<div id="gsi-button" onclick="onClick()" data-onsuccess="onSignIn"></div>
 			<br/>
-			HTML;
+HTML;
 
 	}
 
+	/** Handler for enqueuing the the scripts in the login page head we'll need to implement GSI */
 	public static function add_header_scripts() {
 
 		$oauth_client_id = esc_attr( get_option( Plugin::key( 'oauth_client_id' ) ) );
 		?>
-			<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
-			<meta name="google-signin-client_id" content="<?php echo $oauth_client_id; ?>">
+			<meta name="google-signin-client_id" content="<?php echo esc_html( $oauth_client_id ); ?>">
 
 			<script>
 				var wasClicked = false;
