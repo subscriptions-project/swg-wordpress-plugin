@@ -53,7 +53,7 @@ class RegisterUserText extends WP_UnitTestCase
 
 		$request = new WP_REST_Request(
 			'POST',
-			'/subscribe-with-google/v1/register-user',
+			'/subscribe-with-google/v1/register-user'
 		);
 
 		$request->set_body(json_encode([
@@ -76,7 +76,7 @@ class RegisterUserText extends WP_UnitTestCase
 
 		$request = new WP_REST_Request(
 			'POST',
-			'/subscribe-with-google/v1/register-user',
+			'/subscribe-with-google/v1/register-user'
 		);
 
 		$request->set_body(json_encode([
