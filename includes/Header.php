@@ -21,6 +21,11 @@ final class Header {
 
 	/** Adds to the <head> element on Post view pages. */
 	public static function modify() {
+		// Only modify single post pages.
+		if ( ! is_single() ) {
+			return;
+		}
+
 		// Styles for SwgPress.
 		wp_enqueue_style(
 			'subscribe-with-google',

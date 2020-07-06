@@ -2,7 +2,6 @@
 namespace SubscribeWithGoogle\WordPress\Tests;
 
 use SubscribeWithGoogle\WordPress\Header;
-use SubscribeWithGoogle\WordPress\Plugin;
 use WP_UnitTestCase;
 
 class HeaderTest extends WP_UnitTestCase {
@@ -32,9 +31,21 @@ class HeaderTest extends WP_UnitTestCase {
 		// Reset AMP var.
 		global $is_amp;
 		$is_amp = false;
+
+		// Reset scripts.
+		global $wp_scripts;
+		if ( $wp_scripts ) {
+			$wp_scripts->queue = array();
+		}
+
+		// Reset styles.
+		global $wp_styles;
+		if ( $wp_styles ) {
+			$wp_styles->queue = array();
+		}
 	}
 
-	public function test__handle_wp_head__adds_scripts_and_styles() {
+	public function test__modify__adds_scripts_and_styles() {
 		Header::modify();
 		$this->expectOutputRegex( '/"@type": "NewsArticle",/' );
 
@@ -46,7 +57,20 @@ class HeaderTest extends WP_UnitTestCase {
 		$this->assertContains( 'subscribe-with-google', $styles->queue );
 	}
 
-	public function test__handle_wp_head__is_amp__adds_amp_extension() {
+	public function test__modify__not_on_single_post__does_not_add_scripts_or_styles() {
+		// Visits an index page.
+		$this->go_to("/");
+		Header::modify();
+
+		$scripts = wp_scripts();
+		$this->assertNotContains( 'swg-js', $scripts->queue );
+		$this->assertNotContains( 'subscribe-with-google', $scripts->queue );
+
+		$styles = wp_styles();
+		$this->assertNotContains( 'subscribe-with-google', $styles->queue );
+	}
+
+	public function test__modify__is_amp__adds_amp_extension() {
 		global $is_amp;
 		$is_amp = true;
 
