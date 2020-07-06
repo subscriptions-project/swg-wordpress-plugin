@@ -67,6 +67,9 @@ final class Filters {
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
 			$content_segments[1] = '
+<p class="swg--paywall-checking-entitlements">
+			Checking for entitlements...
+</p>
 <p class="swg--paywall-prompt" subscriptions-section="content-not-granted">
 	🔒 <span>Subscribe to unlock the rest of this article.</span>
 	<br />
@@ -78,10 +81,6 @@ final class Filters {
 		subscriptions-service="subscribe.google.com">
 	</button>
 </p>
-
-<div class="swg--locked-content" subscriptions-section="content">
-' . $content_segments[1] . '
-</div>
 ';
 		}
 
