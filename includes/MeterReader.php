@@ -55,6 +55,9 @@ final class MeterReader {
 	 */
 	public static function url_read_record_exists_for_user( $url, $user_id ) {
 		$url_record = get_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), true );
+		if ( ! is_array( $url_record ) ) {
+			$url_record = array( $url );
+		}
 		return in_array( $url, $url_record, true );
 	}
 
