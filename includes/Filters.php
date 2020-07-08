@@ -65,6 +65,17 @@ final class Filters {
 		$more_tag         = '<span id="more-' . get_the_ID() . '"></span>';
 		$content_segments = explode( $more_tag, $content );
 
+		if ( Plugin::is_amp() ) {
+			$paywall_html = self::html_paywall();
+			return <<<HTML
+			{$content_segments[0]}
+			{$paywall_html}
+			<div class="swg--locked-content" subscriptions-section="content">
+				{$content_segments[1]}
+			</div>
+HTML;
+		}
+
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
 			$content_segments[1] = self::paywall_content_for_session( $content_segments );
@@ -105,6 +116,7 @@ final class Filters {
 	 * @param Array $content_segments The segments of content for the page.
 	 */
 	protected static function paywall_content_for_session( $content_segments ) {
+
 		if ( is_user_logged_in() ) {
 			$url          = get_permalink();
 			$user_id      = get_current_user_id();
@@ -123,17 +135,29 @@ HTML;
 			$login_text = "<a href='/wp-login.php?action=register&continue=" . rawurlencode( get_permalink() ) . "'>Register an account</a> or <a href='/wp-login.php'>log in</a> to continue";
 		}
 
+		return self::html_paywall( $login_text );
+	}
+
+	/**
+	 * Standalone HTML for the SwG Paywall.
+	 *
+	 * @param String $login_text Optional text to display to the user to register or login.
+	 */
+	protected static function html_paywall( $login_text = '' ) {
+
+		$login_text_container = '';
+		if ( $login_text ) {
+			$login_text_container = "<span class='text-small'>{$login_text}</span><br /><br/>";
+		}
 		return <<<HTML
-<p class="swg--paywall-checking-entitlements">
+<p class="swg--paywall-checking-entitlements" subscriptions-section="content-not-granted">
 			Checking for entitlements...
 </p>
 <p class="swg--paywall-prompt" subscriptions-section="content-not-granted">
 	🔒 <span>Subscribe to unlock the rest of this article.</span>
 	<br />
 	<br/>
-	<span class="text-small">{$login_text}</span>
-	<br />
-	<br/>
+	{$login_text_container}
 	<button
 		class="swg-button swg-subscribe-button"
 		subscriptions-action="subscribe"
