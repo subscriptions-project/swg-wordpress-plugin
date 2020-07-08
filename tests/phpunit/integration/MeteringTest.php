@@ -9,6 +9,7 @@ use SubscribeWithGoogle\WordPress\GoogleSignIn;
 use SubscribeWithGoogle\WordPress\RegisterWithGoogleSignIn;
 use WP_REST_Request;
 use WP_REST_Server;
+use WP_User;
 
 class MeteringTest extends WP_UnitTestCase
 {
@@ -89,6 +90,21 @@ class MeteringTest extends WP_UnitTestCase
 
 		$this->assertRegexp('/\bYou have 9 views remaining\b/', $content);
 		
+	}
+
+	public function test__it_does_not_show_the_paywall_or_meter_to_admins_or_editors(){
+
+			$user_id = wp_create_user('Test Name', 'password', 'email@example.com');
+			$user_id_role = new WP_User($user_id);
+			$user_id_role->set_role('administrator');
+			$user = get_user_by('id', $user_id);
+			RegisterWithGoogleSignIn::login_user($user);
+
+			$this->go_to("/?p=" . $this->post_ids[0]);
+			$content = Filters::the_content(get_post($this->post_ids[0])->post_content);
+
+			$this->assertNotRegexp('/\bYou have [0-9]+ views remaining\b/', $content);
+
 	}
 
 	

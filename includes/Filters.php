@@ -50,7 +50,7 @@ final class Filters {
 	 */
 	public static function the_content( $content ) {
 		// Check if we're inside the main loop in a single post page.
-		if ( ! is_single() || ! is_main_query() ) {
+		if ( ! is_single() || ! is_main_query() || current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) {
 			return $content;
 		}
 

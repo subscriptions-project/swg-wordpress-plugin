@@ -5,8 +5,10 @@ namespace SubscribeWithGoogle\WordPress\Tests;
 use WP_UnitTestCase;
 use SubscribeWithGoogle\WordPress\GoogleSignIn;
 use SubscribeWithGoogle\WordPress\PostRestAPI;
+use SubscribeWithGoogle\WordPress\RegisterWithGoogleSignIn;
 use WP_REST_Request;
 use WP_REST_Server;
+use WP_User;
 
 class PostRestAPITest extends WP_UnitTestCase
 {
@@ -116,6 +118,27 @@ class PostRestAPITest extends WP_UnitTestCase
 		$this->assertEquals(
 			401,
 			$response->data['data']['status']
+		);
+	}
+
+	public function test__administrators_are_always_granted_access()
+	{
+		$user_id = wp_create_user('Test Name', 'password', 'email@example.com');
+		$user_id_role = new WP_User($user_id);
+		$user_id_role->set_role('administrator');
+		$user = get_user_by('id', $user_id);
+		RegisterWithGoogleSignIn::login_user($user);
+
+		$request = new WP_REST_Request(
+			'GET',
+			'/wp/v2/posts/' . $this->post_id
+		);
+
+		$response = $this->server->dispatch($request);
+
+		$this->assertEquals(
+			'<h1>Hello world!</h1>',
+			trim($response->data)
 		);
 	}
 }

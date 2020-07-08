@@ -30,7 +30,9 @@ final class PostRestAPI {
 
 	/** Adds action handlers. */
 	public function __construct() {
-		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
+		if ( ! is_admin() ) {
+			add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
+		}
 	}
 
 	/** Registers custom REST routes. */
@@ -81,7 +83,7 @@ final class PostRestAPI {
 		$publication_id      = get_option( Plugin::key( 'publication_id' ) );
 		$product_id_for_post = $publication_id . ':' . $product;
 
-		if ( in_array( $product_id_for_post, $entitled_products_for_user, true ) ) {
+		if ( in_array( $product_id_for_post, $entitled_products_for_user, true ) || current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) {
 			return $content;
 		}
 
