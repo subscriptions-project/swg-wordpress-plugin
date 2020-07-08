@@ -192,4 +192,27 @@ final class GoogleSignIn {
 		$client->setRedirectUri( 'postmessage' );
 		return $client;
 	}
+
+	/**
+	 * Validate the provided Google ID Token with the oauth API.
+	 *
+	 * @param String $token Google ID Token passed from the front-end.
+	 */
+	public static function verify_google_id_token( $token ) {
+		// I tried using the Google Client to validate the token, but it fails because of some
+		// missing class, Math BigInteger, which doesn't seem to be fixed by the composer dependencies.
+
+		$response = wp_remote_get( 'https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=' . $token );
+
+		if ( ! is_wp_error( $response ) ) {
+			if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+				return wp_remote_retrieve_body( $response );
+			} else {
+				$error_message = wp_remote_retrieve_response_message( $response );
+			}
+		} else {
+			$error_message = $response->get_error_message();
+		}
+		// TODO: Add error handling.
+	}
 }

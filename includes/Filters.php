@@ -19,6 +19,7 @@ final class Filters {
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'the_content', array( __CLASS__, 'the_content' ) );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'wp_nav_menu_items' ) );
+		add_action( 'user_register', array( __CLASS__, 'user_was_created' ), 10, 1 );
 	}
 
 	/**
@@ -49,7 +50,7 @@ final class Filters {
 	 */
 	public static function the_content( $content ) {
 		// Check if we're inside the main loop in a single post page.
-		if ( ! is_single() || ! is_main_query() ) {
+		if ( ! is_single() || ! is_main_query() || current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) {
 			return $content;
 		}
 
@@ -64,25 +65,20 @@ final class Filters {
 		$more_tag         = '<span id="more-' . get_the_ID() . '"></span>';
 		$content_segments = explode( $more_tag, $content );
 
+		if ( Plugin::is_amp() ) {
+			$paywall_html = self::html_paywall();
+			return <<<HTML
+			{$content_segments[0]}
+			{$paywall_html}
+			<div class="swg--locked-content" subscriptions-section="content">
+				{$content_segments[1]}
+			</div>
+HTML;
+		}
+
 		// Add Paywall wrapper & prompt.
 		if ( count( $content_segments ) > 1 ) {
-			$content_segments[1] = '
-<p class="swg--paywall-prompt" subscriptions-section="content-not-granted">
-	🔒 <span>Subscribe to unlock the rest of this article.</span>
-	<br />
-	<br />
-	<button
-		class="swg-button swg-subscribe-button"
-		subscriptions-action="subscribe"
-		subscriptions-display="true"
-		subscriptions-service="subscribe.google.com">
-	</button>
-</p>
-
-<div class="swg--locked-content" subscriptions-section="content">
-' . $content_segments[1] . '
-</div>
-';
+			$content_segments[1] = self::paywall_content_for_session( $content_segments );
 		}
 
 		$content = implode( $more_tag, $content_segments );
@@ -103,5 +99,72 @@ final class Filters {
 			$menu_html
 		);
 		return $menu_html;
+	}
+
+	/**
+	 * Whenever a user is created, add an empty array to their `free_urls_accessed` meta
+	 *
+	 * @param Int $user_id The WP_User ID that was just created.
+	 */
+	public static function user_was_created( $user_id ) {
+		update_user_meta( $user_id, Plugin::key( 'free_urls_accessed' ), array() );
+	}
+
+	/**
+	 * Build the paywall for the current user based on login state.
+	 *
+	 * @param Array $content_segments The segments of content for the page.
+	 */
+	protected static function paywall_content_for_session( $content_segments ) {
+
+		if ( is_user_logged_in() ) {
+			$url          = get_permalink();
+			$user_id      = get_current_user_id();
+			$remaining    = 10 - MeterReader::get_read_record_count_for_user( $user_id );
+			$views_plural = 1 === $remaining ? 'view' : 'views';
+			$login_text   = "You have ${remaining} ${views_plural} remaining";
+
+			if ( $remaining > 0 || MeterReader::url_read_record_exists_for_user( $url, $user_id ) ) {
+				MeterReader::add_read_record_for_url_to_user( $url, $user_id );
+				return <<<HTML
+				<div class="meter-message">{$login_text}</div>
+				$content_segments[1];
+HTML;
+			}
+		} else {
+			$login_text = "<a href='/wp-login.php?action=register&continue=" . rawurlencode( get_permalink() ) . "'>Register an account</a> or <a href='/wp-login.php'>log in</a> to continue";
+		}
+
+		return self::html_paywall( $login_text );
+	}
+
+	/**
+	 * Standalone HTML for the SwG Paywall.
+	 *
+	 * @param String $login_text Optional text to display to the user to register or login.
+	 */
+	protected static function html_paywall( $login_text = '' ) {
+
+		$login_text_container = '';
+		if ( $login_text ) {
+			$login_text_container = "<span class='text-small'>{$login_text}</span><br /><br/>";
+		}
+		return <<<HTML
+<p class="swg--paywall-checking-entitlements" subscriptions-section="content-not-granted">
+			Checking for entitlements...
+</p>
+<p class="swg--paywall-prompt" subscriptions-section="content-not-granted">
+	🔒 <span>Subscribe to unlock the rest of this article.</span>
+	<br />
+	<br/>
+	{$login_text_container}
+	<button
+		class="swg-button swg-subscribe-button"
+		subscriptions-action="subscribe"
+		subscriptions-display="true"
+		subscriptions-service="subscribe.google.com">
+	</button>
+</p>
+HTML;
 	}
 }

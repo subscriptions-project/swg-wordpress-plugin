@@ -117,58 +117,19 @@ describe('main', () => {
     articleEl.remove();
   });
 
-  it('fetches entitlements', async () => {
+  it('attempts to fetch the page content', async () => {
+    global.SubscribeWithGoogleWpGlobals.POST_ID = 1;
     await SUBSCRIBERS(subscriptions);
-    expect(fetch).toBeCalledWith('/api/entitlements');
+    
+    expect(fetch).toBeCalledWith('/wp-json/wp/v2/posts/1');
   });
 
-  it('fetches entitlements if cache does not have the right product', async () => {
-    global.localStorage[CACHE_KEY] = JSON.stringify({
-      expiration: Date.now() * 2,
-      products: [],
-    });
-    await SUBSCRIBERS(subscriptions);
-    expect(fetch).toBeCalledWith('/api/entitlements');
-  });
-
-  it('fetches entitlements if cache is expired', async () => {
-    global.localStorage[CACHE_KEY] = JSON.stringify({
-      expiration: Date.now() / 2,
-      products: ['premium'],
-    });
-    await SUBSCRIBERS(subscriptions);
-    expect(fetch).toBeCalledWith('/api/entitlements');
-  });
-
-  it('does not fetch entitlements if cache entitles user', async () => {
-    global.localStorage[CACHE_KEY] = JSON.stringify({
-      expiration: Date.now() * 2,
-      products: ['premium'],
-    });
-    await SUBSCRIBERS(subscriptions);
-    expect(fetch).not.toBeCalled();
-  });
-
-  it('fetches entitlements if cache is disabled', async () => {
-    global.localStorage[CACHE_KEY] = JSON.stringify({
-      expiration: Date.now() * 2,
-      products: ['premium'],
-    });
-    location.hash = '#swg.wp.experiments=disablecache';
-    await SUBSCRIBERS(subscriptions);
-    expect(fetch).toBeCalledWith('/api/entitlements');
-  });
 
   it('conditionally disables 3p entitlements', async () => {
     subscriptions.getEntitlements = jest.fn();
     location.hash = '#swg.wp.experiments=disable3p';
     await SUBSCRIBERS(subscriptions);
     expect(subscriptions.getEntitlements).not.toBeCalled();
-  });
-
-  it('marks article as unlocked when a product matches', async () => {
-    await SUBSCRIBERS(subscriptions);
-    expect(articleEl.classList.contains('swg--page-is-unlocked')).toBeTruthy();
   });
 
   it('marks article as locked when no products match', async () => {

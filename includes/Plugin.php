@@ -28,6 +28,8 @@ final class Plugin {
 		new Header();
 		new ManagePosts();
 		new Shortcodes();
+		new PostRestAPI();
+		new RegisterWithGoogleSignIn();
 	}
 
 	/** Loads the plugin main instance and initializes it. */

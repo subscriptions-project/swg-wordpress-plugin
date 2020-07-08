@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * Selects a single DOM element.
  * @param {string} selector
