@@ -19,21 +19,24 @@ final class Header {
 		add_action( 'wp_head', array( __CLASS__, 'modify' ) );
 	}
 
-	/** Adds to the <head> element on Post view pages. */
+	/** Adds to the <head> element. */
 	public static function modify() {
-		// Only modify single post pages.
-		if ( ! is_single() ) {
-			return;
+		self::modify_all_pages();
+
+		if ( is_single() ) {
+			self::modify_single_post_pages();
 		}
+	}
 
-		// Styles for SwgPress.
-		wp_enqueue_style(
-			'subscribe-with-google',
-			plugins_url( '../dist/assets/css/main.css', __FILE__ ),
-			null,
-			1
-		);
+	/** Adds to the <head> element on all pages. */
+	private static function modify_all_pages() {
+		// Add meta tag for Google Sign In.
+		$oauth_client_id = get_option( Plugin::key( 'oauth_client_id' ) );
+		?>
+<meta name="google-signin-client_id" content="<?php echo esc_attr( $oauth_client_id ); ?>">
+		<?php
 
+		// Add JavaScript on every non-AMP page to support login buttons.
 		if ( ! Plugin::is_amp() ) {
 			// Google's API JavaScript library (https://github.com/google/google-api-javascript-client).
 			wp_enqueue_script(
@@ -69,7 +72,20 @@ final class Header {
 				'SubscribeWithGoogleWpGlobals',
 				array( 'API_BASE_URL' => $api_base_url )
 			);
-		} else {
+		}
+	}
+
+	/** Adds to the <head> element on single post pages. */
+	private static function modify_single_post_pages() {
+		// Styles for SwgPress.
+		wp_enqueue_style(
+			'subscribe-with-google',
+			plugins_url( '../dist/assets/css/main.css', __FILE__ ),
+			null,
+			1
+		);
+
+		if ( Plugin::is_amp() ) {
 			// Add SwG's AMP extension.
 			?>
 			<script
@@ -99,12 +115,6 @@ final class Header {
 			}
 		}
 		</script>
-
-		<?php
-		// Add meta tag for Google Sign In.
-		$oauth_client_id = get_option( Plugin::key( 'oauth_client_id' ) );
-		?>
-		<meta name="google-signin-client_id" content="<?php echo esc_attr( $oauth_client_id ); ?>">
 
 		<?php
 		// Add configuration JSON for AMP extensions.

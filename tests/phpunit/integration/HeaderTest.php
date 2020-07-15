@@ -45,29 +45,24 @@ class HeaderTest extends WP_UnitTestCase {
 		}
 	}
 
-	public function test__modify__adds_scripts_and_styles() {
+	public function test__modify__all_pages__adds_scripts_and_oauth_client_id() {
+		// Visits an index page.
+		$this->go_to("/");
+
 		Header::modify();
-		$this->expectOutputRegex( '/"@type": "NewsArticle",/' );
+		$this->expectOutputRegex( '/google-signin-client_id/' );
 
 		$scripts = wp_scripts();
 		$this->assertContains( 'swg-js', $scripts->queue );
 		$this->assertContains( 'subscribe-with-google', $scripts->queue );
+	}
+
+	public function test__modify__single_posts__adds_styles_and_ld_json() {
+		Header::modify();
+		$this->expectOutputRegex( '/"@type": "NewsArticle",/' );
 
 		$styles = wp_styles();
 		$this->assertContains( 'subscribe-with-google', $styles->queue );
-	}
-
-	public function test__modify__not_on_single_post__does_not_add_scripts_or_styles() {
-		// Visits an index page.
-		$this->go_to("/");
-		Header::modify();
-
-		$scripts = wp_scripts();
-		$this->assertNotContains( 'swg-js', $scripts->queue );
-		$this->assertNotContains( 'subscribe-with-google', $scripts->queue );
-
-		$styles = wp_styles();
-		$this->assertNotContains( 'subscribe-with-google', $styles->queue );
 	}
 
 	public function test__modify__is_amp__adds_amp_extension() {
