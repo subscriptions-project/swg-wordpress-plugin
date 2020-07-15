@@ -34,9 +34,7 @@ cache:
 
 branches:
   only:
-    - master
-    - develop
-    - feature/auth-proxy
+    - main
 
 # Before install, failures in this section will result in build status 'errored'
 before_install:
