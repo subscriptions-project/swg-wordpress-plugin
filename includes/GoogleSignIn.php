@@ -38,8 +38,9 @@ final class GoogleSignIn {
 			'subscribewithgoogle/v1',
 			'/create-1p-gsi-cookie',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( __CLASS__, 'create_1p_gsi_cookie' ),
+				'methods'             => 'POST',
+				'callback'            => array( __CLASS__, 'create_1p_gsi_cookie' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 
@@ -47,8 +48,9 @@ final class GoogleSignIn {
 			'subscribewithgoogle/v1',
 			'/entitlements',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( __CLASS__, 'get_entitlements' ),
+				'methods'             => 'GET',
+				'callback'            => array( __CLASS__, 'get_entitlements' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 
@@ -56,8 +58,9 @@ final class GoogleSignIn {
 			'subscribewithgoogle/v1',
 			'/grant-status',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( __CLASS__, 'get_grant_status' ),
+				'methods'             => 'GET',
+				'callback'            => array( __CLASS__, 'get_grant_status' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 	}
