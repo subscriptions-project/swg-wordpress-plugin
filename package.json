@@ -53,7 +53,7 @@
   "author": "Google",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@babel/core": "^7.10.2",
+    "@babel/core": "^7.29.6",
     "@babel/plugin-transform-runtime": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
